@@ -27,7 +27,7 @@ if "%mensaje%"=="" (
 :: 3. Lo envía a GitHub
 echo.
 echo [+] Subiendo a la nube (GitHub)...
-git push
+git push -u origin main
 
 echo.
 echo ==================================================

@@ -35,7 +35,6 @@ html {
   background: var(--bg-primary);
   color: var(--text-primary);
   scroll-behavior: auto; /* Lenis handles smooth scrolling */
-  cursor: none;
 }
 
 body {
@@ -45,7 +44,7 @@ body {
   min-height: 100vh;
 }
 
-a, button { cursor: none; }
+/* a, button { cursor: none; } */
 
 ::selection {
   background: var(--accent-1);

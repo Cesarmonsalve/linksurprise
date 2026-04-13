@@ -180,6 +180,7 @@ export default function EditorPage({ params }: EditorProps) {
     tab: (active: boolean) => ({ padding: '0.6rem 1rem', borderRadius: 8, border: 'none', background: active ? 'rgba(192,132,252,0.15)' : 'transparent', color: active ? '#c084fc' : '#888', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', transition: 'all 0.3s' }),
     phone: { width: 375, height: 667, borderRadius: 40, overflow: 'hidden', border: '3px solid rgba(255,255,255,0.1)', background: '#000', position: 'relative' as const, boxShadow: '0 25px 80px rgba(0,0,0,0.5)' },
     phoneNotch: { position: 'absolute' as const, top: 0, left: '50%', transform: 'translateX(-50%)', width: 150, height: 30, background: '#000', borderRadius: '0 0 20px 20px', zIndex: 10 },
+    linkInput: { width: '100%', padding: '0.6rem 1rem', borderRadius: 10, border: '1px solid rgba(16,185,129,0.3)', background: 'rgba(16,185,129,0.08)', color: '#10b981', fontSize: '0.78rem', outline: 'none', fontFamily: 'monospace', transition: 'border-color 0.3s' },
     actionBtn: (primary: boolean, green: boolean = false) => ({ padding: '0.8rem 1.5rem', borderRadius: 12, border: primary ? 'none' : '1px solid rgba(255,255,255,0.15)', background: primary ? (green ? 'linear-gradient(135deg, #10b981, #059669)' : 'linear-gradient(135deg, #c084fc, #f472b6)') : 'transparent', color: '#fff', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', transition: 'all 0.3s', textAlign: 'center' as const }),
   };
 

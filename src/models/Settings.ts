@@ -25,6 +25,10 @@ const SettingsSchema = new mongoose.Schema({
   premiumTemplateIds: [{
     type: String
   }],
+  groqApiKey: {
+    type: String,
+    default: ''
+  },
   updatedAt: {
     type: Date,
     default: Date.now

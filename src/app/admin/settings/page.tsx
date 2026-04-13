@@ -9,6 +9,7 @@ export default function SettingsPage() {
     zinliEmail: '',
     priceInfo: '$3 USD',
     premiumTemplateIds: [] as string[],
+    groqApiKey: '',
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -41,6 +42,7 @@ export default function SettingsPage() {
           zinliEmail: data.data.zinliEmail || '',
           priceInfo: data.data.priceInfo || '$3 USD',
           premiumTemplateIds: data.data.premiumTemplateIds || [],
+          groqApiKey: data.data.groqApiKey || '',
         });
       }
     } catch (e) {
@@ -119,6 +121,18 @@ export default function SettingsPage() {
             style={{ width: '100%', padding: '1rem', borderRadius: 12, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', outline: 'none' }}
             placeholder="correo@ejemplo.com"
           />
+        </div>
+
+        <div style={{ marginBottom: '2rem' }}>
+          <label style={{ display: 'block', fontSize: '0.8rem', color: '#888', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Groq API Key (Laboratorio IA)</label>
+          <input 
+            type="password" 
+            value={settings.groqApiKey}
+            onChange={(e) => setSettings({...settings, groqApiKey: e.target.value})}
+            style={{ width: '100%', padding: '1rem', borderRadius: 12, background: 'rgba(255,255,255,0.02)', border: '1px solid #10b981', color: '#fff', outline: 'none' }}
+            placeholder="gsk_xxxxxxxx..."
+          />
+          <p style={{ fontSize: '0.75rem', color: '#10b981', margin: '0.5rem 0' }}>Obligatorio para usar el Laboratorio de Inteligencia Artificial (Llama-3).</p>
         </div>
 
         <button 

@@ -18,6 +18,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const navItems = [
     { label: '📊 Dashboard', path: '/admin' },
+    { label: '🤖 Laboratorio IA', path: '/admin/ai' },
     { label: '🎨 Plantillas Propias', path: '/admin/templates' },
     { label: '⚙️ Ajustes / Pagos', path: '/admin/settings' },
   ];

@@ -7,6 +7,7 @@ const DEFAULT_SETTINGS = {
   zinliEmail: '',
   priceInfo: '$3 USD',
   premiumTemplateIds: [],
+  groqApiKey: '',
 };
 
 export async function GET() {

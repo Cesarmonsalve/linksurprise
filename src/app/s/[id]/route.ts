@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Project from '@/models/Project';
-import CustomTemplate from '@/models/CustomTemplate';
+import TemplateDB from '@/models/TemplateDB';
 import Settings from '@/models/Settings';
 import { generateHTML, ProjectData } from '@/lib/generateHTML';
 
@@ -60,8 +60,8 @@ export async function GET(request: Request, props: { params: Promise<{ id: strin
     
     // Check if it's a custom template
     let customTemplateConfig = undefined;
-    if (project.template.startsWith('custom_') || !project.template.match(/^[a-z_]+$/)) {
-      customTemplateConfig = await CustomTemplate.findOne({ id: project.template });
+    if (project.template.startsWith('ai_') || project.template.startsWith('custom_') || !project.template.match(/^[a-z_]+$/)) {
+      customTemplateConfig = await TemplateDB.findOne({ id: project.template });
     }
 
     const data: ProjectData = {

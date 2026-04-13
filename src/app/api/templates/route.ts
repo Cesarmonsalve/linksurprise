@@ -9,27 +9,24 @@ export async function GET() {
     // Try to fetch custom templates from DB (non-blocking)
     try {
       const dbConnect = (await import('@/lib/mongodb')).default;
-      const CustomTemplate = (await import('@/models/CustomTemplate')).default;
+      const TemplateDB = (await import('@/models/TemplateDB')).default;
 
       await dbConnect();
-      const customTemplates = await CustomTemplate.find({ isActive: true });
+      const aiTemplates = await TemplateDB.find({});
 
-      const formattedCustom = customTemplates.map((t: any) => ({
+      const formattedCustom = aiTemplates.map((t: any) => ({
         id: t.id,
         name: t.name,
         emoji: t.emoji,
-        gradient: t.gradient,
-        pillar: t.pillar,
-        pillarLabel: t.pillarLabel,
-        defaultBg: t.defaultBg,
-        defaultText: t.defaultText,
-        defaultAccent: t.defaultAccent,
-        defaultMessage: t.defaultMessage,
-        effect: t.effect,
+        gradient: 'linear-gradient(135deg, #10b981, #06b6d4)', // Default AI gradient
+        pillar: 'artistic',
+        pillarLabel: '🤖 Generada por IA',
+        defaultBg: '#050510',
+        defaultText: '#fff',
+        defaultAccent: '#10b981',
+        defaultMessage: 'Plantilla mágica creada por Inteligencia Artificial.',
+        effect: 'fadeUp',
         isCustom: true,
-        htmlTemplate: t.htmlTemplate,
-        cssTemplate: t.cssTemplate,
-        jsTemplate: t.jsTemplate,
       }));
 
       formattedCustom.forEach((t: any) => {

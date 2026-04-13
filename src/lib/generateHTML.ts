@@ -70,11 +70,10 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false, renderM
   let templateHTML = '';
   let templateJS = '';
 
-  if (data.customTemplateConfig) {
     // Es una plantilla personalizada cargada desde la BD
     const c = data.customTemplateConfig;
     // Replace variables in Custom HTML
-    templateHTML = c.htmlTemplate
+    templateHTML = (c.html || c.htmlTemplate || '')
       .replace(/\$\{recipientName\}/g, safeRecipient)
       .replace(/\$\{senderName\}/g, safeSender)
       .replace(/\$\{escapedMessage\}/g, escapedMessage)
@@ -83,8 +82,8 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false, renderM
       .replace(/\$\{textColor\}/g, textColor)
       .replace(/\$\{accentColor\}/g, accentColor);
       
-    templateCSS = c.cssTemplate || '';
-    templateJS = c.jsTemplate || '';
+    templateCSS = c.css || c.cssTemplate || '';
+    templateJS = c.js || c.jsTemplate || '';
   } else {
     // Es una plantilla nativa estática
     const renderer = TEMPLATE_RENDERERS[resolvedTemplate];
@@ -122,8 +121,11 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false, renderM
     engineExecution = `<script>window.addEventListener('load', () => { ${templateJS} });</script>`;
     
     // Validar si la plantilla Custom tiene una versión Basic designada
-    if (data.customTemplateConfig && data.customTemplateConfig.htmlBasicTemplate) {
-      templateHTML = data.customTemplateConfig.htmlBasicTemplate
+    if (data.customTemplateConfig && (data.customTemplateConfig.htmlBasicTemplate || data.customTemplateConfig.html)) {
+      const basicHtml = data.customTemplateConfig.htmlBasicTemplate || data.customTemplateConfig.html;
+      const basicCss = data.customTemplateConfig.cssBasicTemplate || data.customTemplateConfig.css || '';
+      
+      templateHTML = basicHtml
         .replace(/\$\{recipientName\}/g, safeRecipient)
         .replace(/\$\{senderName\}/g, safeSender)
         .replace(/\$\{escapedMessage\}/g, escapedMessage)
@@ -131,7 +133,7 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false, renderM
         .replace(/\$\{backgroundColor\}/g, backgroundColor)
         .replace(/\$\{textColor\}/g, textColor)
         .replace(/\$\{accentColor\}/g, accentColor);
-      templateCSS = data.customTemplateConfig.cssBasicTemplate || '';
+      templateCSS = basicCss;
     } else {
       // Si no tiene Basic, o es de las predefinidas: TARJETA UNIVERSAL
       templateCSS = `

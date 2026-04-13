@@ -97,7 +97,13 @@ export default function EditorPage({ params }: EditorProps) {
 
   const previewHTML = useMemo(() => generateHTML(projectData, true), [projectData]);
 
-  const handleDownload = useCallback(() => {
+  const isPremium = settings?.premiumTemplateIds?.includes(templateId);
+
+  const handleDownload = () => {
+    if (isPremium) {
+      handleSaveProject();
+      return;
+    }
     const html = generateHTML(projectData, false); // false = con watermark (free)
     const blob = new Blob([html], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
@@ -108,7 +114,7 @@ export default function EditorPage({ params }: EditorProps) {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-  }, [projectData, recipientName]);
+  };
 
   const [isSaving, setIsSaving] = useState(false);
   const [generatedLink, setGeneratedLink] = useState('');
@@ -123,7 +129,7 @@ export default function EditorPage({ params }: EditorProps) {
           title: title || 'Una sorpresa para ti 💝',
           template: templateId,
           config: projectData,
-          status: 'pending_payment' // Set initial status to pending instead of draft directly
+          status: isPremium ? 'pending_payment' : 'free'
         })
       });
       const data = await res.json();
@@ -132,7 +138,11 @@ export default function EditorPage({ params }: EditorProps) {
         const url = `${window.location.origin}/s/${data.data._id}`;
         setGeneratedLink(url);
         navigator.clipboard.writeText(url);
-        setShowModal(true); // Open the Modal
+        if (isPremium) {
+          setShowModal(true); // Open the Payment Modal
+        } else {
+          alert('¡Link generado y copiado a tu portapapeles! Ya puedes compartirlo.');
+        }
       }
     } catch (err) {
       alert('Error al guardar el proyecto');
@@ -186,9 +196,11 @@ export default function EditorPage({ params }: EditorProps) {
             />
           )}
           <button onClick={handleSaveProject} disabled={isSaving} style={styles.actionBtn(true, true)}>
-            {isSaving ? 'Guardando...' : '💾 Generar Link'}
+            {isSaving ? 'Guardando...' : (isPremium ? '💎 Guardar Proyecto VIP' : '💾 Generar Link')}
           </button>
-          <button onClick={handleDownload} style={styles.actionBtn(true)}>⬇ Descargar HTML</button>
+          <button onClick={handleDownload} style={styles.actionBtn(!isPremium)}>
+            {isPremium ? '🔒 Descargar HTML' : '⬇ Descargar HTML'}
+          </button>
         </div>
       </nav>
 

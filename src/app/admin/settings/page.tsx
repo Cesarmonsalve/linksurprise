@@ -8,13 +8,27 @@ export default function SettingsPage() {
     binancePayId: '',
     zinliEmail: '',
     priceInfo: '$3 USD',
+    premiumTemplateIds: [] as string[],
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [templates, setTemplates] = useState<any[]>([]);
 
   useEffect(() => {
-    fetchSettings();
+    Promise.all([fetchSettings(), fetchTemplates()]).then(() => setLoading(false));
   }, []);
+
+  const fetchTemplates = async () => {
+    try {
+      const res = await fetch('/api/templates');
+      const data = await res.json();
+      if (data.success && data.data) {
+        setTemplates(Object.values(data.data));
+      }
+    } catch (e) {
+      console.error('Failed to load templates');
+    }
+  };
 
   const fetchSettings = async () => {
     try {
@@ -26,12 +40,12 @@ export default function SettingsPage() {
           binancePayId: data.data.binancePayId || '',
           zinliEmail: data.data.zinliEmail || '',
           priceInfo: data.data.priceInfo || '$3 USD',
+          premiumTemplateIds: data.data.premiumTemplateIds || [],
         });
       }
     } catch (e) {
       console.error('Failed to load settings');
     }
-    setLoading(false);
   };
 
   const handleSave = async (e: React.FormEvent) => {
@@ -116,6 +130,55 @@ export default function SettingsPage() {
         </button>
 
       </form>
+
+      <div style={{ background: '#0a0a0a', padding: '2rem', borderRadius: 16, border: '1px solid rgba(255,255,255,0.05)', marginTop: '2rem' }}>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>🔐 Gestión Freemium (Muros de Pago)</h2>
+        <p style={{ color: '#888', marginBottom: '1.5rem' }}>Selecciona cuáles plantillas exigen pago obligatorio. Las que marques como Premium tendrán un candado de descarga y cobrarán para compartirse.</p>
+        
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1rem' }}>
+          {templates.map(t => {
+            const isPremium = settings.premiumTemplateIds.includes(t.id);
+            return (
+              <div key={t.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', background: 'rgba(255,255,255,0.02)', border: isPremium ? '1px solid rgba(192,132,252,0.4)' : '1px solid rgba(255,255,255,0.05)', borderRadius: 12 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span style={{ fontSize: '1.2rem' }}>{t.emoji}</span>
+                  <div>
+                    <div style={{ fontSize: '0.9rem', fontWeight: 600, color: isPremium ? '#c084fc' : '#e2e8f0' }}>{t.name}</div>
+                    <div style={{ fontSize: '0.7rem', color: '#888' }}>{t.isCustom ? 'Personalizada' : t.pillarLabel}</div>
+                  </div>
+                </div>
+                
+                <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                  <div style={{
+                    width: 44, height: 24, background: isPremium ? '#7c3aed' : 'rgba(255,255,255,0.1)',
+                    borderRadius: 20, position: 'relative', transition: 'all 0.3s'
+                  }}>
+                    <div style={{
+                      width: 18, height: 18, background: '#fff', borderRadius: '50%',
+                      position: 'absolute', top: 3, left: isPremium ? 22 : 3, transition: 'all 0.3s'
+                    }} />
+                  </div>
+                  <span style={{ marginLeft: '0.5rem', fontSize: '0.75rem', fontWeight: 600, color: isPremium ? '#c084fc' : '#888' }}>
+                    {isPremium ? 'VIP 👑' : 'Gratis 🎁'}
+                  </span>
+                  <input 
+                    type="checkbox" 
+                    checked={isPremium}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSettings({...settings, premiumTemplateIds: [...settings.premiumTemplateIds, t.id]});
+                      } else {
+                        setSettings({...settings, premiumTemplateIds: settings.premiumTemplateIds.filter(id => id !== t.id)});
+                      }
+                    }}
+                    style={{ display: 'none' }}
+                  />
+                </label>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }

@@ -22,6 +22,9 @@ const SettingsSchema = new mongoose.Schema({
     type: String,
     default: '$3 USD'
   },
+  premiumTemplateIds: [{
+    type: String
+  }],
   updatedAt: {
     type: Date,
     default: Date.now

@@ -2,10 +2,11 @@ import { NextResponse } from 'next/server';
 
 const DEFAULT_SETTINGS = {
   key: 'global',
-  whatsappNumber: '',
+  whatsappNumber: '+57 301 1101348',
   binancePayId: '',
   zinliEmail: '',
   priceInfo: '$3 USD',
+  premiumTemplateIds: [],
 };
 
 export async function GET() {

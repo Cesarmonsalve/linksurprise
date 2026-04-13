@@ -7,9 +7,24 @@ import { motion } from 'framer-motion';
 export default function CrearPage() {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [templates, setTemplates] = useState<any[]>([]);
+  const [premiumIds, setPremiumIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    Promise.all([fetchTemplates(), fetchSettings()]).then(() => setLoading(false));
+  }, []);
+
+  const fetchSettings = async () => {
+    try {
+      const res = await fetch('/api/admin/settings');
+      const data = await res.json();
+      if (data.success && data.data && data.data.premiumTemplateIds) {
+        setPremiumIds(data.data.premiumTemplateIds);
+      }
+    } catch (e) {
+      console.error('Failed to load settings', e);
+    }
+  };
     const fetchTemplates = async () => {
       try {
         const res = await fetch('/api/templates');
@@ -30,10 +45,7 @@ export default function CrearPage() {
       } catch (err) {
         console.error(err);
       }
-      setLoading(false);
     };
-    fetchTemplates();
-  }, []);
 
   return (
     <div style={{ minHeight: '100vh', background: '#050505', color: '#f5f5f0', padding: '2rem' }}>
@@ -108,20 +120,27 @@ export default function CrearPage() {
                       {t.emoji}
                     </span>
                     {/* Price badge */}
-                    <span style={{
-                      position: 'absolute',
-                      top: 12,
-                      right: 12,
-                      background: 'rgba(0,0,0,0.5)',
-                      backdropFilter: 'blur(10px)',
-                      padding: '0.3rem 0.8rem',
-                      borderRadius: 20,
-                      fontSize: '0.8rem',
-                      fontWeight: 700,
-                      color: '#fff',
-                    }}>
-                      Desde {t.price}
-                    </span>
+                    {premiumIds.includes(t.id) ? (
+                      <span style={{
+                        position: 'absolute', top: 12, right: 12,
+                        background: 'linear-gradient(135deg, rgba(124, 58, 237, 0.9), rgba(219, 39, 119, 0.9))',
+                        backdropFilter: 'blur(10px)', padding: '0.4rem 0.8rem',
+                        borderRadius: 20, fontSize: '0.75rem', fontWeight: 800, color: '#fff',
+                        boxShadow: '0 4px 15px rgba(0,0,0,0.3)', letterSpacing: '0.05em'
+                      }}>
+                        👑 PREMIUM
+                      </span>
+                    ) : (
+                      <span style={{
+                        position: 'absolute', top: 12, right: 12,
+                        background: 'rgba(16, 185, 129, 0.2)', border: '1px solid rgba(16, 185, 129, 0.5)',
+                        backdropFilter: 'blur(10px)', padding: '0.4rem 0.8rem',
+                        borderRadius: 20, fontSize: '0.75rem', fontWeight: 800, color: '#10b981',
+                        letterSpacing: '0.05em'
+                      }}>
+                        🎁 GRATIS
+                      </span>
+                    )}
                   </div>
                   {/* Card Info */}
                   <div style={{ padding: '1.5rem' }}>

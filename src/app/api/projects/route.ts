@@ -7,6 +7,27 @@ export async function POST(req: Request) {
     await dbConnect();
     const body = await req.json();
     
+    // IP Capture
+    const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
+    body.ipAddress = ip;
+
+    // Anti-spam barrier: Maximum 1 pending VIP project per IP every 24 hours
+    if (body.status === 'pending_payment' && ip !== 'unknown') {
+      const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+      const pendingCount = await Project.countDocuments({
+        ipAddress: ip,
+        status: 'pending_payment',
+        createdAt: { $gt: yesterday }
+      });
+
+      if (pendingCount >= 2) {
+        return NextResponse.json({ 
+          success: false, 
+          error: 'Ya tienes varias sorpresas VIP pendientes de pago. Por favor, reporta el pago de una antes de crear más, o usa la versión gratuita.' 
+        }, { status: 429 });
+      }
+    }
+
     // Create a new project draft
     const project = await Project.create(body);
     

@@ -8,10 +8,14 @@ import PaymentModal from '@/components/PaymentModal';
 
 const FONTS = ['Inter', 'Playfair Display', 'Poppins', 'Dancing Script', 'Outfit', 'Caveat', 'Montserrat'];
 const EFFECTS = [
-  { id: 'typewriter', label: '⌨️ Máquina de escribir', desc: 'El texto aparece letra por letra' },
-  { id: 'fadeUp', label: '✨ Fade Up', desc: 'El contenido aparece suavemente' },
-  { id: 'confetti', label: '🎊 Confeti', desc: 'Lluvia de confeti al abrir' },
-  { id: 'reveal', label: '🔮 Reveal', desc: 'Aparición dramática' },
+  { id: 'typewriter', label: '⌨️ Máquina de escribir', desc: 'El texto aparece letra por letra (Clásico)' },
+  { id: 'fadeUp', label: '✨ Desvanecer (Fade Up)', desc: 'El texto aparece suavemente desde abajo' },
+  { id: 'bounceIn', label: '🪀 Rebote Divertido', desc: 'Aparece dando un salto' },
+  { id: 'zoomOut', label: '🔍 Alejar Enfoque', desc: 'Se posiciona haciendo un efecto de zoom inverso' },
+  { id: 'confetti', label: '🎊 Lluvia de Confeti', desc: 'Lluvia de colores al abrir (VIP / Gratis Limitado)' },
+  { id: 'reveal', label: '🔮 Cortina Teatral', desc: 'Aparición dramática levantando un telón oscuro' },
+  { id: 'heartRain', label: '❤️ Lluvia de Corazones (Exclusivo VIP)', desc: 'Lluvia infinita de corazoncitos flotantes' },
+  { id: 'sparkles', label: '✨ Destellos de Ratón (Exclusivo VIP)', desc: 'Magia que sigue tu dedo/cursor por la pantalla' },
 ];
 
 interface EditorProps {
@@ -29,6 +33,8 @@ export default function EditorPage({ params }: EditorProps) {
   const [showModal, setShowModal] = useState(false);
   const [createdProjectId, setCreatedProjectId] = useState('');
   const [toastMsg, setToastMsg] = useState('');
+
+  const [clientPhone, setClientPhone] = useState('');
 
   const showToast = (msg: string) => {
     setToastMsg(msg);
@@ -128,6 +134,10 @@ export default function EditorPage({ params }: EditorProps) {
   const [generatedLink, setGeneratedLink] = useState('');
 
   const handleSaveProject = async () => {
+    if (isPremium && !clientPhone.trim()) {
+      showToast('❌ OBLIGATORIO: Ingresa tu número de WhatsApp para poder asociar tu pago.');
+      return;
+    }
     setIsSaving(true);
     try {
       const res = await fetch('/api/projects', {
@@ -137,7 +147,8 @@ export default function EditorPage({ params }: EditorProps) {
           title: title || 'Una sorpresa para ti 💝',
           template: templateId,
           config: projectData,
-          status: isPremium ? 'pending_payment' : 'free'
+          status: isPremium ? 'pending_payment' : 'free',
+          clientPhone: isPremium ? clientPhone : ''
         })
       });
       
@@ -415,6 +426,14 @@ export default function EditorPage({ params }: EditorProps) {
                   <label style={styles.label}>🔐 Contraseña (opcional)</label>
                   <input style={styles.input} placeholder="Deja vacío si no quieres contraseña" value={password} onChange={e => setPassword(e.target.value)} />
                 </div>
+
+                {isPremium && (
+                  <div style={{ ...styles.fieldGroup, borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1.5rem', marginTop: '1.5rem' }}>
+                    <label style={{ ...styles.label, color: '#10b981' }}>📱 TU WHATSAPP (OBLIGATORIO PARA VIP)</label>
+                    <input style={{ ...styles.input, borderColor: 'rgba(16,185,129,0.5)', background: 'rgba(16,185,129,0.05)' }} placeholder="+58412..." value={clientPhone} onChange={e => setClientPhone(e.target.value)} />
+                    <p style={{ fontSize: '0.7rem', color: '#888', marginTop: '0.5rem' }}>Lo necesitamos para vincular tu comprobante de pago con este enlace protegido.</p>
+                  </div>
+                )}
               </motion.div>
             )}
 

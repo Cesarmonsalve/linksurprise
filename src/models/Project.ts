@@ -40,6 +40,14 @@ const ProjectSchema = new mongoose.Schema({
   referenceNumber: {
     type: String,
     default: ''
+  },
+  clientPhone: {
+    type: String,
+    default: ''
+  },
+  ipAddress: {
+    type: String,
+    default: ''
   }
 });
 

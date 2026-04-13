@@ -4,6 +4,7 @@
 // ═══════════════════════════════════════════════════════════════
 
 import { TEMPLATE_RENDERERS, resolveTemplateId, TemplateRenderData } from './templates/index';
+import { getGlobalEffect } from './effects';
 
 export interface ProjectData {
   recipientName: string;
@@ -36,6 +37,7 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false, renderM
     title,
     template,
     password,
+    effect,
   } = data;
 
   // ═══ SANITIZATION ═══
@@ -248,6 +250,8 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false, renderM
     </div>
   ` : '';
 
+  const globalEffect = getGlobalEffect(effect, accentColor, isPaid);
+
   // ═══ ASSEMBLE FINAL HTML ═══
   return `<!DOCTYPE html>
 <html lang="es">
@@ -272,9 +276,13 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false, renderM
     
     /* ═══ Template: ${resolvedTemplate} ═══ */
     ${templateCSS}
+
+    /* ═══ Global Effect: ${effect} ═══ */
+    ${globalEffect.css}
   </style>
 </head>
 <body>
+  ${globalEffect.html}
   ${preloaderHTML}
   ${passwordHTML}
   ${musicUrl ? `<audio id="bg-music" src="${musicUrl}" loop style="display:none;"></audio>` : ''}
@@ -285,6 +293,10 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false, renderM
   ${watermark}
   ${engineLibraries}
   ${engineExecution}
+  <script>
+    // ═══ Global Effect JS ═══
+    ${globalEffect.js}
+  </script>
 </body>
 </html>`;
 }

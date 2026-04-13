@@ -86,6 +86,7 @@ export default function AdminDashboard() {
                 <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Fecha</th>
                 <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Para / De</th>
                 <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Plantilla</th>
+                <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Cliente / IP</th>
                 <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Estado</th>
                 <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Acciones</th>
               </tr>
@@ -105,6 +106,10 @@ export default function AdminDashboard() {
                     </td>
                     <td style={{ padding: '1rem 1.5rem', fontSize: '0.9rem', color: '#c084fc' }}>
                       {p.template}
+                    </td>
+                    <td style={{ padding: '1rem 1.5rem', fontSize: '0.8rem' }}>
+                      <div style={{ color: '#10b981', fontWeight: 'bold' }}>{p.clientPhone || 'N/A'}</div>
+                      <div style={{ color: '#555', fontSize: '0.7rem' }}>IP: {p.ipAddress || 'unknown'}</div>
                     </td>
                     <td style={{ padding: '1rem 1.5rem' }}>
                       {getStatusBadge(p.status)}

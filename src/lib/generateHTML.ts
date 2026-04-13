@@ -183,35 +183,35 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false): string
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>\${safeTitle || 'Una sorpresa para ti 💝'}</title>
+  <title>${safeTitle || 'Una sorpresa para ti 💝'}</title>
   <meta name="description" content="Alguien especial te envió una sorpresa digital">
-  <meta property="og:title" content="\${safeTitle || 'Tienes una sorpresa 💝'}">
+  <meta property="og:title" content="${safeTitle || 'Tienes una sorpresa 💝'}">
   <meta property="og:description" content="Alguien especial te ha enviado un mensaje. ¡Ábrelo!">
-  <link href="https://fonts.googleapis.com/css2?family=\${fontFamily.replace(/ /g, '+')}:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=${fontFamily.replace(/ /g, '+')}:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root { --bg: \${backgroundColor}; --txt: \${textColor}; --acc: \${accentColor}; }
+    :root { --bg: ${backgroundColor}; --txt: ${textColor}; --acc: ${accentColor}; }
     *{margin:0;padding:0;box-sizing:border-box;}
     body{
-      font-family:'\${fontFamily}',sans-serif;
+      font-family:'${fontFamily}',sans-serif;
       color:var(--txt);
       overflow-x:hidden;
       -webkit-font-smoothing: antialiased;
       background: var(--bg);
     }
     
-    /* ═══ Template: \${resolvedTemplate} ═══ */
-    \${templateCSS}
+    /* ═══ Template: ${resolvedTemplate} ═══ */
+    ${templateCSS}
   </style>
 </head>
 <body>
-  \${preloaderHTML}
-  \${passwordHTML}
-  \${musicUrl ? \`<audio id="bg-music" src="\${musicUrl}" loop style="display:none;"></audio>\` : ''}
+  ${preloaderHTML}
+  ${passwordHTML}
+  ${musicUrl ? `<audio id="bg-music" src="${musicUrl}" loop style="display:none;"></audio>` : ''}
   
-  <!-- Template Engine: \${resolvedTemplate} -->
-  \${templateHTML}
+  <!-- Template Engine: ${resolvedTemplate} -->
+  ${templateHTML}
   
-  \${watermark}
+  ${watermark}
   
   <!-- Core 3D & GSAP Engine (Mega Interactive) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
@@ -222,11 +222,11 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false): string
     // Register GSAP Plugins globally
     gsap.registerPlugin(ScrollTrigger, TextPlugin);
     
-    // Engine: \${resolvedTemplate}
+    // Engine: ${resolvedTemplate}
     window.addEventListener('load', () => {
       // Small delay to let preloader fade out securely
       setTimeout(() => {
-        \${templateJS}
+        ${templateJS}
       }, 500);
     });
   </script>

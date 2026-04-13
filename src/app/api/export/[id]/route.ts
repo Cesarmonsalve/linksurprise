@@ -29,8 +29,9 @@ export async function GET(request: Request, props: { params: Promise<{ id: strin
       customTemplateConfig: customTemplateConfig || undefined
     };
 
-    // Use the unified template engine (same as /s/[id])
-    const html = generateHTML(data, isPaid);
+    // Use the unified template engine — VIP for paid, basic for free
+    const mode = isPaid ? 'vip' : 'basic';
+    const html = generateHTML(data, isPaid, mode);
 
     return new NextResponse(html, {
       status: 200,

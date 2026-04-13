@@ -53,7 +53,7 @@ export function renderParticleBurst(d: TemplateRenderData): TemplateOutput {
     let parts = '';
     for(let i=0; i<30; i++) {
         const l = Math.random()*100; const d = Math.random()*5+3; const s = Math.random()*6+2;
-        parts += `<div class="p-css" style="left:${l}%; width:${s}px; height:${s}px; --dr:\${d}s; animation-delay:${Math.random()*2}s;"></div>`;
+        parts += `<div class="p-css" style="left:${l}%; width:${s}px; height:${s}px; --dr:${d}s; animation-delay:${Math.random()*2}s;"></div>`;
     }
     html = `
       <div class="particles-css">${parts}</div>

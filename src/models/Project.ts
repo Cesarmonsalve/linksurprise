@@ -7,7 +7,7 @@ const ProjectSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['draft', 'pending_payment', 'paid'],
+    enum: ['draft', 'pending_payment', 'paid', 'free'],
     default: 'draft',
   },
   template: {

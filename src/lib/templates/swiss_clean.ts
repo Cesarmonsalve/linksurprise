@@ -131,7 +131,7 @@ export function renderSwissClean(d: TemplateRenderData): TemplateOutput {
     setTimeout(type, 800);
   ` : `
     // VIP MODE ENGINE - Kinetic Typography
-    const nameStr = "\${(d.recipientName || 'HOLA').toUpperCase()}";
+    const nameStr = "${(d.recipientName || 'HOLA').toUpperCase()}";
     const cont = document.getElementById('name-container');
     nameStr.split('').forEach(c => {
       const sp = document.createElement('span');

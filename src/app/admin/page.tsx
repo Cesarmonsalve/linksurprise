@@ -45,6 +45,7 @@ export default function AdminDashboard() {
   const getStatusBadge = (status: string) => {
     if (status === 'paid') return <span style={{ padding: '0.3rem 0.6rem', background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', borderRadius: 20, fontSize: '0.75rem', fontWeight: 600 }}>Aprobado / Pagado</span>;
     if (status === 'pending_payment') return <span style={{ padding: '0.3rem 0.6rem', background: 'rgba(245, 158, 11, 0.15)', color: '#f59e0b', borderRadius: 20, fontSize: '0.75rem', fontWeight: 600 }}>Pago Pendiente</span>;
+    if (status === 'free') return <span style={{ padding: '0.3rem 0.6rem', background: 'rgba(96, 165, 250, 0.15)', color: '#60a5fa', borderRadius: 20, fontSize: '0.75rem', fontWeight: 600 }}>Gratuito</span>;
     return <span style={{ padding: '0.3rem 0.6rem', background: 'rgba(255, 255, 255, 0.1)', color: '#aaa', borderRadius: 20, fontSize: '0.75rem', fontWeight: 600 }}>Borrador</span>;
   };
 

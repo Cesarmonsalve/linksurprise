@@ -91,7 +91,7 @@ export function renderBrutalistBold(d: TemplateRenderData): TemplateOutput {
         <div class="b-card" id="b-card">
           <div class="b-tag-wrap">
             <div class="b-tag">URGENT</div>
-            <div class="b-id">ID: #\${Math.floor(Math.random() * 90000) + 10000}</div>
+            <div class="b-id">ID: #${Math.floor(Math.random() * 90000) + 10000}</div>
           </div>
           
           <h1 class="b-title">${d.title}</h1>

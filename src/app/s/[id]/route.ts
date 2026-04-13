@@ -71,8 +71,9 @@ export async function GET(request: Request, props: { params: Promise<{ id: strin
       customTemplateConfig: customTemplateConfig || undefined
     };
 
-    // Generate pure standalone HTML using our engine in VIP mode
-    const html = generateHTML(data, isPaid, 'vip');
+    // Generate pure standalone HTML — VIP for paid, basic for free
+    const mode = isPaid ? 'vip' : 'basic';
+    const html = generateHTML(data, isPaid, mode);
 
     // Return it as a live web page!
     return new NextResponse(html, {

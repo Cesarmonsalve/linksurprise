@@ -113,7 +113,7 @@ export function renderFadeStory(d: TemplateRenderData): TemplateOutput {
       dotsHTML += `<div class="story-dot${i === 0 ? ' active' : ''}" data-idx="${i}"></div>`;
     }
     uiHTML = `
-      <div class="story-nav">\${dotsHTML}</div>
+      <div class="story-nav">${dotsHTML}</div>
       <div class="story-tap-hint" id="tapHint">›</div>
     `;
   } else {
@@ -122,13 +122,13 @@ export function renderFadeStory(d: TemplateRenderData): TemplateOutput {
        barsHTML += `<div class="progress-bar"><div class="progress-fill" id="fill-${i}"></div></div>`;
     }
     uiHTML = `
-      <div class="progress-container">\${barsHTML}</div>
+      <div class="progress-container">${barsHTML}</div>
       <div class="touch-left" id="t-left"></div>
       <div class="touch-right" id="t-right"></div>
     `;
   }
 
-  const html = `<div class="story-container">${scenesHTML}</div>\${uiHTML}`;
+  const html = `<div class="story-container">${scenesHTML}</div>${uiHTML}`;
 
   const js = isBasic ? `
     const scenes = document.querySelectorAll('.story-scene');

@@ -131,7 +131,7 @@ export default function CrearPage() {
                     <h3 style={{ fontSize: '1.3rem', fontWeight: 700, margin: '0.4rem 0' }}>{t.title}</h3>
                     <p style={{ fontSize: '0.85rem', color: '#888', lineHeight: 1.5, marginBottom: '1rem' }}>{t.desc}</p>
                     <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                      {t.features.map((f, j) => (
+                      {t.features.map((f: string, j: number) => (
                         <span key={j} style={{
                           fontSize: '0.7rem',
                           padding: '0.25rem 0.6rem',

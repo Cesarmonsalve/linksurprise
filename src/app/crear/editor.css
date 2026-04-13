@@ -1,0 +1,62 @@
+/* ═══════════════════════════════════════════════════════
+   EDITOR PAGE STYLES
+   ═══════════════════════════════════════════════════════ */
+
+.editor-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.editor-sidebar {
+  width: 420px;
+  min-width: 420px;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+.editor-preview {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: #080808;
+  position: relative;
+}
+
+/* Mobile: Stack vertically with preview at top */
+@media (max-width: 900px) {
+  .editor-layout {
+    flex-direction: column-reverse;
+    overflow-y: auto;
+  }
+
+  .editor-sidebar {
+    width: 100%;
+    min-width: 100%;
+    border-right: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 1rem;
+  }
+
+  .editor-preview {
+    padding: 1.5rem;
+    min-height: 500px;
+  }
+
+  .editor-nav-actions {
+    display: none !important;
+  }
+
+  .editor-mobile-actions {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 901px) {
+  .editor-mobile-actions {
+    display: none !important;
+  }
+}

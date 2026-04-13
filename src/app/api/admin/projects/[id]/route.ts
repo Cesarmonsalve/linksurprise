@@ -2,10 +2,11 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Project from '@/models/Project';
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(req: Request, props: { params: Promise<{ id: string }> }) {
   try {
     await dbConnect();
     const { status } = await req.json();
+    const params = await props.params;
     
     // params.id gives the Project ID
     const project = await Project.findByIdAndUpdate(params.id, { status }, { new: true });

@@ -100,6 +100,7 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false, renderM
         imageUrl,
         title: safeTitle,
         template: resolvedTemplate,
+        renderMode,
       };
       const rendered = renderer(renderData);
       templateCSS = rendered.css;

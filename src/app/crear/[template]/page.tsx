@@ -140,8 +140,15 @@ export default function EditorPage({ params }: EditorProps) {
           status: isPremium ? 'pending_payment' : 'free'
         })
       });
-      const data = await res.json();
-      if (data.success) {
+      
+      let data;
+      try {
+        data = await res.json();
+      } catch (e) {
+        throw new Error('Error al conectar con el servidor.');
+      }
+
+      if (res.ok && data.success) {
         setCreatedProjectId(data.data._id);
         const url = `${window.location.origin}/s/${data.data._id}`;
         setGeneratedLink(url);
@@ -151,11 +158,15 @@ export default function EditorPage({ params }: EditorProps) {
         } else {
           showToast('¡Link copiado al portapapeles! 🎁✨');
         }
+      } else {
+        throw new Error(data.error || 'Error al guardar el proyecto en la base de datos.');
       }
-    } catch (err) {
-      showToast('Error al guardar el proyecto');
+    } catch (err: any) {
+      console.error(err);
+      showToast(`❌ Error: ${err.message || 'Error desconocido'}`);
+    } finally {
+      setIsSaving(false);
     }
-    setIsSaving(false);
   };
 
   const handlePreviewNewTab = useCallback(() => {

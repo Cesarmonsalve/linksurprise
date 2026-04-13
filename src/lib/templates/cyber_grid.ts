@@ -1,119 +1,268 @@
 // ═══════════════════════════════════════════════════════════════
-// STYLE #2: CYBER GRID — eSports Neon Grid
+// STYLE #2: CYBER GRID — Hacker Terminal Game
 // ═══════════════════════════════════════════════════════════════
 import { TemplateRenderData, TemplateOutput } from './index';
 
 export function renderCyberGrid(d: TemplateRenderData): TemplateOutput {
+  const isBasic = d.renderMode === 'basic';
+  const termColor = d.accentColor || '#00ffcc';
+
   const css = `
-    body { background: #0a0a12; overflow-x: hidden; }
+    body { background: #000; overflow-x: hidden; font-family: 'Courier New', Courier, monospace; margin: 0; padding: 0; }
     
-    /* Perspective neon grid floor */
-    .cyber-grid-bg {
-      position: fixed; inset: 0; z-index: 0;
-      background:
-        linear-gradient(to bottom, transparent 60%, ${d.accentColor}08 100%),
-        repeating-linear-gradient(90deg, ${d.accentColor}10 0px, transparent 1px, transparent 80px),
-        repeating-linear-gradient(0deg, ${d.accentColor}10 0px, transparent 1px, transparent 80px);
-      transform: perspective(400px) rotateX(40deg);
-      transform-origin: center bottom;
-      animation: gridScroll 4s linear infinite;
+    ${isBasic ? `
+    /* BASIC MODE STYLES */
+    .basic-shell {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem;
+      background: linear-gradient(180deg, #000 0%, #051015 100%);
     }
-    @keyframes gridScroll { to { background-position: 0 80px; } }
+    .basic-card {
+      background: rgba(0,20,20,0.4); border: 1px solid ${termColor}40;
+      box-shadow: 0 0 20px ${termColor}20, inset 0 0 10px ${termColor}10;
+      border-radius: 8px; padding: 3rem 2rem; max-width: 500px; width: 100%; text-align: left;
+    }
+    .cyber-sys { font-weight: bold; color: ${termColor}; font-size: 0.8rem; margin-bottom: 5px; text-transform: uppercase; }
+    .cyber-title { font-size: 1.5rem; font-weight: bold; color: #fff; margin-bottom: 20px; }
+    .cyber-photo { width: 100%; border: 1px solid ${termColor}50; margin: 20px 0; border-radius: 4px; filter: contrast(1.2) sepia(1) hue-rotate(130deg) saturate(2); }
+    .cyber-msg { color: #aaa; line-height: 1.6; }
+    .cyber-cursor { display: inline-block; width: 10px; height: 1em; background: ${termColor}; animation: blink 1s step-end infinite; vertical-align: text-bottom; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    `: `
+    /* VIP MODE STYLES */
+    #matrix-canvas { position: fixed; inset: 0; z-index: 0; opacity: 0.15; }
+    .scanlines { position: fixed; inset: 0; background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2)); background-size: 100% 4px; z-index: 99; pointer-events: none; }
     
-    /* Scan lines CRT */
-    .crt-lines {
-      position: fixed; inset: 0; z-index: 1; pointer-events: none;
-      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
-    }
-    
-    /* HUD container */
-    .hud-shell {
-      position: relative; z-index: 10; min-height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      padding: 2rem;
-    }
-    
-    .hud-card {
-      background: rgba(0,0,0,0.7);
-      border: 1px solid ${d.accentColor}40;
-      border-radius: 4px; padding: 3rem 2rem;
-      max-width: 480px; width: 100%; text-align: center;
-      position: relative;
-      clip-path: polygon(0 12px, 12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px));
-      box-shadow: 0 0 40px ${d.accentColor}15;
-      opacity: 0; animation: hudSlideIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
-    }
-    @keyframes hudSlideIn { to { opacity: 1; } }
-    
-    /* Corner HUD brackets */
-    .hud-card::before, .hud-card::after {
-      content: ''; position: absolute; width: 30px; height: 30px;
-      border-color: ${d.accentColor}; border-style: solid;
-    }
-    .hud-card::before { top: 4px; left: 4px; border-width: 2px 0 0 2px; }
-    .hud-card::after { bottom: 4px; right: 4px; border-width: 0 2px 2px 0; }
-    
-    /* Glitch text */
-    .glitch-title {
-      font-size: clamp(2rem, 6vw, 3rem); font-weight: 900;
-      color: ${d.textColor}; text-transform: uppercase;
-      letter-spacing: 0.1em; position: relative;
-      animation: glitch 3s infinite;
-    }
-    @keyframes glitch {
-      0%, 95%, 100% { text-shadow: none; }
-      96% { text-shadow: -3px 0 ${d.accentColor}, 3px 0 #ff004440; }
-      97% { text-shadow: 3px 0 #00ffff40, -3px 0 ${d.accentColor}; }
-      98% { text-shadow: -2px 0 ${d.accentColor}, 2px 0 #ff004440; }
+    #terminal-overlay {
+      position: fixed; inset: 0; z-index: 50; background: #000;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 2rem; color: ${termColor};
     }
     
-    .cyber-label { font-size: 0.65rem; letter-spacing: 0.4em; color: ${d.accentColor}; text-transform: uppercase; font-weight: 700; margin-bottom: 1rem; }
-    .cyber-status { display: inline-block; padding: 4px 14px; background: ${d.accentColor}15; border: 1px solid ${d.accentColor}30; border-radius: 2px; font-size: 0.7rem; color: ${d.accentColor}; letter-spacing: 0.15em; margin-bottom: 1.5rem; animation: blink 2s infinite; }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-    .cyber-msg { font-size: 1rem; line-height: 1.8; color: ${d.textColor}; opacity: 0.8; margin: 1.5rem 0; font-family: 'Courier New', monospace; }
-    .cyber-photo { width: 100%; max-width: 280px; border-radius: 4px; border: 1px solid ${d.accentColor}40; margin: 1.5rem auto; display: block; box-shadow: 0 0 20px ${d.accentColor}20; }
-    .cyber-divider { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, ${d.accentColor}60, transparent); margin: 1.5rem 0; }
-    .cyber-sender { font-size: 0.8rem; color: ${d.textColor}60; font-family: monospace; }
-    .cyber-sender strong { color: ${d.accentColor}; }
+    .term-box {
+      width: 100%; max-width: 600px; border: 2px solid ${termColor}; padding: 20px;
+      background: rgba(0,20,20,0.8); box-shadow: 0 0 30px ${termColor}40;
+    }
+    .term-header { border-bottom: 1px solid ${termColor}; padding-bottom: 10px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
+    .term-line { margin-bottom: 10px; }
+    .term-input-line { display: flex; align-items: center; margin-top: 20px; }
+    .term-prompt { margin-right: 10px; font-weight: bold; }
+    .term-input { 
+      background: transparent; border: none; color: #fff; font-family: 'Courier New', Courier, monospace; 
+      font-size: 1rem; outline: none; flex-grow: 1; text-transform: uppercase;
+    }
+    .term-input::placeholder { color: ${termColor}50; }
     
-    @media (max-width: 480px) { .hud-card { padding: 2rem 1.5rem; } }
+    #main-content {
+      position: relative; z-index: 10; display: none; flex-direction: column; align-items: center;
+      min-height: 100vh; padding: 4rem 2rem;
+    }
+    .hud-box {
+      border: 1px solid ${termColor}60; padding: 30px; background: rgba(0,0,0,0.7);
+      box-shadow: 0 0 50px ${termColor}30, inset 0 0 20px ${termColor}20;
+      max-width: 600px; width: 100%; position: relative;
+    }
+    .hud-corner { position: absolute; width: 20px; height: 20px; border: 2px solid ${termColor}; }
+    .hud-tl { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+    .hud-tr { top: -2px; right: -2px; border-left: none; border-bottom: none; }
+    .hud-bl { bottom: -2px; left: -2px; border-right: none; border-top: none; }
+    .hud-br { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+    
+    .hud-sys { font-size: 0.8rem; letter-spacing: 2px; color: ${termColor}; margin-bottom: 10px; }
+    .hud-title { font-size: 2rem; color: #fff; text-shadow: 0 0 10px #fff; margin-bottom: 30px; }
+    .hud-photo { width: 100%; border: 1px solid ${termColor}; margin-bottom: 20px; filter: grayscale(100%) contrast(1.5) sepia(1) hue-rotate(140deg); }
+    .hud-photo img { width: 100%; display: block; opacity: 0.8; }
+    .hud-msg { color: #ddd; line-height: 1.8; font-size: 1.1rem; }
+    .hud-sender { margin-top: 30px; border-top: 1px dashed ${termColor}; padding-top: 20px; color: ${termColor}; }
+    `}
   `;
 
-  const html = `
-    <div class="cyber-grid-bg"></div>
-    <div class="crt-lines"></div>
-    <div class="hud-shell">
-      <div class="hud-card">
-        <div class="cyber-status">● ENLACE ACTIVO</div>
-        <p class="cyber-label">// Transmisión para ${d.recipientName || 'DESTINO'}</p>
-        <h1 class="glitch-title" id="type-target"></h1>
-        <div class="cyber-divider"></div>
-        ${d.imageUrl ? `<img class="cyber-photo" src="${d.imageUrl}" alt="Data" />` : ''}
-        <div class="cyber-divider"></div>
-        <p class="cyber-sender">REMITENTE: <strong>${d.senderName || 'ANÓNIMO'}</strong></p>
+  const html = isBasic ? `
+    <div class="basic-shell">
+      <div class="basic-card">
+        <div class="cyber-sys">SYS.INIT // TARGET: ${d.recipientName || 'GUEST'}</div>
+        <div class="cyber-title">${d.title}</div>
+        <div class="cyber-sys">DECRYPTING PAYLOAD...</div>
+        ${d.imageUrl ? `<img class="cyber-photo" src="${d.imageUrl}" />` : ''}
+        <div class="cyber-msg" id="type-target"></div>
+        <div class="cyber-sys" style="margin-top:20px;">SRC: ${d.senderName || 'UNKNOWN'}</div>
+      </div>
+    </div>
+  ` : `
+    <canvas id="matrix-canvas"></canvas>
+    <div class="scanlines"></div>
+    
+    <div id="terminal-overlay">
+      <div class="term-box">
+        <div class="term-header">SURPRISE_OS v2.4.1 [ENCRYPTED]</div>
+        <div id="term-output"></div>
+        <div class="term-input-line" id="input-container" style="display:none;">
+          <span class="term-prompt">root@nexus:~$</span>
+          <input type="text" id="term-input" class="term-input" autocomplete="off" placeholder="INGRESE CLAVE...">
+        </div>
+      </div>
+    </div>
+    
+    <div id="main-content">
+      <div class="hud-box" id="hud-box">
+        <div class="hud-corner hud-tl"></div><div class="hud-corner hud-tr"></div>
+        <div class="hud-corner hud-bl"></div><div class="hud-corner hud-br"></div>
+        
+        <div class="hud-sys">TARGET LOCKED: ${d.recipientName || 'GUEST'}</div>
+        <div class="hud-title" id="hud-title"></div>
+        ${d.imageUrl ? `
+        <div class="hud-photo" id="hud-photo">
+          <img src="${d.imageUrl}" />
+        </div>` : ''}
+        <div class="hud-msg" id="hud-msg"></div>
+        <div class="hud-sender">TRANSMISSION SRC: ${d.senderName || 'UNKNOWN_NODE'}</div>
       </div>
     </div>
   `;
 
-  const js = `
-    // Typewriter
+  const js = isBasic ? `
     const target = document.getElementById('type-target');
     const txt = "${d.escapedMessage}";
     let i = 0;
     function type() {
-      if (i < txt.length) {
-        if (txt.substring(i, i+5) === '<br/>') { target.innerHTML += '<br/>'; i += 5; }
-        else { target.innerHTML += txt.charAt(i); i++; }
+      if(i < txt.length){
+        if(txt.substring(i,i+5)==='<br/>'){target.innerHTML+='<br/>';i+=5;}
+        else{target.innerHTML+=txt.charAt(i);i++;}
+        target.innerHTML = target.innerHTML.replace('<span class="cyber-cursor"></span>', '') + '<span class="cyber-cursor"></span>';
         setTimeout(type, 30);
       }
     }
-    setTimeout(type, 1200);
+    setTimeout(type, 800);
+  ` : `
+    // VIP MODE ENGINE
     
-    // Music
-    document.body.addEventListener('click', () => {
-      const a = document.getElementById('bg-music');
-      if (a) { a.volume = 0.5; a.play(); }
-    }, { once: true });
+    // Matrix Background
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+'.split('');
+    const fontSize = 14; const columns = canvas.width/fontSize;
+    const drops = []; for(let x=0; x<columns; x++) drops[x] = 1;
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '${termColor}'; ctx.font = fontSize + 'px monospace';
+      for(let i=0; i<drops.length; i++) {
+        const text = chars[Math.floor(Math.random()*chars.length)];
+        ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+        if(drops[i]*fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+    }
+    setInterval(drawMatrix, 33);
+    window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+
+    // Terminal Logic
+    const output = document.getElementById('term-output');
+    const inputContainer = document.getElementById('input-container');
+    const input = document.getElementById('term-input');
+    const expectedKey = 'OPEN';
+    
+    const bootSequence = [
+      "Iniciando conexión segura...",
+      "Estableciendo enlace cuántico...",
+      "Mensaje encriptado detectado.",
+      "Para descriptar, usa la clave: OPEN"
+    ];
+    
+    let bootIndex = 0;
+    function printBootLine() {
+      if(bootIndex < bootSequence.length) {
+        const div = document.createElement('div');
+        div.className = 'term-line';
+        output.appendChild(div);
+        
+        let charIndex = 0;
+        const lineText = bootSequence[bootIndex];
+        const typeInt = setInterval(() => {
+          div.textContent += lineText[charIndex];
+          charIndex++;
+          if(charIndex >= lineText.length) {
+            clearInterval(typeInt);
+            bootIndex++;
+            setTimeout(printBootLine, 400);
+          }
+        }, 30);
+      } else {
+        inputContainer.style.display = 'flex';
+        input.focus();
+      }
+    }
+    setTimeout(printBootLine, 1000);
+    
+    input.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter') {
+        const val = input.value.trim().toUpperCase();
+        const div = document.createElement('div');
+        div.className = 'term-line';
+        div.innerHTML = \`<span class="term-prompt">root@nexus:~$</span> \${val}\`;
+        output.appendChild(div);
+        input.value = '';
+        
+        const resp = document.createElement('div');
+        resp.className = 'term-line';
+        if(val === expectedKey) {
+          resp.textContent = 'ACCESO CONCEDIDO. Desencriptando payload...';
+          resp.style.color = '#fff';
+          output.appendChild(resp);
+          inputContainer.style.display = 'none';
+          setTimeout(unlockPayload, 1500);
+        } else {
+          resp.textContent = 'ERROR: Clave incorrecta. Intentos restantes: INIFINITOS.';
+          resp.style.color = 'red';
+          output.appendChild(resp);
+          // Auto scroll
+          document.querySelector('.term-box').scrollTop = document.querySelector('.term-box').scrollHeight;
+        }
+      }
+    });
+    
+    function unlockPayload() {
+      const audio = document.getElementById('bg-music');
+      if (audio) { audio.volume = 0; audio.play(); gsap.to(audio, {volume: 0.8, duration: 2}); }
+      
+      const termOverlay = document.getElementById('terminal-overlay');
+      const mainContent = document.getElementById('main-content');
+      
+      // Glitch transition
+      gsap.to(termOverlay, { opacity: 0, duration: 0.1, yoyo: true, repeat: 5 });
+      setTimeout(() => {
+        termOverlay.style.display = 'none';
+        mainContent.style.display = 'flex';
+        
+        // HUD Animation
+        gsap.from('#hud-box', { scale: 0.9, opacity: 0, duration: 1, ease: 'power4.out' });
+        
+        // Type title
+        const targetTitle = document.getElementById('hud-title');
+        gsap.to(targetTitle, { text: "${d.title}", duration: 1.5, ease: "none", delay: 0.5 });
+        
+        // Image reveal
+        if(document.getElementById('hud-photo')) {
+          gsap.from('#hud-photo', { height: 0, opacity: 0, duration: 1, delay: 1 });
+        }
+        
+        // Type Msg
+        setTimeout(() => {
+          const targetMsg = document.getElementById('hud-msg');
+          const txtMsg = "${d.escapedMessage}";
+          let mi = 0;
+          function typeMsg() {
+            if(mi < txtMsg.length) {
+              if(txtMsg.substring(mi,mi+5)==='<br/>'){targetMsg.innerHTML+='<br/>';mi+=5;}
+              else{targetMsg.innerHTML+=txtMsg.charAt(mi);mi++;}
+              setTimeout(typeMsg, 20);
+            }
+          }
+          typeMsg();
+        }, 2000);
+        
+      }, 800);
+    }
   `;
 
   return { css, html, js };

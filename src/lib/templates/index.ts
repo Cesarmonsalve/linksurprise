@@ -15,6 +15,7 @@ export interface TemplateRenderData {
   imageUrl: string;
   title: string;
   template: string;
+  renderMode?: 'basic' | 'vip';
 }
 
 export interface TemplateOutput {

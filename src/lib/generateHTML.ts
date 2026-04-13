@@ -135,24 +135,79 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false, renderM
         .replace(/\$\{textColor\}/g, textColor)
         .replace(/\$\{accentColor\}/g, accentColor);
       templateCSS = basicCss;
-    } else {
-      // Si no tiene Basic, o es de las predefinidas: TARJETA UNIVERSAL
+      // Si no tiene Basic, o es de las predefinidas: TARJETA UNIVERSAL MEJORADA
       templateCSS = `
-        .freemium-card {
-          max-width: 600px; margin: 40px auto; padding: 40px 20px; text-align: center;
-          background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
-          border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-          font-family: '${fontFamily}', sans-serif;
+        /* Premium Freemium Card Styles */
+        @keyframes softFloat {
+          0%, 100% { transform: translateY(0px) scale(1); }
+          50% { transform: translateY(-10px) scale(1.01); }
         }
-        .freemium-img { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; border: 4px solid ${accentColor}; }
-        .freemium-title { font-size: 2rem; color: ${textColor}; margin-bottom: 15px; font-weight: bold; }
-        .freemium-message { font-size: 1.1rem; color: ${textColor}; opacity: 0.8; line-height: 1.6; white-space: pre-wrap; }
-        .freemium-footer { margin-top: 30px; font-size: 0.9rem; color: ${accentColor}; }
+        @keyframes fadeInScale {
+          from { opacity: 0; transform: scale(0.95) translateY(20px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .freemium-container {
+          min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; 
+          background: ${backgroundColor};
+          position: relative; overflow: hidden;
+        }
+        .freemium-container::before {
+          content: ''; position: absolute; top: -20%; left: -10%; width: 50vw; height: 50vw;
+          background: radial-gradient(circle, ${accentColor}15 0%, transparent 70%); filter: blur(80px); pointer-events: none;
+        }
+        .freemium-container::after {
+          content: ''; position: absolute; bottom: -20%; right: -10%; width: 40vw; height: 40vw;
+          background: radial-gradient(circle, ${accentColor}1A 0%, transparent 70%); filter: blur(100px); pointer-events: none;
+        }
+        .freemium-card {
+           max-width: 600px; width: 100%; margin: 40px auto; padding: 50px 30px; text-align: center;
+           background: rgba(255,255,255,0.02);
+           backdrop-filter: blur(24px) saturate(150%);
+           -webkit-backdrop-filter: blur(24px) saturate(150%);
+           border: 1px solid rgba(255,255,255,0.06);
+           border-top: 1px solid rgba(255,255,255,0.15);
+           border-radius: 32px; 
+           box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+           font-family: '${fontFamily}', sans-serif;
+           animation: fadeInScale 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards, softFloat 6s ease-in-out infinite;
+           position: relative; z-index: 10;
+           transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
+        }
+        .freemium-card:hover {
+           transform: translateY(-5px);
+           box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 40px ${accentColor}20, inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+        .freemium-img-wrapper {
+           position: relative; width: 160px; height: 160px; margin: 0 auto 30px;
+        }
+        .freemium-img-wrapper::before {
+           content: ''; position: absolute; inset: -5px; border-radius: 50%;
+           background: conic-gradient(from 0deg, ${accentColor}, transparent, ${accentColor});
+           animation: spin 4s linear infinite; z-index: -1; opacity: 0.5;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .freemium-img {
+           width: 100%; height: 100%; border-radius: 50%; object-fit: cover; 
+           border: 4px solid ${backgroundColor}; background: ${backgroundColor};
+           box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+        .freemium-title { 
+           font-size: 2.4rem; color: ${textColor}; margin-bottom: 20px; font-weight: 800; 
+           letter-spacing: -0.03em; line-height: 1.1;
+        }
+        .freemium-message { 
+           font-size: 1.15rem; color: ${textColor}; opacity: 0.85; line-height: 1.7; 
+           white-space: pre-wrap; padding: 0 15px; font-weight: 400;
+        }
+        .freemium-footer { 
+           margin-top: 40px; font-size: 1rem; color: ${accentColor}; font-weight: 600;
+           letter-spacing: 0.05em; text-transform: uppercase;
+        }
       `;
       templateHTML = `
-        <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; background: ${backgroundColor};">
+        <div class="freemium-container">
           <div class="freemium-card">
-            ${imageUrl ? `<img src="${imageUrl}" alt="Foto" class="freemium-img" />` : ''}
+            ${imageUrl ? `<div class="freemium-img-wrapper"><img src="${imageUrl}" alt="Foto" class="freemium-img" /></div>` : ''}
             <h1 class="freemium-title">Para: ${safeRecipient}</h1>
             <div class="freemium-message">${escapedMessage}</div>
             <div class="freemium-footer">Con cariño, ${safeSender}</div>
@@ -174,10 +229,36 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false, renderM
     // Register GSAP Plugins globally
     gsap.registerPlugin(ScrollTrigger, TextPlugin);
     
+    // Global Premium Animations Engine
+    function initLSPremiumEngine() {
+      // 1. Reveal Up Elements
+      gsap.utils.toArray('.ls-reveal-up').forEach((el) => {
+        gsap.fromTo(el, 
+          { y: 50, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 85%' } }
+        );
+      });
+      // 2. Scale In Elements
+      gsap.utils.toArray('.ls-scale-in').forEach((el) => {
+        gsap.fromTo(el, 
+          { scale: 0.8, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 1.2, ease: 'back.out(1.7)', scrollTrigger: { trigger: el, start: 'top 85%' } }
+        );
+      });
+      // 3. Parallax Backgrounds
+      gsap.utils.toArray('.ls-parallax').forEach((el) => {
+        gsap.to(el, {
+          yPercent: 30, ease: 'none',
+          scrollTrigger: { trigger: el.parentElement, start: 'top bottom', end: 'bottom top', scrub: true }
+        });
+      });
+    }
+
     // Engine: ${resolvedTemplate}
     window.addEventListener('load', () => {
       // Small delay to let preloader fade out securely
       setTimeout(() => {
+        initLSPremiumEngine();
         ${templateJS}
       }, 500);
     });

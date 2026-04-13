@@ -89,6 +89,11 @@ async function executeActions(actions: BotAction[]): Promise<string[]> {
           break;
         }
 
+        case 'generate_template': {
+          results.push(`✨ ¡Lista! He generado la plantilla en el panel visual adjunto.`);
+          break;
+        }
+
         default:
           results.push(`⚠️ Acción desconocida: ${action.type}`);
       }
@@ -176,6 +181,9 @@ Acciones disponibles:
    Campos válidos: whatsappNumber, priceInfo, binancePayId, zinliEmail
 3. Toggle premium: { "type": "toggle_premium", "templateId": "<id>", "makePremium": true/false }
 4. Eliminar plantilla: { "type": "delete_template", "templateId": "<id>" }
+5. Crear/Modificar plantilla visual: Manda esta acción si el usuario te pide crear o modificar una plantilla web.
+   { "type": "generate_template", "template": { "html": "...", "css": "...", "js": "..." } }
+   * En "html", devuelve SOLO el contenido central (sin html, head, body). Puedes usar \${recipientName}, \${senderName}, \${escapedMessage}, \${imageUrl}.
 
 ═══ FORMATO DE RESPUESTA ═══
 DEBES responder ÚNICAMENTE con un JSON válido con esta estructura:
@@ -188,9 +196,10 @@ El campo "actions" es un array. Si no hay acciones, devuelve [].
 Si el usuario pide algo que requiere una acción, inclúyela en el array.
 
 ═══ REGLAS IMPORTANTES ═══
-- NUNCA inventes datos. Usa SOLO los datos reales proporcionados arriba.
-- Si te piden algo que no puedes hacer (ej: crear plantilla completa), explica que pueden usar la sección de Plantillas Propias o que esa funcionalidad viene pronto.
-- Si te piden aprobar un proyecto, busca el ID correcto en la lista de proyectos según el nombre que mencionen.
+- NUNCA inventes datos de estado o estadística. Usa SOLO los datos reales proporcionados arriba.
+- Eres capaz de crear CÓDIGO para plantillas impresionantes. Si el usuario pide una mejora visual de una plantilla existente o una nueva, siéntete libre de retornar la acción "generate_template" rellenando HTML, CSS avanzado (glows, glassmorphism) y JS.
+- En la acción de generate_template, NO agregues markdown (\`\`\`html) dentro de las propiedades html/css/js del JSON.
+- Si te piden aprobar un proyecto, busca el ID correcto en la lista de proyectos.
 - Sé conciso: no más de 3-4 líneas por respuesta a menos que listen datos.
 - Para listar datos, usa formato con emojis y estructura clara.
 - Si el usuario saluda, responde amigablemente y ofrece ayuda.`;
@@ -265,7 +274,8 @@ Si el usuario pide algo que requiere una acción, inclúyela en el array.
       success: true,
       data: {
         message: finalMessage,
-        actionsExecuted: actionResults.length
+        actionsExecuted: actionResults.length,
+        actions: botResponse.actions || []
       }
     });
 

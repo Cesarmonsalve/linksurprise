@@ -45,6 +45,14 @@ const CustomTemplateSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  htmlBasicTemplate: {
+    type: String,
+    default: ''
+  },
+  cssBasicTemplate: {
+    type: String,
+    default: ''
+  },
   isActive: {
     type: Boolean,
     default: true

@@ -108,24 +108,52 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false, renderM
     }
   }
 
-  // ═══ BASIC MODE FALLBACK ═══
+  // ═══ BASIC MODE / FREEMIUM ═══
   // If basic, we purge the complex scripts (GSAP, Parallax, Three)
-  // and inject a recovery script to force hidden elements to show up statically.
   let engineLibraries = '';
   let engineExecution = '';
 
   if (renderMode === 'basic') {
-    templateJS = `
-      // Biphasic Motor: MODO BÁSICO (Freemium)
-      // Se han removido las animaciones de Múltiples Capas y VIP.
-      document.querySelectorAll('*').forEach(el => {
-        if (el.style.opacity === '0') el.style.opacity = '1';
-        el.style.transform = 'none';
-        if (el.style.display === 'none' && el.id !== 'pw-error') el.style.display = '';
-      });
-      document.body.style.overflow = 'auto'; // Permitir scroll en versión plana
-    `;
+    // Modo Básico: Sin librerías pesadas, y con HTML/CSS plano
+    templateJS = `document.body.style.overflow = 'auto';`;
     engineExecution = `<script>window.addEventListener('load', () => { ${templateJS} });</script>`;
+    
+    // Validar si la plantilla Custom tiene una versión Basic designada
+    if (data.customTemplateConfig && data.customTemplateConfig.htmlBasicTemplate) {
+      templateHTML = data.customTemplateConfig.htmlBasicTemplate
+        .replace(/\$\{recipientName\}/g, safeRecipient)
+        .replace(/\$\{senderName\}/g, safeSender)
+        .replace(/\$\{escapedMessage\}/g, escapedMessage)
+        .replace(/\$\{imageUrl\}/g, imageUrl || '')
+        .replace(/\$\{backgroundColor\}/g, backgroundColor)
+        .replace(/\$\{textColor\}/g, textColor)
+        .replace(/\$\{accentColor\}/g, accentColor);
+      templateCSS = data.customTemplateConfig.cssBasicTemplate || '';
+    } else {
+      // Si no tiene Basic, o es de las predefinidas: TARJETA UNIVERSAL
+      templateCSS = `
+        .freemium-card {
+          max-width: 600px; margin: 40px auto; padding: 40px 20px; text-align: center;
+          background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
+          border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+          font-family: '${fontFamily}', sans-serif;
+        }
+        .freemium-img { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; border: 4px solid ${accentColor}; }
+        .freemium-title { font-size: 2rem; color: ${textColor}; margin-bottom: 15px; font-weight: bold; }
+        .freemium-message { font-size: 1.1rem; color: ${textColor}; opacity: 0.8; line-height: 1.6; white-space: pre-wrap; }
+        .freemium-footer { margin-top: 30px; font-size: 0.9rem; color: ${accentColor}; }
+      `;
+      templateHTML = `
+        <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; background: ${backgroundColor};">
+          <div class="freemium-card">
+            ${imageUrl ? `<img src="${imageUrl}" alt="Foto" class="freemium-img" />` : ''}
+            <h1 class="freemium-title">Para: ${safeRecipient}</h1>
+            <div class="freemium-message">${escapedMessage}</div>
+            <div class="freemium-footer">Con cariño, ${safeSender}</div>
+          </div>
+        </div>
+      `;
+    }
   } else {
     // Modo VIP Completo con todas las librerías
     engineLibraries = `

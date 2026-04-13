@@ -20,7 +20,9 @@ export default function NewTemplate() {
     defaultAccent: '#7c3aed',
     htmlTemplate: '<div class="custom-surprise" style="display:none; opacity:0; text-align:center;">\n  <h1 class="target-name">${recipientName}</h1>\n  <p class="target-message">${escapedMessage}</p>\n</div>',
     cssTemplate: '.custom-surprise {\n  padding: 2rem;\n}',
-    jsTemplate: 'gsap.to(".custom-surprise", { display: "block", opacity: 1, duration: 1 });'
+    jsTemplate: 'gsap.to(".custom-surprise", { display: "block", opacity: 1, duration: 1 });',
+    htmlBasicTemplate: '',
+    cssBasicTemplate: ''
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -100,6 +102,15 @@ export default function NewTemplate() {
           <div style={{ marginBottom: '1.5rem' }}>
             <label style={labelStyle}>Lógica JavaScript (GSAP ya está inyectado en la página general)</label>
             <textarea name="jsTemplate" value={formData.jsTemplate} onChange={handleChange} style={{...inputStyle, height: 200, fontFamily: 'monospace', fontSize: '0.85rem', whiteSpace: 'pre'}} />
+          </div>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label style={labelStyle}>HTML Versión Básica (Opcional - Reemplaza el VIP si descargas la versión Gratis)</label>
+            <textarea name="htmlBasicTemplate" placeholder="Si dejas esto vacío, el sistema usará una Tarjeta Universal simple por defecto." value={formData.htmlBasicTemplate} onChange={handleChange} style={{...inputStyle, height: 100, fontFamily: 'monospace', fontSize: '0.85rem', whiteSpace: 'pre'}} />
+          </div>
+
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label style={labelStyle}>CSS Versión Básica (Opcional)</label>
+            <textarea name="cssBasicTemplate" value={formData.cssBasicTemplate} onChange={handleChange} style={{...inputStyle, height: 100, fontFamily: 'monospace', fontSize: '0.85rem', whiteSpace: 'pre'}} />
           </div>
         </div>
 

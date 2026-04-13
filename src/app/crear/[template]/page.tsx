@@ -28,6 +28,12 @@ export default function EditorPage({ params }: EditorProps) {
   // Modal states
   const [showModal, setShowModal] = useState(false);
   const [createdProjectId, setCreatedProjectId] = useState('');
+  const [toastMsg, setToastMsg] = useState('');
+
+  const showToast = (msg: string) => {
+    setToastMsg(msg);
+    setTimeout(() => setToastMsg(''), 3000);
+  };
 
   const [recipientName, setRecipientName] = useState('');
   const [senderName, setSenderName] = useState('');
@@ -143,11 +149,11 @@ export default function EditorPage({ params }: EditorProps) {
         if (isPremium) {
           setShowModal(true); // Open the Payment Modal
         } else {
-          alert('¡Link generado y copiado a tu portapapeles! Ya puedes compartirlo.');
+          showToast('¡Link copiado al portapapeles! 🎁✨');
         }
       }
     } catch (err) {
-      alert('Error al guardar el proyecto');
+      showToast('Error al guardar el proyecto');
     }
     setIsSaving(false);
   };
@@ -190,12 +196,20 @@ export default function EditorPage({ params }: EditorProps) {
         </div>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
           {generatedLink && (
-            <input 
-              readOnly 
-              value={generatedLink} 
-              style={{...styles.input, width: '200px', padding: '0.5rem', borderColor: '#10b981'}} 
-              onClick={(e) => { (e.target as HTMLInputElement).select(); navigator.clipboard.writeText(generatedLink); }}
-            />
+            <div style={{ position: 'relative', width: '100%', maxWidth: '300px' }}>
+              <input 
+                readOnly 
+                value={generatedLink} 
+                style={{ ...styles.linkInput, width: '100%', paddingRight: '40px', cursor: 'pointer' }}
+                title="Clic para copiar"
+                onClick={(e) => { 
+                  (e.target as HTMLInputElement).select(); 
+                  navigator.clipboard.writeText(generatedLink); 
+                  showToast('¡Copiado! 📋');
+                }}
+              />
+              <span style={{ position: 'absolute', right: 12, top: 12, pointerEvents: 'none' }}>📋</span>
+            </div>
           )}
           <button onClick={handleSaveProject} disabled={isSaving} style={styles.actionBtn(true, true)}>
             {isSaving ? 'Guardando...' : (isPremium ? '💎 Guardar Proyecto VIP' : '💾 Generar Link')}
@@ -562,6 +576,20 @@ export default function EditorPage({ params }: EditorProps) {
         projectUrl={generatedLink}
         settings={settings}
       />
+
+      {/* Global Toast Notification */}
+      {toastMsg && (
+        <div style={{
+          position: 'fixed', bottom: 30, left: '50%', transform: 'translateX(-50%)',
+          background: 'rgba(255,255,255,0.95)', color: '#000', padding: '1rem 2rem',
+          borderRadius: 30, fontWeight: 700, zIndex: 999999,
+          boxShadow: '0 10px 40px rgba(0,0,0,0.5)',
+          animation: 'toastFade 0.3s ease-out'
+        }}>
+          {toastMsg}
+          <style>{`@keyframes toastFade { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }`}</style>
+        </div>
+      )}
     </div>
   );
 }

@@ -178,7 +178,7 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false): string
   `;
 
   // ═══ ASSEMBLE FINAL HTML ═══
-  return \`<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -231,5 +231,5 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false): string
     });
   </script>
 </body>
-</html>\`;
+</html>`;
 }

@@ -85,7 +85,7 @@ export default function NewTemplate() {
         {/* Code Editors */}
         <div style={{ background: '#0a0a0a', padding: '2rem', borderRadius: 16, border: '1px solid rgba(255,255,255,0.05)' }}>
           <h2 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: '#c084fc' }}>Código Dinámico</h2>
-          <p style={{ fontSize: '0.85rem', color: '#888', marginBottom: '1.5rem' }}>Variables disponibles: \${recipientName}, \${senderName}, \${escapedMessage}, \${imageUrl}, \${backgroundColor}, \${textColor}, \${accentColor}</p>
+          <p style={{ fontSize: '0.85rem', color: '#888', marginBottom: '1.5rem' }}>Variables disponibles: {'${recipientName}'}, {'${senderName}'}, {'${escapedMessage}'}, {'${imageUrl}'}, {'${backgroundColor}'}, {'${textColor}'}, {'${accentColor}'}</p>
           
           <div style={{ marginBottom: '1.5rem' }}>
             <label style={labelStyle}>Estructura HTML</label>

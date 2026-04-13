@@ -516,6 +516,7 @@ export default function EditorPage({ params }: EditorProps) {
             </motion.div>
           </div>
         </div>
+      </div>
       )}
 
       {/* Payment Modal */}

@@ -224,7 +224,7 @@ Si el usuario pide algo que requiere una acción, inclúyela en el array.
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'llama3-70b-8192',
+        model: 'llama-3.3-70b-versatile',
         messages,
         temperature: 0.3,
         max_tokens: 1500,

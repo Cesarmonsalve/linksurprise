@@ -31,11 +31,15 @@ export default function Home() {
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
 
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScroll, { passive: true });
 
-    // Intersection Observer for reveal animations
+    // Intersection Observer for reveal animations — runs AFTER mounted content renders
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
@@ -44,16 +48,20 @@ export default function Home() {
           }
         });
       },
-      { threshold: 0.15, rootMargin: '0px 0px -50px 0px' }
+      { threshold: 0.1, rootMargin: '0px 0px -30px 0px' }
     );
 
-    document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+    // Small delay to ensure DOM is painted
+    const timer = setTimeout(() => {
+      document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+    }, 100);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
       observer.disconnect();
+      clearTimeout(timer);
     };
-  }, []);
+  }, [mounted]);
 
   if (!mounted) return <div style={{ minHeight: '100vh', background: '#050505' }} />;
 

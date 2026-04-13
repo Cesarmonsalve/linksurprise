@@ -70,6 +70,7 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false, renderM
   let templateHTML = '';
   let templateJS = '';
 
+  if (data.customTemplateConfig) {
     // Es una plantilla personalizada cargada desde la BD
     const c = data.customTemplateConfig;
     // Replace variables in Custom HTML

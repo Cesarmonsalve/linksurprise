@@ -95,7 +95,9 @@ export default function EditorPage({ params }: EditorProps) {
     customTemplateConfig: tmpl?.isCustom ? tmpl : undefined
   }), [recipientName, senderName, message, bgColor, textColor, accentColor, fontFamily, effect, musicUrl, imageUrl, templateId, title, password, tmpl]);
 
-  const previewHTML = useMemo(() => generateHTML(projectData, true), [projectData]);
+  const [previewMode, setPreviewMode] = useState<'vip' | 'basic'>('vip');
+  
+  const previewHTML = useMemo(() => generateHTML(projectData, true, previewMode), [projectData, previewMode]);
 
   const isPremium = settings?.premiumTemplateIds?.includes(templateId);
 
@@ -104,7 +106,7 @@ export default function EditorPage({ params }: EditorProps) {
       handleSaveProject();
       return;
     }
-    const html = generateHTML(projectData, false); // false = con watermark (free)
+    const html = generateHTML(projectData, false, 'basic'); // false = con watermark, basic = no GSAP/ThreeJS
     const blob = new Blob([html], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -509,9 +511,30 @@ export default function EditorPage({ params }: EditorProps) {
         {/* Right Side - Live Preview in Phone Mockup */}
         <div style={styles.preview}>
           <div style={{ textAlign: 'center' }}>
-            <p style={{ fontSize: '0.7rem', color: '#555', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1.5rem' }}>
+            <p style={{ fontSize: '0.7rem', color: '#555', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1rem' }}>
               Vista previa en vivo
             </p>
+            {/* Visual Toggle Mode */}
+            <div style={{ display: 'inline-flex', gap: '0.5rem', marginBottom: '1.5rem', background: '#0a0a0a', padding: '0.4rem', borderRadius: 30, border: '1px solid rgba(255,255,255,0.05)' }}>
+              <button 
+                onClick={() => setPreviewMode('basic')} 
+                style={{ cursor: 'pointer', padding: '0.6rem 1.2rem', borderRadius: 20, fontSize: '0.8rem', fontWeight: 600, border: 'none', transition: 'all 0.3s',
+                  background: previewMode === 'basic' ? 'rgba(255,255,255,0.1)' : 'transparent', 
+                  color: previewMode === 'basic' ? '#fff' : '#666' 
+                }}
+              >
+                🎁 Básica (Grab)
+              </button>
+              <button 
+                onClick={() => setPreviewMode('vip')} 
+                style={{ cursor: 'pointer', padding: '0.6rem 1.2rem', borderRadius: 20, fontSize: '0.8rem', fontWeight: 600, border: 'none', transition: 'all 0.3s',
+                  background: previewMode === 'vip' ? 'linear-gradient(135deg, #7c3aed, #db2777)' : 'transparent', 
+                  color: previewMode === 'vip' ? '#fff' : '#666' 
+                }}
+              >
+                👑 Modo VIP Live
+              </button>
+            </div>
             <motion.div
               style={styles.phone}
               initial={{ opacity: 0, y: 20 }}

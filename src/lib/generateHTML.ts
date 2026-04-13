@@ -22,7 +22,7 @@ export interface ProjectData {
   customTemplateConfig?: any; // For custom templates from DB
 }
 
-export function generateHTML(data: ProjectData, isPaid: boolean = false): string {
+export function generateHTML(data: ProjectData, isPaid: boolean = false, renderMode: 'vip' | 'basic' = 'vip'): string {
   const {
     recipientName,
     senderName,
@@ -108,6 +108,48 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false): string
     }
   }
 
+  // ═══ BASIC MODE FALLBACK ═══
+  // If basic, we purge the complex scripts (GSAP, Parallax, Three)
+  // and inject a recovery script to force hidden elements to show up statically.
+  let engineLibraries = '';
+  let engineExecution = '';
+
+  if (renderMode === 'basic') {
+    templateJS = `
+      // Biphasic Motor: MODO BÁSICO (Freemium)
+      // Se han removido las animaciones de Múltiples Capas y VIP.
+      document.querySelectorAll('*').forEach(el => {
+        if (el.style.opacity === '0') el.style.opacity = '1';
+        el.style.transform = 'none';
+        if (el.style.display === 'none' && el.id !== 'pw-error') el.style.display = '';
+      });
+      document.body.style.overflow = 'auto'; // Permitir scroll en versión plana
+    `;
+    engineExecution = `<script>window.addEventListener('load', () => { ${templateJS} });</script>`;
+  } else {
+    // Modo VIP Completo con todas las librerías
+    engineLibraries = `
+  <!-- Core 3D & GSAP Engine (Mega Interactive) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+    `;
+    engineExecution = `
+  <script>
+    // Register GSAP Plugins globally
+    gsap.registerPlugin(ScrollTrigger, TextPlugin);
+    
+    // Engine: ${resolvedTemplate}
+    window.addEventListener('load', () => {
+      // Small delay to let preloader fade out securely
+      setTimeout(() => {
+        ${templateJS}
+      }, 500);
+    });
+  </script>`;
+  }
+
   // ═══ WATERMARK (free tier) ═══
   const watermark = !isPaid
     ? `<div style="position:fixed;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.6);color:#fff;padding:6px 16px;border-radius:20px;font-size:11px;font-family:sans-serif;z-index:9999;backdrop-filter:blur(8px);">Hecho con ❤️ en LinkSurprise</div>`
@@ -149,7 +191,7 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false): string
     : '';
 
   // ═══ PRELOADER (Global for 3D/GSAP Templates) ═══
-  const preloaderHTML = `
+  const preloaderHTML = renderMode === 'vip' ? `
     <div id="ls-preloader" style="position:fixed;inset:0;background:${backgroundColor};z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.8s ease, transform 0.8s ease;">
       <div style="width:60px;height:60px;border-radius:50%;border:2px solid ${accentColor}20;border-top-color:${accentColor};animation:lsSpin 1s linear infinite;margin-bottom:20px;box-shadow:0 0 20px ${accentColor}40;"></div>
       <p style="color:${textColor};font-family:'${fontFamily}',sans-serif;font-size:0.85rem;letter-spacing:0.2em;text-transform:uppercase;animation:lsPulse 2s infinite;">Cargando <span id="ls-progress">0%</span></p>
@@ -175,7 +217,7 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false): string
         });
       </script>
     </div>
-  `;
+  ` : '';
 
   // ═══ ASSEMBLE FINAL HTML ═══
   return `<!DOCTYPE html>
@@ -212,24 +254,8 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false): string
   ${templateHTML}
   
   ${watermark}
-  
-  <!-- Core 3D & GSAP Engine (Mega Interactive) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
-  <script>
-    // Register GSAP Plugins globally
-    gsap.registerPlugin(ScrollTrigger, TextPlugin);
-    
-    // Engine: ${resolvedTemplate}
-    window.addEventListener('load', () => {
-      // Small delay to let preloader fade out securely
-      setTimeout(() => {
-        ${templateJS}
-      }, 500);
-    });
-  </script>
+  ${engineLibraries}
+  ${engineExecution}
 </body>
 </html>`;
 }

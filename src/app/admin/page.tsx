@@ -51,9 +51,29 @@ export default function AdminDashboard() {
 
   return (
     <>
-      <h1 className="section-title" style={{ fontSize: 32, marginBottom: 8, textAlign: 'left', margin: 0 }}>
-        {t.admin.projectsTitle.split(' ')[0]} <span className="highlight">{t.admin.projectsTitle.split(' ').slice(1).join(' ')}</span>
-      </h1>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+        <h1 className="section-title" style={{ fontSize: 32, textAlign: 'left', margin: 0 }}>
+          {t.admin.projectsTitle.split(' ')[0]} <span className="highlight">{t.admin.projectsTitle.split(' ').slice(1).join(' ')}</span>
+        </h1>
+        <button 
+          onClick={async () => {
+            if (window.confirm('¿ESTÁS COMPLETAMENTE SEGURO? Esta acción eliminará TODOS los pedidos y proyectos de la base de datos de forma permanente.')) {
+              const res = await fetch('/api/admin/projects/all', { method: 'DELETE' });
+              const data = await res.json();
+              if (data.success) {
+                alert(data.message);
+                setProjects([]);
+              } else {
+                alert('Error: ' + data.error);
+              }
+            }
+          }}
+          className="editor-btn" 
+          style={{ background: 'rgba(255,95,87,0.1)', color: '#ff5f57', borderColor: 'rgba(255,95,87,0.2)', fontSize: 11, fontWeight: 800 }}
+        >
+          🗑️ ELIMINAR TODO
+        </button>
+      </div>
       <p style={{ color: 'var(--text-muted)', marginBottom: 32, fontSize: 13 }}>{t.admin.projectsDesc}</p>
 
       {/* Stats Cards */}

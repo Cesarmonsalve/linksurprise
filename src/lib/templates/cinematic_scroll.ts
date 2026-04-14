@@ -13,7 +13,7 @@ export function renderCinematicScroll(d: TemplateRenderData): TemplateOutput {
     
     .letterbox-top, .letterbox-bottom { position: fixed; left: 0; width: 100%; height: 50px; background: #000; z-index: 50; }
     .letterbox-top { top: 0; } .letterbox-bottom { bottom: 0; }
-    .cine-noise { position: fixed; inset: 0; z-index: 40; pointer-events: none; opacity: 0.03; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+    .cine-noise { position: fixed; inset: 0; z-index: 40; pointer-events: none; opacity: 0.015; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
     
     ${isBasic ? `
     .cine-panel { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 80px 2rem; }
@@ -31,7 +31,8 @@ export function renderCinematicScroll(d: TemplateRenderData): TemplateOutput {
     `: `
     /* VIP MODE */
     .pin-container { width: 100%; overflow: hidden; }
-    .cine-panel { height: 100vh; width: 100vw; display: flex; align-items: center; justify-content: center; position: relative; }
+    .bg-image { position: absolute; inset: -10%; background-size: cover; background-position: center; filter: blur(15px) brightness(0.25) saturate(1.2); z-index: 0; background-color: #050508; }
+    .cine-panel { height: 100vh; width: 100vw; display: flex; align-items: center; justify-content: center; position: relative; background: radial-gradient(circle at center, rgba(255,255,255,0.03) 0%, transparent 100%); }
     .cine-inner { max-width: 600px; width: 100%; text-align: center; padding: 0 2rem; position: relative; z-index: 10; }
     
     .cine-label { font-size: 0.8rem; letter-spacing: 0.4em; color: ${d.accentColor}; text-transform: uppercase; margin-bottom: 1rem; }

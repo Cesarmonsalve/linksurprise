@@ -94,6 +94,12 @@ async function executeActions(actions: BotAction[]): Promise<string[]> {
           break;
         }
 
+        case 'delete_all_projects': {
+          const result = await Project.deleteMany({});
+          results.push(`✅ Se han eliminado permanentemente TODOS los proyectos (${result.deletedCount}).`);
+          break;
+        }
+
         default:
           results.push(`⚠️ Acción desconocida: ${action.type}`);
       }
@@ -183,7 +189,9 @@ Acciones disponibles:
 4. Eliminar plantilla: { "type": "delete_template", "templateId": "<id>" }
 5. Crear/Modificar plantilla visual: Manda esta acción si el usuario te pide crear o modificar una plantilla web.
    { "type": "generate_template", "template": { "html": "...", "css": "...", "js": "..." } }
-   * En "html", devuelve SOLO el contenido central (sin html, head, body). Puedes usar \${recipientName}, \${senderName}, \${escapedMessage}, \${imageUrl}.
+   * En "html", devuelve SOLO el contenido central (sin html, head, body). Puedes usar ${recipientName}, ${senderName}, \${escapedMessage}, \${imageUrl}.
+6. Eliminar todos los pedidos/proyectos: { "type": "delete_all_projects" }
+   * Usa esto SOLO si el usuario pide explícitamente limpiar o borrar todos los proyectos/pedidos.
 
 ═══ FORMATO DE RESPUESTA ═══
 DEBES responder ÚNICAMENTE con un JSON válido con esta estructura:

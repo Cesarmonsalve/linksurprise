@@ -5,8 +5,22 @@ const DEFAULT_SETTINGS = {
   whatsappNumber: '+57 301 1101348',
   binancePayId: '',
   zinliEmail: '',
-  priceInfo: '$3 USD',
+  priceInfo: '$3.00 USD',
   premiumTemplateIds: [],
+  landingContent: {
+    hero: {
+      badge: 'LO NUEVO EN SORPRESAS',
+      title1: 'Crea Experiencias',
+      title2: 'Digitales',
+      title3: 'Inolvidables',
+      desc: 'Transforma tus mensajes en momentos mágicos con nuestras plantillas premium e interactivas.'
+    },
+    stats: {
+      active: '+1,200',
+      templates: '20+',
+      satisfaction: '99%'
+    }
+  },
   groqApiKey: '',
 };
 

@@ -3,13 +3,27 @@
 import { useState, useEffect } from 'react';
 
 export default function SettingsPage() {
-  const [settings, setSettings] = useState({
+  const [settings, setSettings] = useState<any>({
     whatsappNumber: '',
     binancePayId: '',
     zinliEmail: '',
-    priceInfo: '$3 USD',
-    premiumTemplateIds: [] as string[],
+    priceInfo: '$3.00 USD',
+    premiumTemplateIds: [],
     groqApiKey: '',
+    landingContent: {
+      hero: {
+        badge: 'LO NUEVO EN SORPRESAS',
+        title1: 'Crea Experiencias',
+        title2: 'Digitales',
+        title3: 'Inolvidables',
+        desc: 'Transforma tus mensajes en momentos mágicos con nuestras plantillas premium e interactivas.'
+      },
+      stats: {
+        active: '+1,200',
+        templates: '20+',
+        satisfaction: '99%'
+      }
+    }
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -37,12 +51,12 @@ export default function SettingsPage() {
       const data = await res.json();
       if (data.success && data.data) {
         setSettings({
-          whatsappNumber: data.data.whatsappNumber || '',
-          binancePayId: data.data.binancePayId || '',
-          zinliEmail: data.data.zinliEmail || '',
-          priceInfo: data.data.priceInfo || '$3 USD',
-          premiumTemplateIds: data.data.premiumTemplateIds || [],
-          groqApiKey: data.data.groqApiKey || '',
+          ...settings,
+          ...data.data,
+          landingContent: {
+            ...settings.landingContent,
+            ...(data.data.landingContent || {})
+          }
         });
       }
     } catch (e) {
@@ -69,130 +83,227 @@ export default function SettingsPage() {
     setSaving(false);
   };
 
-  if (loading) return <div style={{ padding: '2rem' }}>Cargando...</div>;
+  if (loading) return <div style={{ padding: '2rem', color: '#888' }}>Cargando configuración...</div>;
 
   return (
-    <div style={{ padding: '2rem', maxWidth: 800 }}>
-      <h1 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Ajustes de Pago</h1>
-      <p style={{ color: '#888', marginBottom: '2rem' }}>Define los datos a donde tus clientes enviarán los reportes y pagos.</p>
-      
-      <form onSubmit={handleSave} style={{ background: '#0a0a0a', padding: '2rem', borderRadius: 16, border: '1px solid rgba(255,255,255,0.05)' }}>
+    <div style={{ padding: '0 1rem 4rem 1rem', maxWidth: 1000, margin: '0 auto' }}>
+      <div style={{ marginBottom: '3rem' }}>
+        <h1 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '0.5rem', fontFamily: 'var(--font-montserrat)' }}>AJUSTES <span className="highlight">GLOBALES</span></h1>
+        <p style={{ color: 'var(--text-muted)' }}>Gestiona los precios, pagos y el contenido de toda tu plataforma.</p>
+      </div>
+
+      <form onSubmit={handleSave}>
         
-        <div style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'block', fontSize: '0.8rem', color: '#888', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Número de WhatsApp</label>
-          <p style={{ fontSize: '0.75rem', color: '#555', marginBottom: '0.5rem' }}>Incluye el código de país sin el signo más (ej: 521234567890)</p>
-          <input 
-            type="text" 
-            value={settings.whatsappNumber}
-            onChange={(e) => setSettings({...settings, whatsappNumber: e.target.value})}
-            style={{ width: '100%', padding: '1rem', borderRadius: 12, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', outline: 'none' }}
-            placeholder="Ej: 584120000000"
-          />
+        {/* MAIN SETTINGS */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', marginBottom: '3rem' }}>
+           <div style={{ background: 'var(--surface)', padding: '2rem', borderRadius: 20, border: '1px solid var(--border)' }}>
+             <h3 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: 8 }}>💰 PAGOS Y PRECIOS</h3>
+             
+             <div style={{ marginBottom: '1.25rem' }}>
+               <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#666', marginBottom: 8, display: 'block' }}>WHATSAPP (REDES)</label>
+               <input 
+                 type="text" 
+                 className="editor-input"
+                 value={settings.whatsappNumber}
+                 onChange={(e) => setSettings({...settings, whatsappNumber: e.target.value})}
+                 placeholder="Ej: 521..."
+                 style={{ width: '100%', background: 'rgba(255,255,255,0.03)' }}
+               />
+             </div>
+
+             <div style={{ marginBottom: '1.25rem' }}>
+               <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#666', marginBottom: 8, display: 'block' }}>PRECIO PREMIUM (MOSTRAR)</label>
+               <input 
+                 type="text" 
+                 className="editor-input"
+                 value={settings.priceInfo}
+                 onChange={(e) => setSettings({...settings, priceInfo: e.target.value})}
+                 placeholder="Ej: $3.00 USD"
+                 style={{ width: '100%', background: 'rgba(255,255,255,0.03)' }}
+               />
+             </div>
+
+             <div>
+               <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#666', marginBottom: 8, display: 'block' }}>GROQ API KEY (IA)</label>
+               <input 
+                 type="password" 
+                 className="editor-input"
+                 value={settings.groqApiKey}
+                 onChange={(e) => setSettings({...settings, groqApiKey: e.target.value})}
+                 placeholder="gsk_..."
+                 style={{ width: '100%', background: 'rgba(16,185,129,0.05)', borderColor: 'rgba(16,185,129,0.2)' }}
+               />
+             </div>
+           </div>
+
+           <div style={{ background: 'var(--surface)', padding: '2rem', borderRadius: 20, border: '1px solid var(--border)' }}>
+             <h3 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: 8 }}>🚀 LANDING: HERO SECTION</h3>
+             
+             <div style={{ marginBottom: '1.25rem' }}>
+               <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#666', marginBottom: 8, display: 'block' }}>BADGE (ETIQUETA SUPERIOR)</label>
+               <input 
+                 type="text" 
+                 className="editor-input"
+                 value={settings.landingContent.hero.badge}
+                 onChange={(e) => setSettings({
+                   ...settings, 
+                   landingContent: { ...settings.landingContent, hero: { ...settings.landingContent.hero, badge: e.target.value } }
+                 })}
+                 style={{ width: '100%', background: 'rgba(255,255,255,0.03)' }}
+               />
+             </div>
+
+             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: '1.25rem' }}>
+                <div>
+                   <label style={{ fontSize: '0.65rem', fontWeight: 700, color: '#666' }}>TÍTULO 1</label>
+                   <input 
+                     type="text" className="editor-input"
+                     value={settings.landingContent.hero.title1}
+                     onChange={(e) => setSettings({
+                       ...settings, 
+                       landingContent: { ...settings.landingContent, hero: { ...settings.landingContent.hero, title1: e.target.value } }
+                     })}
+                     style={{ width: '100%', padding: 8, fontSize: 12 }}
+                   />
+                </div>
+                <div>
+                   <label style={{ fontSize: '0.65rem', fontWeight: 700, color: '#666' }}>TÍTULO 2 (ROSA)</label>
+                   <input 
+                     type="text" className="editor-input"
+                     value={settings.landingContent.hero.title2}
+                     onChange={(e) => setSettings({
+                       ...settings, 
+                       landingContent: { ...settings.landingContent, hero: { ...settings.landingContent.hero, title2: e.target.value } }
+                     })}
+                     style={{ width: '100%', padding: 8, fontSize: 12, borderColor: 'var(--pink)' }}
+                   />
+                </div>
+                <div>
+                   <label style={{ fontSize: '0.65rem', fontWeight: 700, color: '#666' }}>TÍTULO 3</label>
+                   <input 
+                     type="text" className="editor-input"
+                     value={settings.landingContent.hero.title3}
+                     onChange={(e) => setSettings({
+                       ...settings, 
+                       landingContent: { ...settings.landingContent, hero: { ...settings.landingContent.hero, title3: e.target.value } }
+                     })}
+                     style={{ width: '100%', padding: 8, fontSize: 12 }}
+                   />
+                </div>
+             </div>
+
+             <div>
+               <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#666', marginBottom: 8, display: 'block' }}>DESCRIPCIÓN (SUBHEAD)</label>
+               <textarea 
+                 className="editor-input"
+                 value={settings.landingContent.hero.desc}
+                 onChange={(e) => setSettings({
+                   ...settings, 
+                   landingContent: { ...settings.landingContent, hero: { ...settings.landingContent.hero, desc: e.target.value } }
+                 })}
+                 style={{ width: '100%', background: 'rgba(255,255,255,0.03)', height: 80, resize: 'none' }}
+               />
+             </div>
+           </div>
         </div>
 
-        <div style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'block', fontSize: '0.8rem', color: '#888', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Precio Oficial / Promo</label>
-          <input 
-            type="text" 
-            value={settings.priceInfo}
-            onChange={(e) => setSettings({...settings, priceInfo: e.target.value})}
-            style={{ width: '100%', padding: '1rem', borderRadius: 12, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', outline: 'none' }}
-            placeholder="Ej: $3 USD"
-          />
+        {/* STATS EDITING */}
+        <div style={{ background: 'var(--surface)', padding: '2rem', borderRadius: 20, border: '1px solid var(--border)', marginBottom: '3rem' }}>
+           <h3 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: '1.5rem' }}>📊 LANDING: ESTADÍSTICAS</h3>
+           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
+              <div>
+                 <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#666', marginBottom: 8, display: 'block' }}>VISITAS / ACTIVOS</label>
+                 <input 
+                   type="text" className="editor-input"
+                   value={settings.landingContent.stats.active}
+                   onChange={(e) => setSettings({
+                     ...settings, 
+                     landingContent: { ...settings.landingContent, stats: { ...settings.landingContent.stats, active: e.target.value } }
+                   })}
+                   style={{ width: '100%' }}
+                 />
+              </div>
+              <div>
+                 <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#666', marginBottom: 8, display: 'block' }}>PLANTILLAS</label>
+                 <input 
+                   type="text" className="editor-input"
+                   value={settings.landingContent.stats.templates}
+                   onChange={(e) => setSettings({
+                     ...settings, 
+                     landingContent: { ...settings.landingContent, stats: { ...settings.landingContent.stats, templates: e.target.value } }
+                   })}
+                   style={{ width: '100%' }}
+                 />
+              </div>
+              <div>
+                 <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#666', marginBottom: 8, display: 'block' }}>SATISFACCIÓN</label>
+                 <input 
+                   type="text" className="editor-input"
+                   value={settings.landingContent.stats.satisfaction}
+                   onChange={(e) => setSettings({
+                     ...settings, 
+                     landingContent: { ...settings.landingContent, stats: { ...settings.landingContent.stats, satisfaction: e.target.value } }
+                   })}
+                   style={{ width: '100%' }}
+                 />
+              </div>
+           </div>
         </div>
 
-        <div style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'block', fontSize: '0.8rem', color: '#888', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>ID de Binance Pay (Opcional)</label>
-          <input 
-            type="text" 
-            value={settings.binancePayId}
-            onChange={(e) => setSettings({...settings, binancePayId: e.target.value})}
-            style={{ width: '100%', padding: '1rem', borderRadius: 12, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', outline: 'none' }}
-            placeholder="Tu ID numérico de Binance"
-          />
-        </div>
-
-        <div style={{ marginBottom: '2rem' }}>
-          <label style={{ display: 'block', fontSize: '0.8rem', color: '#888', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Correo de Zinli (Opcional)</label>
-          <input 
-            type="email" 
-            value={settings.zinliEmail}
-            onChange={(e) => setSettings({...settings, zinliEmail: e.target.value})}
-            style={{ width: '100%', padding: '1rem', borderRadius: 12, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', outline: 'none' }}
-            placeholder="correo@ejemplo.com"
-          />
-        </div>
-
-        <div style={{ marginBottom: '2rem' }}>
-          <label style={{ display: 'block', fontSize: '0.8rem', color: '#888', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Groq API Key (Laboratorio IA)</label>
-          <input 
-            type="password" 
-            value={settings.groqApiKey}
-            onChange={(e) => setSettings({...settings, groqApiKey: e.target.value})}
-            style={{ width: '100%', padding: '1rem', borderRadius: 12, background: 'rgba(255,255,255,0.02)', border: '1px solid #10b981', color: '#fff', outline: 'none' }}
-            placeholder="gsk_xxxxxxxx..."
-          />
-          <p style={{ fontSize: '0.75rem', color: '#10b981', margin: '0.5rem 0' }}>Obligatorio para usar el Laboratorio de Inteligencia Artificial (Llama-3).</p>
-        </div>
-
-        <button 
-          type="submit"
-          disabled={saving}
-          style={{ padding: '1rem 2rem', borderRadius: 12, background: 'linear-gradient(135deg, #7c3aed, #2563eb)', color: '#fff', border: 'none', fontWeight: 700, cursor: saving ? 'not-allowed' : 'pointer' }}
-        >
-          {saving ? 'Guardando...' : 'Guardar Configuraciones'}
-        </button>
-
-      </form>
-
-      <div style={{ background: '#0a0a0a', padding: '2rem', borderRadius: 16, border: '1px solid rgba(255,255,255,0.05)', marginTop: '2rem' }}>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>🔐 Gestión Freemium (Muros de Pago)</h2>
-        <p style={{ color: '#888', marginBottom: '1.5rem' }}>Selecciona cuáles plantillas exigen pago obligatorio. Las que marques como Premium tendrán un candado de descarga y cobrarán para compartirse.</p>
-        
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1rem' }}>
-          {templates.map(t => {
-            const isPremium = settings.premiumTemplateIds.includes(t.id);
-            return (
-              <div key={t.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', background: 'rgba(255,255,255,0.02)', border: isPremium ? '1px solid rgba(192,132,252,0.4)' : '1px solid rgba(255,255,255,0.05)', borderRadius: 12 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span style={{ fontSize: '1.2rem' }}>{t.emoji}</span>
-                  <div>
-                    <div style={{ fontSize: '0.9rem', fontWeight: 600, color: isPremium ? '#c084fc' : '#e2e8f0' }}>{t.name}</div>
-                    <div style={{ fontSize: '0.7rem', color: '#888' }}>{t.isCustom ? 'Personalizada' : t.pillarLabel}</div>
+        {/* PREMIUM STATUS */}
+        <div style={{ background: 'var(--surface)', padding: '2rem', borderRadius: 20, border: '1px solid var(--border)', marginBottom: '3rem' }}>
+          <h3 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: '0.5rem' }}>👑 GESTIÓN DE CATÁLOGO (PREMIUM)</h3>
+          <p style={{ color: 'var(--text-muted)', fontSize: 13, marginBottom: '2rem' }}>Selecciona qué plantillas requieren el pago de {settings.priceInfo} para publicarse.</p>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem' }}>
+            {templates.map(t => {
+              const isPremium = settings.premiumTemplateIds.includes(t.id);
+              return (
+                <div key={t.id} 
+                  onClick={() => {
+                    const ids = isPremium 
+                      ? settings.premiumTemplateIds.filter((id: any) => id !== t.id)
+                      : [...settings.premiumTemplateIds, t.id];
+                    setSettings({...settings, premiumTemplateIds: ids});
+                  }}
+                  style={{ 
+                    display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', 
+                    background: isPremium ? 'var(--pink-dim)' : 'rgba(255,255,255,0.02)', 
+                    border: '1px solid', 
+                    borderColor: isPremium ? 'var(--pink)' : 'var(--border)', 
+                    borderRadius: 16, cursor: 'pointer', transition: 'all 0.2s'
+                  }}
+                >
+                  <span style={{ fontSize: '1.5rem' }}>{t.emoji}</span>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: '0.85rem', fontWeight: 700, color: isPremium ? 'var(--pink)' : '#fff' }}>{t.name}</div>
+                    <div style={{ fontSize: '0.65rem', color: isPremium ? 'var(--pink)' : '#666', fontWeight: 600 }}>{isPremium ? 'PREMIUM' : 'GRATIS'}</div>
                   </div>
                 </div>
-                
-                <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <div style={{
-                    width: 44, height: 24, background: isPremium ? '#7c3aed' : 'rgba(255,255,255,0.1)',
-                    borderRadius: 20, position: 'relative', transition: 'all 0.3s'
-                  }}>
-                    <div style={{
-                      width: 18, height: 18, background: '#fff', borderRadius: '50%',
-                      position: 'absolute', top: 3, left: isPremium ? 22 : 3, transition: 'all 0.3s'
-                    }} />
-                  </div>
-                  <span style={{ marginLeft: '0.5rem', fontSize: '0.75rem', fontWeight: 600, color: isPremium ? '#c084fc' : '#888' }}>
-                    {isPremium ? 'VIP 👑' : 'Gratis 🎁'}
-                  </span>
-                  <input 
-                    type="checkbox" 
-                    checked={isPremium}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setSettings({...settings, premiumTemplateIds: [...settings.premiumTemplateIds, t.id]});
-                      } else {
-                        setSettings({...settings, premiumTemplateIds: settings.premiumTemplateIds.filter(id => id !== t.id)});
-                      }
-                    }}
-                    style={{ display: 'none' }}
-                  />
-                </label>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
-      </div>
+
+        {/* SAVE BAR */}
+        <div style={{ 
+          position: 'fixed', bottom: 32, left: '50%', transform: 'translateX(-50%) translateX(120px)', 
+          background: 'rgba(5,5,5,0.8)', backdropFilter: 'blur(20px)', padding: '12px 32px', 
+          borderRadius: 100, border: '1px solid var(--border-pink)', boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
+          display: 'flex', alignItems: 'center', gap: 24, zIndex: 100
+        }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-muted)' }}>¿Has terminado los cambios?</div>
+          <button 
+            type="submit"
+            disabled={saving}
+            className="editor-btn publish"
+            style={{ padding: '10px 30px', margin: 0 }}
+          >
+            {saving ? 'GUARDANDO...' : 'GUARDAR TODO'}
+          </button>
+        </div>
+
+      </form>
     </div>
   );
 }

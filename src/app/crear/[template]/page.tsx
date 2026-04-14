@@ -153,6 +153,8 @@ export default function EditorPage({ params }: EditorProps) {
     label: { display: 'block', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase' as const, color: '#999', marginBottom: '0.6rem' },
     tab: (active: boolean) => ({ padding: '0.7rem 1.2rem', borderRadius: 12, border: '1px solid', borderColor: active ? 'rgba(192,132,252,0.5)' : 'transparent', background: active ? 'linear-gradient(135deg, rgba(192,132,252,0.15), rgba(244,114,182,0.15))' : 'transparent', color: active ? '#fff' : '#888', fontSize: '0.8rem', fontWeight: 800, cursor: 'pointer', transition: 'all 0.3s' }),
     uploadBox: { display: 'block', padding: '1.2rem', border: '2px dashed rgba(255,255,255,0.1)', borderRadius: 16, background: 'rgba(0,0,0,0.2)', cursor: 'pointer', textAlign: 'center' as const, transition: 'all 0.3s' },
+    phone: { width: 'min(375px, 90vw)', height: 'min(667px, 70vh)', borderRadius: 40, overflow: 'hidden', border: '8px solid #1a1a1a', background: '#000', position: 'relative' as const, boxShadow: '0 30px 60px rgba(0,0,0,0.6)' },
+    phoneNotch: { position: 'absolute' as const, top: 0, left: '50%', transform: 'translateX(-50%)', width: 140, height: 28, background: '#1a1a1a', borderRadius: '0 0 20px 20px', zIndex: 10 },
   };
 
   return (

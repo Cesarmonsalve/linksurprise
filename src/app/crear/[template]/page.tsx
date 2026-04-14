@@ -327,19 +327,33 @@ export default function EditorPage({ params }: EditorProps) {
 
           <main style={styles.preview} className={`editor-preview-container ${mobileView === 'preview' ? 'mobile-visible' : 'mobile-hidden'}`}>
              <div style={{ marginBottom: '1.5rem', display: 'flex', gap: '0.5rem' }}>
-                <button style={{ background: previewMode === 'basic' ? '#fff' : 'transparent', color: previewMode === 'basic' ? '#000' : '#fff', border: '1px solid #fff', padding: '0.4rem 1rem', borderRadius: 20, fontSize: '0.7rem', fontWeight: 800 }} onClick={() => setPreviewMode('basic')}>BÁSICO</button>
                 <button 
-                  style={{ background: previewMode === 'vip' ? 'var(--pink)' : 'transparent', color: '#fff', border: '1px solid var(--pink)', padding: '0.4rem 1rem', borderRadius: 20, fontSize: '0.7rem', fontWeight: 800, position: 'relative' }} 
+                  style={{ background: previewMode === 'basic' ? '#fff' : 'transparent', color: previewMode === 'basic' ? '#000' : '#fff', border: '1px solid #fff', padding: '0.4rem 1rem', borderRadius: 20, fontSize: '0.7rem', fontWeight: 800 }} 
+                  onClick={() => setPreviewMode('basic')}
+                >VISTA GRATUITA</button>
+                <button 
+                  style={{ background: previewMode === 'vip' ? 'var(--pink)' : 'transparent', color: '#fff', border: '1px solid var(--pink)', padding: '0.4rem 1rem', borderRadius: 20, fontSize: '0.7rem', fontWeight: 800 }} 
                   onClick={() => setPreviewMode('vip')}
-                >
-                  VIP LIVE
-                  {previewMode === 'vip' && (
-                    <span style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', whiteSpace: 'nowrap', fontSize: '0.55rem', color: 'var(--pink)', marginTop: '4px', fontWeight: 600 }}>
-                      (Incluido en versión VIP ✨)
-                    </span>
-                  )}
-                </button>
+                >VIP LIVE</button>
              </div>
+             
+             {previewMode === 'vip' && (
+               <div style={{ marginBottom: '1.2rem', padding: '0.6rem 1rem', background: 'rgba(192,132,252,0.1)', border: '1px solid rgba(192,132,252,0.3)', borderRadius: 10, display: 'flex', alignItems: 'center', gap: '0.5rem', maxWidth: 375, textAlign: 'center' }}>
+                 <span style={{ fontSize: '0.9rem' }}>👑</span>
+                 <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#c084fc', letterSpacing: '0.05em' }}>
+                    ESTA ES LA EXPERIENCIA PREMIUM QUE RECIBIRÁS AL ACTIVAR EL VIP
+                 </span>
+               </div>
+             )}
+
+             {previewMode === 'basic' && (
+               <div style={{ marginBottom: '1.2rem', padding: '0.6rem 1rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, display: 'flex', alignItems: 'center', gap: '0.5rem', maxWidth: 375 }}>
+                 <span style={{ fontSize: '0.9rem' }}>🎁</span>
+                 <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#888' }}>
+                    VISTA BÁSICA (SIN ANIMACIONES NI EFECTOS)
+                 </span>
+               </div>
+             )}             </div>
              <div style={styles.phone}>
                 <div style={styles.phoneNotch} />
                 <iframe srcDoc={previewHTML} style={{ width: '100%', height: '100%', border: 'none' }} title="Editor Preview" />

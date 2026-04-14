@@ -135,8 +135,8 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false, renderM
         .replace(/\$\{textColor\}/g, textColor)
         .replace(/\$\{accentColor\}/g, accentColor);
       templateCSS = basicCss;
-    } else {
-      // Si no tiene Basic, o es de las predefinidas: TARJETA UNIVERSAL MEJORADA
+    } else if (!templateHTML) {
+      // Si no tiene Basic, o es de las predefinidas y no devolvió HTML básico: TARJETA UNIVERSAL MEJORADA
       templateCSS = `
         /* Premium Freemium Card Styles */
         @keyframes softFloat {

@@ -74,7 +74,7 @@ export const translations = {
       freemiumPrice: "0",
       freemiumDesc: "Plantillas básicas.",
       premium: "Premium",
-      premiumPrice: "9.99",
+      premiumPrice: "3.00",
       premiumDesc: "Acceso total y código fuente.",
       btnChoose: "Elegir Plan"
     },
@@ -180,7 +180,7 @@ export const translations = {
       freemiumPrice: "0",
       freemiumDesc: "Basic templates.",
       premium: "Premium",
-      premiumPrice: "9.99",
+      premiumPrice: "3.00",
       premiumDesc: "Full access and source code.",
       btnChoose: "Choose Plan"
     },

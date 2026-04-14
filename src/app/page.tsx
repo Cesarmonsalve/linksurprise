@@ -57,7 +57,7 @@ export default function Home() {
           <button className="lang-switch" onClick={toggleLanguage}>
             {language === "es" ? "EN" : "ES"}
           </button>
-          <Link href="/admin" className="btn-ghost">{t.nav.login}</Link>
+          <Link href="/admin/login" className="btn-ghost">{t.nav.login}</Link>
           <Link href="/admin" className="btn-primary" style={{  textDecoration: 'none' }}>{t.nav.dashboard}</Link>
         </div>
       </nav>
@@ -79,7 +79,7 @@ export default function Home() {
         <p className="hero-sub">{t.hero.desc}</p>
 
         <div className="hero-actions">
-          <Link href="/admin" className="btn-hero" style={{ textDecoration: 'none' }}>
+          <Link href="/crear" className="btn-hero" style={{ textDecoration: 'none' }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
             {t.hero.btnPrimary}
           </Link>
@@ -139,7 +139,7 @@ export default function Home() {
 
         <div className="gallery-grid" style={{ columns: '3 300px', gap: 20 }}>
           {filteredTemplates.map((template) => (
-            <Link href="/admin" key={template.id} className="template-card" style={{ textDecoration: 'none', breakInside: 'avoid', marginBottom: 20, position: 'relative', borderRadius: 16, overflow: 'hidden', border: '1px solid var(--border)', display: 'block' }}>
+            <Link href="/crear" key={template.id} className="template-card" style={{ textDecoration: 'none', breakInside: 'avoid', marginBottom: 20, position: 'relative', borderRadius: 16, overflow: 'hidden', border: '1px solid var(--border)', display: 'block' }}>
               <div className="card-visual" style={{ position: 'relative', overflow: 'hidden', height: 400, background: 'var(--surface)'}}>
                 {/* Fallback pattern for mockup */}
                 <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,31,142,0.1) 1px, transparent 1px)', backgroundSize: '20px 20px', opacity: 0.5}}></div>
@@ -184,9 +184,9 @@ export default function Home() {
                   <div className="phone-msg" style={{ fontSize: 16, color: 'var(--text)', lineHeight: 1.5, marginBottom: 18, fontStyle: 'italic' }}>
                     &quot;¡Mira esta sorpresa interactiva que te preparé!&quot;
                   </div>
-                  <button className="phone-cta" style={{ width: '100%', padding: 12, background: 'linear-gradient(135deg, var(--pink), var(--orange))', color: '#fff', border: 'none', borderRadius: 10, fontFamily: 'var(--font-montserrat)', fontSize: 12, fontWeight: 800, cursor: 'pointer', textTransform: 'uppercase' }}>
+                  <Link href="/crear" className="phone-cta" style={{ display: 'block', textAlign: 'center', textDecoration: 'none', width: '100%', padding: 12, background: 'linear-gradient(135deg, var(--pink), var(--orange))', color: '#fff', border: 'none', borderRadius: 10, fontFamily: 'var(--font-montserrat)', fontSize: 12, fontWeight: 800, cursor: 'pointer', textTransform: 'uppercase' }}>
                     ABRIR SORPRESA
-                  </button>
+                  </Link>
                </div>
             </div>
           </div>
@@ -267,7 +267,7 @@ export default function Home() {
                    {t.pricing.freemiumDesc}
                 </li>
              </ul>
-             <Link href="/admin" style={{ display: 'block', width: '100%', padding: 14, borderRadius: 10, fontFamily: 'var(--font-montserrat)', fontSize: 13, fontWeight: 800, textAlign: 'center', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.15)', color: 'var(--text)', textTransform: 'uppercase' }}>
+             <Link href="/crear" style={{ display: 'block', width: '100%', padding: 14, borderRadius: 10, fontFamily: 'var(--font-montserrat)', fontSize: 13, fontWeight: 800, textAlign: 'center', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.15)', color: 'var(--text)', textTransform: 'uppercase' }}>
                {t.pricing.btnChoose}
              </Link>
            </div>
@@ -288,7 +288,7 @@ export default function Home() {
                    {t.pricing.premiumDesc}
                 </li>
              </ul>
-             <Link href="/admin" style={{ display: 'block', width: '100%', padding: 14, borderRadius: 10, fontFamily: 'var(--font-montserrat)', fontSize: 13, fontWeight: 800, textAlign: 'center', textDecoration: 'none', background: 'linear-gradient(135deg, var(--pink), var(--orange))', color: '#fff', textTransform: 'uppercase', boxShadow: '0 6px 24px var(--pink-glow)' }}>
+             <Link href="/crear" style={{ display: 'block', width: '100%', padding: 14, borderRadius: 10, fontFamily: 'var(--font-montserrat)', fontSize: 13, fontWeight: 800, textAlign: 'center', textDecoration: 'none', background: 'linear-gradient(135deg, var(--pink), var(--orange))', color: '#fff', textTransform: 'uppercase', boxShadow: '0 6px 24px var(--pink-glow)' }}>
                {t.pricing.btnChoose}
              </Link>
            </div>

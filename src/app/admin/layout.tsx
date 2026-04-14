@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -8,15 +9,34 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const router = useRouter();
   const { t, language, setLanguage } = useLanguage();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    if (pathname === '/admin/login') {
+      setIsAuthenticated(true);
+      return;
+    }
+    
+    // Check if the auth cookie exists
+    if (!document.cookie.includes('admin_token=auth_cesar_2001')) {
+      router.push('/admin/login');
+    } else {
+      setIsAuthenticated(true);
+    }
+  }, [pathname, router]);
 
   if (pathname === '/admin/login') {
     return <>{children}</>;
   }
 
+  // Prevent flashing the dashboard before redirect
+  if (!isAuthenticated) return null;
+
   const handleLogout = () => {
     document.cookie = "admin_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
     router.push('/admin/login');
   };
+
 
   const toggleLanguage = () => {
     setLanguage(language === "es" ? "en" : "es");

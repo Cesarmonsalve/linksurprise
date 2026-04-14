@@ -26,6 +26,7 @@ const ProjectSchema = new mongoose.Schema({
     effect: { type: String, default: 'typewriter' },
     musicUrl: { type: String, default: '' },
     imageUrl: { type: String, default: '' },
+    scenes: { type: [String], default: [] }, // NEW: VIP Scenes Gallery
     password: { type: String, default: '' },
   },
   createdAt: {

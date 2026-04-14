@@ -45,6 +45,7 @@ export default function EditorPage({ params }: EditorProps) {
   const [effect, setEffect] = useState('fadeUp');
   const [musicUrl, setMusicUrl] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const [scenes, setScenes] = useState<string[]>([]); // NEW: VIP Scenes
   const [password, setPassword] = useState('');
   const [title, setTitle] = useState('');
   const [activeTab, setActiveTab] = useState<'content' | 'style' | 'effects'>('content');
@@ -91,9 +92,9 @@ export default function EditorPage({ params }: EditorProps) {
 
   const projectData: ProjectData = useMemo(() => ({
     recipientName, senderName, message, backgroundColor: bgColor, textColor, accentColor,
-    fontFamily, effect, musicUrl, imageUrl, template: templateId, title, password,
+    fontFamily, effect, musicUrl, imageUrl, scenes, template: templateId, title, password,
     customTemplateConfig: tmpl?.isCustom ? tmpl : undefined
-  }), [recipientName, senderName, message, bgColor, textColor, accentColor, fontFamily, effect, musicUrl, imageUrl, templateId, title, password, tmpl]);
+  }), [recipientName, senderName, message, bgColor, textColor, accentColor, fontFamily, effect, musicUrl, imageUrl, scenes, templateId, title, password, tmpl]);
 
   const [previewMode, setPreviewMode] = useState<'vip' | 'basic'>('vip');
   const previewHTML = useMemo(() => generateHTML(projectData, true, previewMode), [projectData, previewMode]);
@@ -101,7 +102,9 @@ export default function EditorPage({ params }: EditorProps) {
   const isPremiumTemplate = settings?.premiumTemplateIds?.includes(templateId);
   const selectedEffectData = EFFECTS.find(e => e.id === effect);
   const hasPremiumEffect = selectedEffectData?.isVip || false;
-  const isPremium = isPremiumTemplate || hasPremiumEffect;
+  const hasVipMusic = !!musicUrl;
+  const hasVipScenes = scenes.length > 0;
+  const isPremium = isPremiumTemplate || hasPremiumEffect || hasVipMusic || hasVipScenes;
 
   const [isSaving, setIsSaving] = useState(false);
   const [generatedLink, setGeneratedLink] = useState('');
@@ -247,9 +250,9 @@ export default function EditorPage({ params }: EditorProps) {
                       </label>
                    </div>
 
-                   {/* MUSIC UPLOAD */}
+                   {/* MUSIC UPLOAD (VIP) */}
                    <div style={{ marginBottom: '1.5rem' }}>
-                      <label style={styles.label}>🎵 Música de Fondo</label>
+                      <label style={styles.label}>🎵 Música de Fondo <span style={{ color: 'var(--orange)', fontSize: '0.65rem', marginLeft: 4 }}>👑 VIP</span></label>
                       <label style={{ ...styles.uploadBox, border: musicUrl ? '2px solid #7c3aed' : '2px dashed rgba(255,255,255,0.1)' }}>
                          <input type="file" accept="audio/*" style={{ display: 'none' }} 
                             onChange={async (e) => {
@@ -261,8 +264,10 @@ export default function EditorPage({ params }: EditorProps) {
                                 reader.onload = async (event) => {
                                   const res = await fetch('/api/upload', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ file: event.target?.result, folder: 'audio' }) });
                                   const data = await res.json();
-                                  if (data.success) setMusicUrl(data.url);
-                                  else { alert('Error: ' + data.error); setMusicUrl(''); }
+                                  if (data.success) {
+                                    setMusicUrl(data.url);
+                                    showToast('📻 Música VIP activada ✓');
+                                  } else { alert('Error: ' + data.error); setMusicUrl(''); }
                                 };
                                 reader.readAsDataURL(file);
                               }
@@ -273,6 +278,49 @@ export default function EditorPage({ params }: EditorProps) {
                             {musicUrl === 'Subiendo...' ? 'SUBIENDO...' : (musicUrl ? 'MÚSICA LISTA ✓' : 'SUBIR MP3')}
                          </div>
                       </label>
+                   </div>
+
+                   {/* SCENES GALLERY (VIP) */}
+                   <div style={{ marginBottom: '1.5rem', padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: 16, border: '1px solid rgba(255,255,255,0.05)' }}>
+                      <label style={styles.label}>🎬 Escenas Cinematográficas <span style={{ color: 'var(--orange)', fontSize: '0.65rem', marginLeft: 4 }}>👑 VIP</span></label>
+                      <p style={{ fontSize: '0.7rem', color: '#777', marginBottom: '1rem' }}>Sube 3 o más fotos para crear una galería inmersiva automática.</p>
+                      
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem', marginBottom: '1rem' }}>
+                         {scenes.map((s, idx) => (
+                            <div key={idx} style={{ aspectRatio: '1/1', background: `url(${s}) center/cover`, borderRadius: 10, position: 'relative' }}>
+                               <button onClick={() => setScenes(scenes.filter((_, i) => i !== idx))} style={{ position: 'absolute', top: -5, right: -5, width: 20, height: 20, borderRadius: '50%', background: '#ff4444', border: 'none', color: '#fff', fontSize: 10, cursor: 'pointer' }}>×</button>
+                            </div>
+                         ))}
+                         {scenes.length < 6 && (
+                            <label style={{ ...styles.uploadBox, aspectRatio: '1/1', padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>
+                               <input type="file" accept="image/*" style={{ display: 'none' }} 
+                                  onChange={async (e) => {
+                                     const file = e.target.files?.[0];
+                                     if (file) {
+                                        const reader = new FileReader();
+                                        reader.onload = (event) => {
+                                           const img = new Image();
+                                           img.onload = async () => {
+                                              const canvas = document.createElement('canvas');
+                                              const width = Math.min(800, img.width);
+                                              const height = img.height * (width / img.width);
+                                              canvas.width = width; canvas.height = height;
+                                              canvas.getContext('2d')?.drawImage(img, 0, 0, width, height);
+                                              const base64 = canvas.toDataURL('image/jpeg', 0.8);
+                                              const res = await fetch('/api/upload', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ file: base64, folder: 'scenes' }) });
+                                              const data = await res.json();
+                                              if (data.success) setScenes([...scenes, data.url]);
+                                           };
+                                           img.src = event.target?.result as string;
+                                        };
+                                        reader.readAsDataURL(file);
+                                     }
+                                  }}
+                               />
+                               +
+                            </label>
+                         )}
+                      </div>
                    </div>
 
                    {/* PASSWORD */}

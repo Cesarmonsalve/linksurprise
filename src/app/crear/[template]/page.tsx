@@ -353,7 +353,7 @@ export default function EditorPage({ params }: EditorProps) {
                     VISTA BÁSICA (SIN ANIMACIONES NI EFECTOS)
                  </span>
                </div>
-             )}             </div>
+             )}
              <div style={styles.phone}>
                 <div style={styles.phoneNotch} />
                 <iframe srcDoc={previewHTML} style={{ width: '100%', height: '100%', border: 'none' }} title="Editor Preview" />

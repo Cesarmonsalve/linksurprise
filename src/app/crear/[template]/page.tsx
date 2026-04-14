@@ -145,9 +145,9 @@ export default function EditorPage({ params }: EditorProps) {
   // Styles
   const styles = {
     page: { minHeight: '100vh', background: '#050505', color: '#f5f5f0', display: 'flex', flexDirection: 'column' as const, overflow: 'hidden' },
-    nav: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.06)', flexWrap: 'wrap' as const, gap: '1rem' },
+    nav: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.06)', flexWrap: 'wrap' as const, gap: '1rem', position: 'relative' as const, zIndex: 100, background: '#050505' },
     editorBody: { display: 'flex', flex: 1, overflow: 'hidden', position: 'relative' as const },
-    sidebar: { width: '100%', maxWidth: 440, borderRight: '1px solid rgba(255,255,255,0.06)', overflowY: 'auto' as const, padding: '1.8rem', background: 'rgba(5,5,5,0.8)', backdropFilter: 'blur(24px)', zIndex: 20 },
+    sidebar: { width: '100%', maxWidth: 440, borderRight: '1px solid rgba(255,255,255,0.06)', overflowY: 'auto' as const, padding: '2.5rem 1.8rem 1.8rem 1.8rem', background: 'rgba(5,5,5,0.8)', backdropFilter: 'blur(24px)', zIndex: 20 },
     preview: { flex: 1, display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: '2rem', background: 'radial-gradient(circle at 50% 50%, #15151a 0%, #050505 100%)', position: 'relative' as const, overflow: 'hidden' },
     input: { width: '100%', padding: '0.85rem 1.2rem', borderRadius: 12, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', color: '#f5f5f0', fontSize: '0.95rem', outline: 'none', transition: 'all 0.3s' },
     label: { display: 'block', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase' as const, color: '#999', marginBottom: '0.6rem' },
@@ -328,7 +328,17 @@ export default function EditorPage({ params }: EditorProps) {
           <main style={styles.preview} className={`editor-preview-container ${mobileView === 'preview' ? 'mobile-visible' : 'mobile-hidden'}`}>
              <div style={{ marginBottom: '1.5rem', display: 'flex', gap: '0.5rem' }}>
                 <button style={{ background: previewMode === 'basic' ? '#fff' : 'transparent', color: previewMode === 'basic' ? '#000' : '#fff', border: '1px solid #fff', padding: '0.4rem 1rem', borderRadius: 20, fontSize: '0.7rem', fontWeight: 800 }} onClick={() => setPreviewMode('basic')}>BÁSICO</button>
-                <button style={{ background: previewMode === 'vip' ? 'var(--pink)' : 'transparent', color: '#fff', border: '1px solid var(--pink)', padding: '0.4rem 1rem', borderRadius: 20, fontSize: '0.7rem', fontWeight: 800 }} onClick={() => setPreviewMode('vip')}>VIP LIVE</button>
+                <button 
+                  style={{ background: previewMode === 'vip' ? 'var(--pink)' : 'transparent', color: '#fff', border: '1px solid var(--pink)', padding: '0.4rem 1rem', borderRadius: 20, fontSize: '0.7rem', fontWeight: 800, position: 'relative' }} 
+                  onClick={() => setPreviewMode('vip')}
+                >
+                  VIP LIVE
+                  {previewMode === 'vip' && (
+                    <span style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', whiteSpace: 'nowrap', fontSize: '0.55rem', color: 'var(--pink)', marginTop: '4px', fontWeight: 600 }}>
+                      (Incluido en versión VIP ✨)
+                    </span>
+                  )}
+                </button>
              </div>
              <div style={styles.phone}>
                 <div style={styles.phoneNotch} />

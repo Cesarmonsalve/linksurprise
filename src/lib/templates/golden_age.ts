@@ -1,6 +1,3 @@
-// ═══════════════════════════════════════════════════════════════
-// STYLE #7: GOLDEN AGE — Vintage Film Warm
-// ═══════════════════════════════════════════════════════════════
 import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderGoldenAge(d: TemplateRenderData): TemplateOutput {
@@ -88,7 +85,7 @@ export function renderGoldenAge(d: TemplateRenderData): TemplateOutput {
     <div class="vip-shell">
       <div id="wax-seal-overlay">
         <div class="wax-seal" id="seal-btn"></div>
-        <p class="seal-text">Rómper el sello</p>
+        <p class="seal-text">Romper el sello</p>
       </div>
       
       <div class="letter-wrap" id="letter">
@@ -158,8 +155,7 @@ export function renderGoldenAge(d: TemplateRenderData): TemplateOutput {
                target.innerHTML += '<br/>'; i += 4; 
            } else {
                // Make it look like ink flowing
-                target.innerHTML += \`<span class="ink-text" style="opacity:0; animation: inkReveal 0.5s forwards">\${char}</span>\
-    ${gallery.js}`;
+                target.innerHTML += \`<span class="ink-text" style="opacity:0; animation: inkReveal 0.5s forwards">\${char}</span>\`;
            }
            i++;
            setTimeout(type, 40);
@@ -186,7 +182,8 @@ export function renderGoldenAge(d: TemplateRenderData): TemplateOutput {
        
        type();
     }
-  `;
+
+    ${gallery.js}`;
 
   return { css, html, js };
 }

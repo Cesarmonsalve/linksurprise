@@ -1,6 +1,3 @@
-// ═══════════════════════════════════════════════════════════════
-// STYLE #2: CYBER GRID — Hacker Terminal Game
-// ═══════════════════════════════════════════════════════════════
 import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderCyberGrid(d: TemplateRenderData): TemplateOutput {
@@ -200,8 +197,7 @@ export function renderCyberGrid(d: TemplateRenderData): TemplateOutput {
         const val = input.value.trim().toUpperCase();
         const div = document.createElement('div');
         div.className = 'term-line';
-        div.innerHTML = \`<span class="term-prompt">root@nexus:~$</span> \${val}\
-    ${gallery.js}`;
+        div.innerHTML = \`<span class="term-prompt">root@nexus:~$</span> \${val}\`;
         output.appendChild(div);
         input.value = '';
         
@@ -265,7 +261,8 @@ export function renderCyberGrid(d: TemplateRenderData): TemplateOutput {
         
       }, 800);
     }
-  `;
+    
+    ${gallery.js}`;
 
   return { css, html, js };
 }

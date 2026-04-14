@@ -1,6 +1,3 @@
-// ═══════════════════════════════════════════════════════════════
-// STYLE #6: FILM NOIR — Classic B&W Contrast
-// ═══════════════════════════════════════════════════════════════
 import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderFilmNoir(d: TemplateRenderData): TemplateOutput {
@@ -103,8 +100,7 @@ export function renderFilmNoir(d: TemplateRenderData): TemplateOutput {
     window.addEventListener('mousemove', e => {
       const x = (e.clientX / window.innerWidth) * 100;
       const y = (e.clientY / window.innerHeight) * 100;
-      spotlight.style.background = \`radial-gradient(circle 20vw at \${x}% \${y}%, transparent 0%, rgba(0,0,0,0.95) 80%), #000\
-    ${gallery.js}`;
+      spotlight.style.background = \`radial-gradient(circle 20vw at \${x}% \${y}%, transparent 0%, rgba(0,0,0,0.95) 80%), #000\`;
     });
     
     // Auto-advance or manual
@@ -159,7 +155,8 @@ export function renderFilmNoir(d: TemplateRenderData): TemplateOutput {
          }, 4000);
       }
     }
-  `;
+
+    ${gallery.js}`;
 
   return { css, html, js };
 }

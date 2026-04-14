@@ -1,6 +1,3 @@
-// ═══════════════════════════════════════════════════════════════
-// STYLE #20: AURORA FLOW — Mesmerizing Gradient
-// ═══════════════════════════════════════════════════════════════
 import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderAuroraFlow(d: TemplateRenderData): TemplateOutput {
@@ -175,8 +172,7 @@ export function renderAuroraFlow(d: TemplateRenderData): TemplateOutput {
             if(x===0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
          }
-         ctx.strokeStyle = col1 + \`\${Math.floor(20 - i*5)}\
-    ${gallery.js}`;
+         ctx.strokeStyle = col1 + Math.floor(20 - i*5).toString(16).padStart(2,'0');
          ctx.lineWidth = 100 + i*50;
          ctx.lineCap = 'round';
          ctx.stroke();
@@ -227,7 +223,8 @@ export function renderAuroraFlow(d: TemplateRenderData): TemplateOutput {
       const y = (e.clientY / H - 0.5) * 10;
       gsap.to(card, { rotationY: x, rotationX: -y, duration: 1, ease: 'power2.out' });
     });
-  `;
+
+    ${gallery.js}`;
 
   return { css, html, js };
 }

@@ -1,6 +1,3 @@
-// ═══════════════════════════════════════════════════════════════
-// STYLE #18: BRUTALIST BOLD — Raw & Unapologetic
-// ═══════════════════════════════════════════════════════════════
 import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderBrutalistBold(d: TemplateRenderData): TemplateOutput {
@@ -171,8 +168,7 @@ export function renderBrutalistBold(d: TemplateRenderData): TemplateOutput {
       if(!isDown) return;
       e.preventDefault();
       const y = e.clientY - startY;
-      dragger.style.transform = \`translateY(\${y}px) rotate(\${startRot + y*0.01}deg)\
-    ${gallery.js}`;
+      dragger.style.transform = \`translateY(\${y}px) rotate(\${startRot + y*0.01}deg)\`;
     });
     
     // Hardcore hover parallax on card
@@ -200,7 +196,8 @@ export function renderBrutalistBold(d: TemplateRenderData): TemplateOutput {
          gsap.to(st, { scale: 0, opacity: 0, duration: 0.2, onComplete: () => st.remove() });
       }, 2000);
     });
-  `;
+
+    ${gallery.js}`;
 
   return { css, html, js };
 }

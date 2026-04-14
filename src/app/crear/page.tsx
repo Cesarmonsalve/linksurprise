@@ -62,14 +62,14 @@ export default function CrearPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <span style={{ fontSize: '0.75rem', fontWeight: 500, letterSpacing: '0.3em', textTransform: 'uppercase', color: '#c084fc' }}>
-            ✦ Paso 1
+          <span style={{ display: 'inline-block', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#fff', background: 'linear-gradient(90deg, #c084fc, #f472b6)', padding: '0.4rem 1rem', borderRadius: 20, marginBottom: '1rem', boxShadow: '0 4px 15px rgba(244,114,182,0.3)' }}>
+            ✦ PASO 1
           </span>
-          <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.1, margin: '1rem 0 0.5rem' }}>
-            ¿Qué tipo de sorpresa quieres crear?
+          <h1 style={{ fontSize: 'clamp(2.2rem, 5vw, 4rem)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1, margin: '0.5rem 0' }}>
+            Crea magia visual. <br/><span style={{ background: 'linear-gradient(135deg, #c084fc, #db2777)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Regala emociones.</span>
           </h1>
-          <p style={{ color: '#888', fontSize: '1rem', maxWidth: 500, lineHeight: 1.6 }}>
-            Elige una plantilla y luego personalízala con tu mensaje, colores, fotos y música.
+          <p style={{ color: '#a1a1aa', fontSize: '1.1rem', maxWidth: 600, lineHeight: 1.6, marginTop: '1rem' }}>
+            Selecciona una plantilla base. Podrás convertirla en una experiencia premium 👑 añadiendo efectos especiales VIP durante la edición.
           </p>
         </motion.div>
 
@@ -123,22 +123,22 @@ export default function CrearPage() {
                     {premiumIds.includes(t.id) ? (
                       <span style={{
                         position: 'absolute', top: 12, right: 12,
-                        background: 'linear-gradient(135deg, rgba(124, 58, 237, 0.9), rgba(219, 39, 119, 0.9))',
+                        background: 'linear-gradient(135deg, rgba(124, 58, 237, 0.95), rgba(219, 39, 119, 0.95))',
                         backdropFilter: 'blur(10px)', padding: '0.4rem 0.8rem',
                         borderRadius: 20, fontSize: '0.75rem', fontWeight: 800, color: '#fff',
-                        boxShadow: '0 4px 15px rgba(0,0,0,0.3)', letterSpacing: '0.05em'
+                        boxShadow: '0 4px 15px rgba(0,0,0,0.4)', letterSpacing: '0.05em'
                       }}>
-                        👑 PREMIUM
+                        👑 VIP EXCLUSIVO
                       </span>
                     ) : (
                       <span style={{
                         position: 'absolute', top: 12, right: 12,
-                        background: 'rgba(16, 185, 129, 0.2)', border: '1px solid rgba(16, 185, 129, 0.5)',
+                        background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.5)',
                         backdropFilter: 'blur(10px)', padding: '0.4rem 0.8rem',
                         borderRadius: 20, fontSize: '0.75rem', fontWeight: 800, color: '#10b981',
-                        letterSpacing: '0.05em'
+                        letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '0.3rem'
                       }}>
-                        🎁 GRATIS
+                        🎁 GRATIS <span style={{fontSize: '0.6rem', opacity: 0.8}}>(Mejorable)</span>
                       </span>
                     )}
                   </div>

@@ -8,14 +8,14 @@ import PaymentModal from '@/components/PaymentModal';
 
 const FONTS = ['Inter', 'Playfair Display', 'Poppins', 'Dancing Script', 'Outfit', 'Caveat', 'Montserrat'];
 const EFFECTS = [
-  { id: 'typewriter', label: '⌨️ Máquina de escribir', desc: 'El texto aparece letra por letra (Clásico)' },
-  { id: 'fadeUp', label: '✨ Desvanecer (Fade Up)', desc: 'El texto aparece suavemente desde abajo' },
-  { id: 'bounceIn', label: '🪀 Rebote Divertido', desc: 'Aparece dando un salto' },
-  { id: 'zoomOut', label: '🔍 Alejar Enfoque', desc: 'Se posiciona haciendo un efecto de zoom inverso' },
-  { id: 'confetti', label: '🎊 Lluvia de Confeti', desc: 'Lluvia de colores al abrir (VIP / Gratis Limitado)' },
-  { id: 'reveal', label: '🔮 Cortina Teatral', desc: 'Aparición dramática levantando un telón oscuro' },
-  { id: 'heartRain', label: '❤️ Lluvia de Corazones (Exclusivo VIP)', desc: 'Lluvia infinita de corazoncitos flotantes' },
-  { id: 'sparkles', label: '✨ Destellos de Ratón (Exclusivo VIP)', desc: 'Magia que sigue tu dedo/cursor por la pantalla' },
+  { id: 'typewriter', label: '⌨️ Máquina de escribir', desc: 'El texto aparece letra por letra (Clásico)', isVip: false },
+  { id: 'fadeUp', label: '✨ Desvanecer (Fade Up)', desc: 'El texto aparece suavemente desde abajo', isVip: false },
+  { id: 'bounceIn', label: '🪀 Rebote Divertido', desc: 'Aparece dando un salto', isVip: false },
+  { id: 'zoomOut', label: '🔍 Alejar Enfoque', desc: 'Se posiciona haciendo un efecto de zoom inverso', isVip: false },
+  { id: 'confetti', label: '🎊 Lluvia de Confeti', desc: 'Lluvia de colores al abrir', isVip: true },
+  { id: 'reveal', label: '🔮 Cortina Teatral', desc: 'Aparición dramática levantando un telón oscuro', isVip: false },
+  { id: 'heartRain', label: '❤️ Lluvia de Corazones', desc: 'Lluvia infinita de corazoncitos flotantes', isVip: true },
+  { id: 'sparkles', label: '✨ Destellos Mágicos', desc: 'Magia que sigue tu dedo/cursor por la pantalla', isVip: true },
 ];
 
 interface EditorProps {
@@ -111,7 +111,12 @@ export default function EditorPage({ params }: EditorProps) {
   
   const previewHTML = useMemo(() => generateHTML(projectData, true, previewMode), [projectData, previewMode]);
 
-  const isPremium = settings?.premiumTemplateIds?.includes(templateId);
+  const isPremiumTemplate = settings?.premiumTemplateIds?.includes(templateId);
+  const selectedEffectData = EFFECTS.find(e => e.id === effect);
+  const hasPremiumEffect = selectedEffectData?.isVip || false;
+  
+  // A project is premium if the template is premium OR if a premium effect has been used.
+  const isPremium = isPremiumTemplate || hasPremiumEffect;
 
   const handleDownload = () => {
     if (isPremium) {
@@ -192,53 +197,61 @@ export default function EditorPage({ params }: EditorProps) {
     page: { minHeight: '100vh', background: '#050505', color: '#f5f5f0', display: 'flex', flexDirection: 'column' as const },
     nav: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.06)' },
     editor: { display: 'flex', flex: 1, overflow: 'hidden' } as React.CSSProperties,
-    sidebar: { width: 420, minWidth: 420, borderRight: '1px solid rgba(255,255,255,0.06)', overflowY: 'auto' as const, padding: '1.5rem' },
-    preview: { flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', background: '#080808', position: 'relative' as const },
-    input: { width: '100%', padding: '0.75rem 1rem', borderRadius: 10, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', color: '#f5f5f0', fontSize: '0.9rem', outline: 'none', fontFamily: 'inherit', transition: 'border-color 0.3s' },
-    label: { display: 'block', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase' as const, color: '#888', marginBottom: '0.5rem' },
-    fieldGroup: { marginBottom: '1.25rem' },
+    sidebar: { width: 440, minWidth: 440, borderRight: '1px solid rgba(255,255,255,0.06)', overflowY: 'auto' as const, padding: '1.8rem', background: 'rgba(10,10,12,0.85)', backdropFilter: 'blur(24px)' },
+    preview: { flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', background: 'radial-gradient(circle at 50% 50%, #15151a 0%, #050505 100%)', position: 'relative' as const },
+    input: { width: '100%', padding: '0.85rem 1.2rem', borderRadius: 12, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', color: '#f5f5f0', fontSize: '0.95rem', outline: 'none', fontFamily: 'inherit', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.2)' },
+    label: { display: 'block', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase' as const, color: '#999', marginBottom: '0.6rem' },
+    fieldGroup: { marginBottom: '1.5rem' },
     colorRow: { display: 'flex', gap: '0.75rem', alignItems: 'center' },
-    colorInput: { width: 40, height: 40, borderRadius: 10, border: '2px solid rgba(255,255,255,0.1)', cursor: 'pointer', background: 'none', padding: 0 },
-    tab: (active: boolean) => ({ padding: '0.6rem 1rem', borderRadius: 8, border: 'none', background: active ? 'rgba(192,132,252,0.15)' : 'transparent', color: active ? '#c084fc' : '#888', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', transition: 'all 0.3s' }),
-    phone: { width: 375, height: 667, borderRadius: 40, overflow: 'hidden', border: '3px solid rgba(255,255,255,0.1)', background: '#000', position: 'relative' as const, boxShadow: '0 25px 80px rgba(0,0,0,0.5)' },
-    phoneNotch: { position: 'absolute' as const, top: 0, left: '50%', transform: 'translateX(-50%)', width: 150, height: 30, background: '#000', borderRadius: '0 0 20px 20px', zIndex: 10 },
-    linkInput: { width: '100%', padding: '0.6rem 1rem', borderRadius: 10, border: '1px solid rgba(16,185,129,0.3)', background: 'rgba(16,185,129,0.08)', color: '#10b981', fontSize: '0.78rem', outline: 'none', fontFamily: 'monospace', transition: 'border-color 0.3s' },
-    actionBtn: (primary: boolean, green: boolean = false) => ({ padding: '0.8rem 1.5rem', borderRadius: 12, border: primary ? 'none' : '1px solid rgba(255,255,255,0.15)', background: primary ? (green ? 'linear-gradient(135deg, #10b981, #059669)' : 'linear-gradient(135deg, #c084fc, #f472b6)') : 'transparent', color: '#fff', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', transition: 'all 0.3s', textAlign: 'center' as const }),
+    colorInput: { width: 44, height: 44, borderRadius: 12, border: '2px solid rgba(255,255,255,0.1)', cursor: 'pointer', background: 'none', padding: 0, transition: 'transform 0.2s' },
+    tab: (active: boolean) => ({ padding: '0.7rem 1.2rem', borderRadius: 12, border: '1px solid', borderColor: active ? 'rgba(192,132,252,0.5)' : 'transparent', background: active ? 'linear-gradient(135deg, rgba(192,132,252,0.15), rgba(244,114,182,0.15))' : 'transparent', color: active ? '#fff' : '#888', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', transition: 'all 0.3s', boxShadow: active ? '0 4px 15px rgba(192,132,252,0.1)' : 'none' }),
+    phone: { width: 375, height: 667, borderRadius: 45, overflow: 'hidden', border: '6px solid #1a1a1a', background: '#000', position: 'relative' as const, boxShadow: '0 30px 60px rgba(0,0,0,0.6), inset 0 0 0 2px rgba(255,255,255,0.05)' },
+    phoneNotch: { position: 'absolute' as const, top: 0, left: '50%', transform: 'translateX(-50%)', width: 140, height: 28, background: '#1a1a1a', borderRadius: '0 0 20px 20px', zIndex: 10 },
+    linkInput: { width: '100%', padding: '0.7rem 1.2rem', borderRadius: 12, border: '1px solid rgba(16,185,129,0.4)', background: 'rgba(16,185,129,0.1)', color: '#10b981', fontSize: '0.85rem', outline: 'none', fontFamily: 'monospace', transition: 'all 0.3s', boxShadow: '0 4px 15px rgba(16,185,129,0.1)' },
+    actionBtn: (primary: boolean, green: boolean = false) => ({ padding: '0.85rem 1.8rem', borderRadius: 14, border: primary ? 'none' : '1px solid rgba(255,255,255,0.15)', background: primary ? (green ? 'linear-gradient(135deg, #10b981, #059669)' : 'linear-gradient(135deg, #c084fc, #f472b6)') : 'rgba(255,255,255,0.03)', color: '#fff', fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer', transition: 'all 0.3s', textAlign: 'center' as const, boxShadow: primary ? (green ? '0 8px 20px rgba(16,185,129,0.3)' : '0 8px 20px rgba(192,132,252,0.3)') : 'none', letterSpacing: '0.02em', backdropFilter: 'blur(10px)' }),
   };
 
   return (
     <div style={styles.page}>
       {/* Nav */}
       <nav style={styles.nav}>
-        <Link href="/crear" style={{ textDecoration: 'none', color: '#f5f5f0', fontSize: '0.95rem', fontWeight: 600 }}>
-          ← Volver
-        </Link>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span style={{ fontSize: '1.2rem' }}>{tmpl?.emoji || '⏳'}</span>
-          <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>{tmpl?.name || 'Cargando...'}</span>
+        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
+          <Link href="/crear" style={{ textDecoration: 'none', color: '#888', fontSize: '0.95rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', transition: 'color 0.3s' }} onMouseEnter={(e) => e.currentTarget.style.color = '#fff'} onMouseLeave={(e) => e.currentTarget.style.color = '#888'}>
+            <div style={{ background: 'rgba(255,255,255,0.05)', padding: '0.4rem', borderRadius: 8 }}>←</div> Volver al Loby
+          </Link>
+        </motion.div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+          <span style={{ fontSize: '1.4rem' }}>{tmpl?.emoji || '⏳'}</span>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <span style={{ fontWeight: 800, fontSize: '1.05rem', letterSpacing: '-0.02em' }}>{tmpl?.name || 'Cargando...'}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.7rem', color: isPremium ? '#f472b6' : '#10b981', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+               {isPremium ? <span>👑 Modo VIP Activado</span> : <span>🎁 Versión Gratuita</span>}
+            </div>
+          </div>
         </div>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'center' }}>
           {generatedLink && (
-            <div style={{ position: 'relative', width: '100%', maxWidth: '300px' }}>
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} style={{ position: 'relative', width: '100%', minWidth: '300px' }}>
               <input 
                 readOnly 
                 value={generatedLink} 
+                className="link-glitch-hover"
                 style={{ ...styles.linkInput, width: '100%', paddingRight: '40px', cursor: 'pointer' }}
                 title="Clic para copiar"
                 onClick={(e) => { 
                   (e.target as HTMLInputElement).select(); 
                   navigator.clipboard.writeText(generatedLink); 
-                  showToast('¡Copiado! 📋');
+                  showToast('¡Copiado! 📋 Envíalo a esa persona especial.');
                 }}
               />
-              <span style={{ position: 'absolute', right: 12, top: 12, pointerEvents: 'none' }}>📋</span>
-            </div>
+              <span style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>📋</span>
+            </motion.div>
           )}
-          <button onClick={handleSaveProject} disabled={isSaving} style={styles.actionBtn(true, true)}>
-            {isSaving ? 'Guardando...' : (isPremium ? '💎 Guardar Proyecto VIP' : '💾 Generar Link')}
+          <button onClick={handleSaveProject} disabled={isSaving} style={styles.actionBtn(true, !isPremium)}>
+            {isSaving ? 'Guardando...' : (isPremium ? '👑 Comprar Link VIP' : '🎁 Generar Link Gratis')}
           </button>
-          <button onClick={handleDownload} style={styles.actionBtn(!isPremium)}>
-            {isPremium ? '🔒 Descargar HTML' : '⬇ Descargar HTML'}
+          <button onClick={handleDownload} style={styles.actionBtn(false)} title={isPremium ? 'Las funciones VIP requieren crear el link premium' : 'Descargar HTML Básico'}>
+            {isPremium ? '🔒 Solo VIP (En línea)' : '⬇ Descargar HTML'}
           </button>
         </div>
       </nav>
@@ -251,11 +264,23 @@ export default function EditorPage({ params }: EditorProps) {
         <aside style={styles.sidebar}>
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4 }}>
             {/* Tabs */}
-            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '2rem', background: 'rgba(255,255,255,0.03)', padding: '0.3rem', borderRadius: 10 }}>
-              <button style={styles.tab(activeTab === 'content')} onClick={() => setActiveTab('content')}>📝 Contenido</button>
-              <button style={styles.tab(activeTab === 'style')} onClick={() => setActiveTab('style')}>🎨 Estilo</button>
-              <button style={styles.tab(activeTab === 'effects')} onClick={() => setActiveTab('effects')}>✨ Efectos</button>
+            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '2rem', background: 'rgba(0,0,0,0.4)', padding: '0.4rem', borderRadius: 16, border: '1px solid rgba(255,255,255,0.05)' }}>
+              <button style={{...styles.tab(activeTab === 'content'), flex: 1}} onClick={() => setActiveTab('content')}>📝 Textos</button>
+              <button style={{...styles.tab(activeTab === 'style'), flex: 1}} onClick={() => setActiveTab('style')}>🎨 Diseño</button>
+              <button style={{...styles.tab(activeTab === 'effects'), flex: 1, position: 'relative'}} onClick={() => setActiveTab('effects')}>
+                 ✨ Magia
+                 {hasPremiumEffect && <span style={{position:'absolute', top:-5, right:-5, background:'#db2777', width:10, height:10, borderRadius:'50%', boxShadow:'0 0 10px #db2777'}}/>}
+              </button>
             </div>
+
+            {/* Banner Dinámico VIP */}
+            {hasPremiumEffect && !isPremiumTemplate && (
+               <motion.div initial={{opacity: 0, height: 0, marginBottom: 0}} animate={{opacity: 1, height: 'auto', marginBottom: '1.5rem'}} style={{ background: 'linear-gradient(90deg, rgba(192,132,252,0.1), rgba(244,114,182,0.1))', padding: '1rem', borderRadius: 12, borderLeft: '4px solid #c084fc' }}>
+                 <p style={{fontSize: '0.8rem', color: '#e2e8f0', margin: 0, lineHeight: 1.5}}>
+                   <strong style={{color: '#c084fc'}}>🔮 ¡Has desbloqueado Magia VIP!</strong> Al seleccionar efectos Premium, este enlace será para toda la vida.
+                 </p>
+               </motion.div>
+            )}
 
             {/* ═══ CONTENT TAB ═══ */}
             {activeTab === 'content' && (
@@ -526,24 +551,35 @@ export default function EditorPage({ params }: EditorProps) {
             {activeTab === 'effects' && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
                 <div style={styles.fieldGroup}>
-                  <label style={styles.label}>🎬 Efecto de entrada</label>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  <label style={styles.label}>🎬 Efecto de entrada y animaciones</label>
+                  <p style={{ fontSize: '0.75rem', color: '#888', marginBottom: '1rem' }}>Desbloquea emociones ilimitadas seleccionando efectos VIP. Sorprende a niveles estratosféricos.</p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
                     {EFFECTS.map(e => (
                       <button key={e.id} onClick={() => setEffect(e.id)}
                         style={{
-                          padding: '1rem',
-                          borderRadius: 12,
-                          border: effect === e.id ? '1px solid rgba(192,132,252,0.4)' : '1px solid rgba(255,255,255,0.06)',
-                          background: effect === e.id ? 'rgba(192,132,252,0.08)' : 'rgba(255,255,255,0.02)',
+                          padding: '1.2rem',
+                          borderRadius: 16,
+                          border: effect === e.id ? '2px solid rgba(192,132,252,0.6)' : '1px solid rgba(255,255,255,0.06)',
+                          background: effect === e.id ? 'linear-gradient(135deg, rgba(192,132,252,0.1), rgba(244,114,182,0.05))' : 'rgba(0,0,0,0.3)',
                           cursor: 'pointer',
                           textAlign: 'left',
-                          transition: 'all 0.3s',
+                          transition: 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                          position: 'relative',
+                          overflow: 'hidden',
+                          boxShadow: effect === e.id ? '0 10px 30px rgba(192,132,252,0.15)' : 'none'
                         }}
                       >
-                        <div style={{ fontSize: '0.9rem', fontWeight: 600, color: effect === e.id ? '#c084fc' : '#f5f5f0', marginBottom: '0.25rem' }}>
-                          {e.label}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                          <div style={{ fontSize: '0.95rem', fontWeight: 700, color: effect === e.id ? '#fff' : '#e2e8f0', marginBottom: '0.3rem' }}>
+                            {e.label}
+                          </div>
+                          {e.isVip ? (
+                            <span style={{ background: 'linear-gradient(135deg, #7c3aed, #db2777)', fontSize: '0.65rem', padding: '0.2rem 0.5rem', borderRadius: 20, color: '#fff', fontWeight: 800, letterSpacing: '0.05em', boxShadow: '0 2px 10px rgba(219,39,119,0.3)' }}>👑 VIP</span>
+                          ) : (
+                            <span style={{ background: 'rgba(255,255,255,0.1)', fontSize: '0.65rem', padding: '0.2rem 0.5rem', borderRadius: 20, color: '#aaa', fontWeight: 600 }}>GRATIS</span>
+                          )}
                         </div>
-                        <div style={{ fontSize: '0.75rem', color: '#888' }}>{e.desc}</div>
+                        <div style={{ fontSize: '0.75rem', color: effect === e.id ? '#cbd5e1' : '#888', lineHeight: 1.4, paddingRight: '1rem' }}>{e.desc}</div>
                       </button>
                     ))}
                   </div>

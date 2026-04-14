@@ -345,7 +345,24 @@ export default function EditorPage({ params }: EditorProps) {
         .mobile-view-toggle { display: none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); padding: 6px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.1); z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .mobile-view-toggle button { padding: 10px 24px; border-radius: 100px; border: none; background: transparent; color: #666; font-weight: 800; font-size: 0.75rem; cursor: pointer; transition: all 0.3s; }
         .mobile-view-toggle button.active { background: #fff; color: #000; }
-        @media (max-width: 900px) { .mobile-view-toggle { display: flex; gap: 4px; } .mobile-hidden { display: none !important; } .mobile-visible { display: flex !important; width: 100% !important; max-width: none !important; } .editor-sidebar-container { padding-bottom: 80px !important; } }
+        @media (max-width: 900px) { 
+          .mobile-view-toggle { display: flex; gap: 4px; } 
+          .mobile-hidden { display: none !important; } 
+          .mobile-visible { display: flex !important; width: 100% !important; max-width: none !important; } 
+          .editor-sidebar-container { padding-bottom: 80px !important; } 
+        }
+        
+        /* Fix for select options in dark mode */
+        select option {
+          background-color: #1a1a1a !important;
+          color: #ffffff !important;
+        }
+
+        .editor-sidebar-container {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(255,255,255,0.1) transparent;
+        }
+
         .toast { position: fixed; top: 2rem; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 12px 24px; border-radius: 100px; font-weight: 800; font-size: 0.85rem; z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: slideDown 0.4s ease; }
         @keyframes slideDown { from { transform: translate(-50%, -20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
       `}</style>

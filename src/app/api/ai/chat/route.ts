@@ -189,7 +189,7 @@ Acciones disponibles:
 4. Eliminar plantilla: { "type": "delete_template", "templateId": "<id>" }
 5. Crear/Modificar plantilla visual: Manda esta acción si el usuario te pide crear o modificar una plantilla web.
    { "type": "generate_template", "template": { "html": "...", "css": "...", "js": "..." } }
-   * En "html", devuelve SOLO el contenido central (sin html, head, body). Puedes usar ${recipientName}, ${senderName}, \${escapedMessage}, \${imageUrl}.
+   * En "html", devuelve SOLO el contenido central (sin html, head, body). Puedes usar \${recipientName}, \${senderName}, \${escapedMessage}, \${imageUrl}.
 6. Eliminar todos los pedidos/proyectos: { "type": "delete_all_projects" }
    * Usa esto SOLO si el usuario pide explícitamente limpiar o borrar todos los proyectos/pedidos.
 

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function CrearPage() {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -11,6 +11,14 @@ export default function CrearPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Injecting font for the premium feel
+    if (typeof document !== 'undefined') {
+      const link = document.createElement('link');
+      link.href = 'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;600;700&display=swap';
+      link.rel = 'stylesheet';
+      document.head.appendChild(link);
+    }
+
     Promise.all([fetchTemplates(), fetchSettings()]).then(() => setLoading(false));
   }, []);
 
@@ -25,171 +33,247 @@ export default function CrearPage() {
       console.error('Failed to load settings', e);
     }
   };
-    const fetchTemplates = async () => {
-      try {
-        const res = await fetch('/api/templates');
-        const data = await res.json();
-        if (data.success && data.data) {
-          const arr = Object.values(data.data).map((t: any) => ({
-            id: t.id,
-            tag: t.pillarLabel,
-            title: t.name,
-            desc: t.defaultMessage?.length > 60 ? t.defaultMessage.substring(0, 60) + '...' : (t.defaultMessage || ''),
-            price: '$3',
-            gradient: t.gradient,
-            emoji: t.emoji,
-            features: [t.pillarLabel, 'Personalizable'],
-          }));
-          setTemplates(arr);
-        }
-      } catch (err) {
-        console.error(err);
+
+  const fetchTemplates = async () => {
+    try {
+      const res = await fetch('/api/templates');
+      const data = await res.json();
+      if (data.success && data.data) {
+        const arr = Object.values(data.data).map((t: any) => ({
+          id: t.id,
+          tag: t.pillarLabel,
+          title: t.name,
+          desc: t.defaultMessage || '',
+          gradient: t.gradient,
+          emoji: t.emoji,
+          features: [t.pillarLabel, 'Personalizable'],
+        }));
+        setTemplates(arr);
       }
-    };
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#050505', color: '#f5f5f0', padding: '2rem' }}>
-      {/* Header */}
-      <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', maxWidth: 1200, margin: '0 auto 3rem' }}>
-        <Link href="/" style={{ textDecoration: 'none', color: '#a1a1aa', fontSize: '1.1rem', fontWeight: 600, letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '0.5rem', transition: 'color 0.3s' }} onMouseEnter={e => e.currentTarget.style.color='#fff'} onMouseLeave={e => e.currentTarget.style.color='#a1a1aa'}>
-          <span style={{ fontSize: '1.3rem' }}>←</span> Volver al inicio
-        </Link>
-      </nav>
+    <div style={{ 
+      minHeight: '100vh', 
+      background: '#080808', 
+      color: '#d1d1d1', 
+      fontFamily: "'Inter', sans-serif",
+      position: 'relative',
+      overflowX: 'hidden'
+    }}>
+      {/* Dynamic Noise Texture */}
+      <div style={{
+        position: 'fixed',
+        inset: 0,
+        opacity: 0.04,
+        pointerEvents: 'none',
+        zIndex: 1,
+        background: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`
+      }} />
 
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <span style={{ display: 'inline-block', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#fff', background: 'linear-gradient(90deg, #c084fc, #f472b6)', padding: '0.4rem 1rem', borderRadius: 20, marginBottom: '1rem', boxShadow: '0 4px 15px rgba(244,114,182,0.3)' }}>
-            ✦ PASO 1
-          </span>
-          <h1 style={{ fontSize: 'clamp(2.2rem, 5vw, 4rem)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1, margin: '0.5rem 0' }}>
-            Crea magia visual. <br/><span style={{ background: 'linear-gradient(135deg, #c084fc, #db2777)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Regala emociones.</span>
-          </h1>
-          <p style={{ color: '#a1a1aa', fontSize: '1.1rem', maxWidth: 600, lineHeight: 1.6, marginTop: '1rem' }}>
-            Selecciona una plantilla base. Podrás convertirla en una experiencia premium 👑 añadiendo efectos especiales VIP durante la edición.
-          </p>
-        </motion.div>
+      {/* Main Content */}
+      <div style={{ position: 'relative', zIndex: 2, padding: '5rem 3rem', maxWidth: 1600, margin: '0 auto' }}>
+        
+        {/* Minimalist Heading Section */}
+        <header style={{ marginBottom: '10rem', borderBottom: '1px solid rgba(255,255,255,0.03)', paddingBottom: '3rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6rem' }}>
+            <Link href="/" style={{ color: '#fff', textDecoration: 'none', fontSize: '1rem', fontWeight: 700, letterSpacing: '-0.02em' }}>
+              LS STUDIO —
+            </Link>
+            <div style={{ display: 'flex', gap: '4rem', fontSize: '0.75rem', fontWeight: 600, color: '#666', letterSpacing: '0.15em' }}>
+              <span>CATÁLOGO 2026</span>
+              <span>INDEX: 01-20</span>
+            </div>
+          </div>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '6rem', alignItems: 'end' }}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <h1 style={{ 
+                fontSize: 'clamp(3.5rem, 9vw, 8rem)', 
+                lineHeight: 0.85, 
+                fontWeight: 400, 
+                letterSpacing: '-0.05em',
+                margin: 0,
+                fontFamily: "'Instrument Serif', serif",
+                color: '#fff'
+              }}>
+                Diseña para <br/>la <i style={{ fontWeight: 300 }}>emoción.</i>
+              </h1>
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 1 }}
+              style={{ paddingBottom: '1rem' }}
+            >
+              <p style={{ fontSize: '1.1rem', color: '#888', maxWidth: '440px', lineHeight: 1.6, margin: 0 }}>
+                Explora nuestra selección de arquitecturas visuales. <br/>Cada plantilla es una base neutral esperando tu toque personal.
+              </p>
+            </motion.div>
+          </div>
+        </header>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-          gap: '1.5rem',
-          marginTop: '3rem',
+        {/* Gallery Grid (The "Studio" Layout) */}
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(12, 1fr)', 
+          gap: '3rem',
+          alignItems: 'start'
         }}>
           {loading ? (
-            <p style={{ color: '#888' }}>Cargando plantillas...</p>
-          ) : templates.map((t, i) => (
-            <motion.div
-              key={t.id}
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
-            >
-              <div
-                style={{
-                  borderRadius: 24,
-                  border: hoveredId === t.id ? '1px solid rgba(192,132,252,0.5)' : '1px solid rgba(255,255,255,0.08)',
-                  overflow: 'hidden',
-                  background: 'linear-gradient(180deg, rgba(20,20,22,0.8) 0%, rgba(10,10,12,0.9) 100%)',
-                  backdropFilter: 'blur(20px)',
-                  transition: 'all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)',
-                  transform: hoveredId === t.id ? 'translateY(-8px)' : 'translateY(0)',
-                  boxShadow: hoveredId === t.id ? '0 20px 40px rgba(0,0,0,0.6), 0 0 40px rgba(192,132,252,0.1)' : '0 10px 30px rgba(0,0,0,0.4)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  height: '100%',
+            <div style={{ gridColumn: 'span 12', padding: '10rem 0', textAlign: 'left', color: '#222', fontSize: '5vw', fontFamily: 'serif' }}>ARCHITECTURE LOADING...</div>
+          ) : templates.map((t, i) => {
+            // Asymmetric calculation for 12-col grid
+            const spanMap = [7, 5, 4, 8, 12, 6, 6];
+            const span = spanMap[i % spanMap.length];
+            const hasMargin = i % 2 !== 0;
+
+            return (
+              <motion.div
+                key={t.id}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: (i % 3) * 0.15, ease: [0.16, 1, 0.3, 1] }}
+                style={{ 
+                  gridColumn: `span ${span}`,
+                  marginTop: hasMargin ? '6rem' : '0',
+                  position: 'relative'
                 }}
                 onMouseEnter={() => setHoveredId(t.id)}
                 onMouseLeave={() => setHoveredId(null)}
               >
-                {/* Visual Header */}
                 <div style={{
-                  height: 160,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '4.5rem',
                   position: 'relative',
+                  aspectRatio: span > 8 ? '21/9' : span > 6 ? '16/10' : '10/13',
+                  background: '#0e0e0f',
                   overflow: 'hidden',
-                  background: 'radial-gradient(circle at center, rgba(192,132,252,0.1) 0%, transparent 70%)',
-                  borderBottom: '1px solid rgba(255,255,255,0.03)'
+                  border: '1px solid rgba(255,255,255,0.04)',
+                  transition: 'border-color 0.4s',
+                  borderColor: hoveredId === t.id ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.04)'
                 }}>
-                  {/* Glowing background behind emoji */}
-                  <div style={{ position: 'absolute', width: 100, height: 100, background: t.gradient, filter: 'blur(40px)', opacity: 0.4, borderRadius: '50%' }} />
-                  
-                  <span style={{
-                    transition: 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                    transform: hoveredId === t.id ? 'scale(1.15) rotate(-5deg)' : 'scale(1) rotate(0)',
-                    filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.3))',
-                    position: 'relative',
-                    zIndex: 2
+                  {/* Abstract Focal Visual */}
+                  <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: t.gradient,
+                    opacity: 0.08,
+                    filter: 'blur(100px) saturate(1.5)',
+                    transition: 'opacity 0.6s',
+                    opacity: hoveredId === t.id ? 0.2 : 0.08
+                  }} />
+
+                  <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: span > 6 ? '10vw' : '15vw',
+                    filter: 'grayscale(1) brightness(0.7)',
+                    opacity: 0.3,
+                    transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+                    transform: hoveredId === t.id ? 'scale(1.1) rotate(5deg)' : 'scale(1) rotate(0)'
                   }}>
                     {t.emoji}
-                  </span>
-                  
-                  {/* Price badge */}
-                  {premiumIds.includes(t.id) ? (
-                    <div style={{
-                      position: 'absolute', top: 16, right: 16,
-                      background: 'rgba(219, 39, 119, 0.1)', border: '1px solid rgba(219, 39, 119, 0.3)',
-                      backdropFilter: 'blur(10px)', padding: '0.4rem 0.8rem',
-                      borderRadius: 20, fontSize: '0.7rem', fontWeight: 700, color: '#f472b6',
-                      letterSpacing: '0.1em'
-                    }}>
-                      👑 VIP BASE
-                    </div>
-                  ) : (
-                    <div style={{
-                      position: 'absolute', top: 16, right: 16,
-                      background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.2)',
-                      backdropFilter: 'blur(10px)', padding: '0.4rem 0.8rem',
-                      borderRadius: 20, fontSize: '0.7rem', fontWeight: 700, color: '#10b981',
-                      letterSpacing: '0.1em'
-                    }}>
-                      🎁 GRATIS
-                    </div>
-                  )}
-                </div>
-                
-                {/* Card Info */}
-                <div style={{ padding: '1.8rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                  <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.8rem', flexWrap: 'wrap' }}>
-                    {t.features.slice(0, 2).map((f: string, j: number) => (
-                      <span key={j} style={{
-                        fontSize: '0.65rem', padding: '0.3rem 0.6rem', borderRadius: 6,
-                        background: 'rgba(255,255,255,0.04)', color: '#a1a1aa', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase'
-                      }}>
-                        {f}
-                      </span>
-                    ))}
                   </div>
-                  <h3 style={{ fontSize: '1.4rem', fontWeight: 700, margin: '0 0 0.5rem 0', letterSpacing: '-0.02em', color: '#fff' }}>{t.title}</h3>
-                  <p style={{ fontSize: '0.9rem', color: '#888', lineHeight: 1.6, marginBottom: '2rem', flex: 1 }}>{t.desc}</p>
-                  
-                  {/* Action Buttons */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.5rem', marginTop: 'auto' }}>
-                    <Link href={`/crear/${t.id}`} style={{ textDecoration: 'none' }}>
-                      <button style={{
-                        width: '100%', padding: '0.8rem', borderRadius: 12,
-                        background: hoveredId === t.id ? 'linear-gradient(135deg, #c084fc, #db2777)' : 'rgba(255,255,255,0.05)',
-                        color: hoveredId === t.id ? '#fff' : '#e2e8f0',
-                        border: hoveredId === t.id ? 'none' : '1px solid rgba(255,255,255,0.1)',
-                        fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer',
-                        transition: 'all 0.3s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem'
+
+                  {/* Metadata Overlay */}
+                  <div style={{ position: 'absolute', padding: '2.5rem', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', zIndex: 10 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+                        <span style={{ fontSize: '0.65rem', color: '#fff', fontWeight: 600, letterSpacing: '0.1em' }}>0{i+1}</span>
+                        <span style={{ fontSize: '0.6rem', color: '#555', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.15em' }}>{t.tag}</span>
+                      </div>
+                      {premiumIds.includes(t.id) && (
+                        <div style={{ fontSize: '0.55rem', border: '1px solid rgba(255,255,255,0.15)', color: '#aaa', padding: '0.3rem 0.6rem', letterSpacing: '0.2em' }}>VIP RELEASE</div>
+                      )}
+                    </div>
+
+                    <div style={{ transition: 'transform 0.5s', transform: hoveredId === t.id ? 'translateY(-10px)' : 'translateY(0)' }}>
+                      <h3 style={{ 
+                        fontSize: 'clamp(1.5rem, 3vw, 3.5rem)', 
+                        fontWeight: 300, 
+                        margin: '0 0 0.5rem', 
+                        fontFamily: "'Instrument Serif', serif", 
+                        color: '#fff',
+                        lineHeight: 1
                       }}>
-                        <span>✏️</span> Crear con esta Plantilla {hoveredId === t.id && '→'}
-                      </button>
-                    </Link>
+                        {t.title}
+                      </h3>
+                      <AnimatePresence>
+                        {hoveredId === t.id && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            style={{ overflow: 'hidden' }}
+                          >
+                            <p style={{ fontSize: '0.85rem', color: '#666', marginBottom: '2rem', maxWidth: '300px' }}>{t.desc}</p>
+                            <Link href={`/crear/${t.id}`} style={{ textDecoration: 'none' }}>
+                              <button style={{
+                                width: '100%',
+                                padding: '1.2rem',
+                                background: '#fff',
+                                color: '#000',
+                                border: 'none',
+                                fontSize: '0.7rem',
+                                fontWeight: 700,
+                                letterSpacing: '0.2em',
+                                cursor: 'pointer',
+                                transition: 'all 0.3s'
+                              }}
+                              onMouseEnter={(e) => (e.currentTarget.style.background = '#e2e2e2')}
+                              onMouseLeave={(e) => (e.currentTarget.style.background = '#fff')}
+                              >
+                                COMENZAR DISEÑO
+                              </button>
+                            </Link>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
+
+        {/* Studio Footer */}
+        <footer style={{ marginTop: '20rem', padding: '4rem 0', borderTop: '1px solid rgba(255,255,255,0.02)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ fontSize: '0.75rem', color: '#333', letterSpacing: '0.05em' }}>
+              &copy; 2026 LINK SURPRISE STUDIO <br/>
+              DESIGNED IN BUENOS AIRES
+            </div>
+            <div style={{ display: 'flex', gap: '3rem', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.2em', color: '#666' }}>
+              <span>PRIVACY</span>
+              <span>TERMS</span>
+              <span>GITHUB</span>
+            </div>
+          </div>
+        </footer>
       </div>
+
+      <style jsx global>{`
+        body {
+          margin: 0;
+          cursor: crosshair;
+        }
+        
+        ::selection {
+          background: #fff;
+          color: #000;
+        }
+      `}</style>
     </div>
   );
 }

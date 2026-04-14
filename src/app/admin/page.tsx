@@ -1,12 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function AdminDashboard() {
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     fetchProjects();
@@ -34,7 +35,6 @@ export default function AdminDashboard() {
       });
       const data = await res.json();
       if (data.success) {
-        // Refresh local list
         setProjects(projects.map((p: any) => p._id === id ? { ...p, status: newStatus } : p));
       }
     } catch (e) {
@@ -43,83 +43,82 @@ export default function AdminDashboard() {
   };
 
   const getStatusBadge = (status: string) => {
-    if (status === 'paid') return <span style={{ padding: '0.3rem 0.6rem', background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', borderRadius: 20, fontSize: '0.75rem', fontWeight: 600 }}>Aprobado / Pagado</span>;
-    if (status === 'pending_payment') return <span style={{ padding: '0.3rem 0.6rem', background: 'rgba(245, 158, 11, 0.15)', color: '#f59e0b', borderRadius: 20, fontSize: '0.75rem', fontWeight: 600 }}>Pago Pendiente</span>;
-    if (status === 'free') return <span style={{ padding: '0.3rem 0.6rem', background: 'rgba(96, 165, 250, 0.15)', color: '#60a5fa', borderRadius: 20, fontSize: '0.75rem', fontWeight: 600 }}>Gratuito</span>;
-    return <span style={{ padding: '0.3rem 0.6rem', background: 'rgba(255, 255, 255, 0.1)', color: '#aaa', borderRadius: 20, fontSize: '0.75rem', fontWeight: 600 }}>Borrador</span>;
+    if (status === 'paid') return <span className="status-badge approved">{t.admin.statusApproved}</span>;
+    if (status === 'pending_payment') return <span className="status-badge pending">{t.admin.statusPending}</span>;
+    if (status === 'free') return <span className="status-badge approved" style={{ background: 'rgba(0, 229, 255, 0.1)', color: 'var(--cyan)', borderColor: 'rgba(0, 229, 255, 0.3)' }}>GRATUITO</span>;
+    return <span className="status-badge" style={{ background: 'rgba(255,255,255,0.1)', color: '#aaa', borderColor: 'transparent' }}>BORRADOR</span>;
   };
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Dashboard General</h1>
-      <p style={{ color: '#888', marginBottom: '2rem' }}>Administra y aprueba las sorpresas creadas por tus usuarios.</p>
+    <>
+      <h1 className="section-title" style={{ fontSize: 32, marginBottom: 8, textAlign: 'left', margin: 0 }}>
+        {t.admin.projectsTitle.split(' ')[0]} <span className="highlight">{t.admin.projectsTitle.split(' ').slice(1).join(' ')}</span>
+      </h1>
+      <p style={{ color: 'var(--text-muted)', marginBottom: 32, fontSize: 13 }}>{t.admin.projectsDesc}</p>
 
       {/* Stats Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '3rem' }}>
-        <div style={{ background: '#0a0a0a', padding: '1.5rem', borderRadius: 16, border: '1px solid rgba(255,255,255,0.05)' }}>
-          <div style={{ color: '#888', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Proyectos Totales</div>
-          <div style={{ fontSize: '2.5rem', fontWeight: 800, marginTop: '0.5rem', color: '#c084fc' }}>{projects.length}</div>
+        <div style={{ background: 'var(--surface)', padding: '1.5rem', borderRadius: 16, border: '1px solid var(--border)' }}>
+          <div className="sidebar-section-title" style={{ margin: 0 }}>TOTAL</div>
+          <div style={{ fontFamily: 'var(--font-montserrat)', fontSize: '2.5rem', fontWeight: 800, marginTop: '0.5rem', color: 'var(--purple-light)' }}>{projects.length}</div>
         </div>
-        <div style={{ background: '#0a0a0a', padding: '1.5rem', borderRadius: 16, border: '1px solid rgba(255,255,255,0.05)' }}>
-          <div style={{ color: '#888', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Pagos Pendientes</div>
-          <div style={{ fontSize: '2.5rem', fontWeight: 800, marginTop: '0.5rem', color: '#f59e0b' }}>
+        <div style={{ background: 'var(--surface)', padding: '1.5rem', borderRadius: 16, border: '1px solid var(--border)' }}>
+          <div className="sidebar-section-title" style={{ margin: 0 }}>{t.admin.statusPending}</div>
+          <div style={{ fontFamily: 'var(--font-montserrat)', fontSize: '2.5rem', fontWeight: 800, marginTop: '0.5rem', color: '#febc2e' }}>
             {projects.filter((p: any) => p.status === 'pending_payment').length}
           </div>
         </div>
-        <div style={{ background: '#0a0a0a', padding: '1.5rem', borderRadius: 16, border: '1px solid rgba(255,255,255,0.05)' }}>
-          <div style={{ color: '#888', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Aprobados</div>
-          <div style={{ fontSize: '2.5rem', fontWeight: 800, marginTop: '0.5rem', color: '#10b981' }}>
+        <div style={{ background: 'var(--surface)', padding: '1.5rem', borderRadius: 16, border: '1px solid var(--border)' }}>
+          <div className="sidebar-section-title" style={{ margin: 0 }}>{t.admin.statusApproved}</div>
+          <div style={{ fontFamily: 'var(--font-montserrat)', fontSize: '2.5rem', fontWeight: 800, marginTop: '0.5rem', color: '#28c840' }}>
             {projects.filter((p: any) => p.status === 'paid').length}
           </div>
         </div>
       </div>
-
-      <h2 style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: '1rem' }}>Últimas Sorpresas Creadas</h2>
       
       {loading ? (
-        <p style={{ color: '#888' }}>Cargando datos...</p>
+        <p style={{ color: 'var(--text-muted)' }}>Cargando datos...</p>
       ) : (
-        <div style={{ background: '#0a0a0a', borderRadius: 16, border: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-            <thead style={{ background: 'rgba(255,255,255,0.02)' }}>
+        <div style={{ overflowX: 'auto', background: 'var(--surface)', borderRadius: 12, border: '1px solid var(--border)' }}>
+          <table className="admin-table">
+            <thead>
               <tr>
-                <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Fecha</th>
-                <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Para / De</th>
-                <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Plantilla</th>
-                <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Cliente / IP</th>
-                <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Estado</th>
-                <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Acciones</th>
+                <th>FECHA</th>
+                <th>PARA / DE</th>
+                <th>PLANTILLA</th>
+                <th>CLIENTE</th>
+                <th>ESTADO</th>
+                <th>{t.admin.actions}</th>
               </tr>
             </thead>
             <tbody>
               {projects.length === 0 ? (
-                <tr><td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: '#888' }}>No hay proyectos todavía.</td></tr>
+                <tr><td colSpan={6} style={{ padding: '2rem', textAlign: 'center', color: '#888' }}>No hay proyectos todavía.</td></tr>
               ) : (
                 projects.map((p: any) => (
-                  <tr key={p._id} style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-                    <td style={{ padding: '1rem 1.5rem', fontSize: '0.9rem', color: '#aaa' }}>
+                  <tr key={p._id}>
+                    <td style={{ color: 'var(--text-muted)' }}>
                       {new Date(p.createdAt).toLocaleDateString()}
                     </td>
-                    <td style={{ padding: '1rem 1.5rem' }}>
-                      <div style={{ fontWeight: 600 }}>{p.config?.recipientName || 'Sin nombre'}</div>
-                      <div style={{ fontSize: '0.8rem', color: '#888' }}>De: {p.config?.senderName || 'Anónimo'}</div>
+                    <td>
+                      <div style={{ fontWeight: 800, fontFamily: 'var(--font-montserrat)', textTransform: 'uppercase', fontSize: 11 }}>{p.config?.recipientName || 'Sin nombre'}</div>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>De: {p.config?.senderName || 'Anónimo'}</div>
                     </td>
-                    <td style={{ padding: '1rem 1.5rem', fontSize: '0.9rem', color: '#c084fc' }}>
+                    <td style={{ color: 'var(--pink)', fontWeight: 600, fontSize: 12 }}>
                       {p.template}
                     </td>
-                    <td style={{ padding: '1rem 1.5rem', fontSize: '0.8rem' }}>
-                      <div style={{ color: '#10b981', fontWeight: 'bold' }}>{p.clientPhone || 'N/A'}</div>
-                      <div style={{ color: '#555', fontSize: '0.7rem' }}>IP: {p.ipAddress || 'unknown'}</div>
+                    <td>
+                      <div style={{ color: '#00e5a0', fontWeight: 'bold' }}>{p.clientPhone || 'N/A'}</div>
                     </td>
-                    <td style={{ padding: '1rem 1.5rem' }}>
+                    <td>
                       {getStatusBadge(p.status)}
                     </td>
-                    <td style={{ padding: '1rem 1.5rem' }}>
+                    <td>
                       <div style={{ display: 'flex', gap: '0.5rem' }}>
-                        <a href={`/s/${p._id}`} target="_blank" style={{ padding: '0.4rem 0.8rem', background: 'rgba(255,255,255,0.1)', color: '#fff', borderRadius: 8, textDecoration: 'none', fontSize: '0.8rem' }}>Ver URL</a>
+                        <a href={`/s/${p._id}`} target="_blank" className="editor-btn" style={{ background: 'var(--surface2)'}}>{t.admin.previewBtn}</a>
                         {p.status !== 'paid' && (
-                          <button onClick={() => updateStatus(p._id, 'paid')} style={{ padding: '0.4rem 0.8rem', background: 'rgba(16, 185, 129, 0.2)', color: '#10b981', border: '1px solid rgba(16, 185, 129, 0.4)', borderRadius: 8, fontSize: '0.8rem', cursor: 'pointer', fontWeight: 600 }}>
-                            ✓ Aprobar Pago
+                          <button onClick={() => updateStatus(p._id, 'paid')} className="editor-btn" style={{ borderColor: 'rgba(40, 200, 64, 0.4)', color: '#28c840', background: 'rgba(40, 200, 64, 0.05)' }}>
+                            {t.admin.approveBtn}
                           </button>
                         )}
                       </div>
@@ -131,6 +130,6 @@ export default function AdminDashboard() {
           </table>
         </div>
       )}
-    </div>
+    </>
   );
 }

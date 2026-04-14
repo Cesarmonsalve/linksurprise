@@ -164,7 +164,6 @@ export default function CrearPage() {
                     position: 'absolute',
                     inset: 0,
                     background: t.gradient,
-                    opacity: 0.08,
                     filter: 'blur(100px) saturate(1.5)',
                     transition: 'opacity 0.6s',
                     opacity: hoveredId === t.id ? 0.2 : 0.08

@@ -1,10 +1,11 @@
 // ═══════════════════════════════════════════════════════════════
 // STYLE #7: GOLDEN AGE — Vintage Film Warm
 // ═══════════════════════════════════════════════════════════════
-import { TemplateRenderData, TemplateOutput } from './index';
+import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderGoldenAge(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
+  const gallery = renderVipGallery(d, "goldenage");
   const c = d.accentColor || '#d4af37'; // gold
 
   const css = `
@@ -75,7 +76,7 @@ export function renderGoldenAge(d: TemplateRenderData): TemplateOutput {
         <p class="g-year">✦ Momento Especial ✦</p>
         <h1 class="g-title">${d.title}</h1>
         <div class="g-div"></div>
-        ${d.imageUrl ? `<img class="g-photo" src="${d.imageUrl}" />` : ''}
+        ${d.imageUrl ? gallery.html : ''}
         <p class="g-msg" id="type-target"></p>
         <p class="g-sender">${d.senderName || 'Alguien'}</p>
       </div>
@@ -95,7 +96,7 @@ export function renderGoldenAge(d: TemplateRenderData): TemplateOutput {
           <p class="g-label">Para ${d.recipientName || 'Ti'},</p>
           <h1 class="g-title">${d.title}</h1>
           <div class="g-div"></div>
-          ${d.imageUrl ? `<img class="g-photo" src="${d.imageUrl}" />` : ''}
+          ${d.imageUrl ? gallery.html : ''}
           <div class="g-msg" id="type-target"></div>
           <p class="g-sender" id="g-sender" style="opacity:0">${d.senderName || 'Alguien'}</p>
         </div>
@@ -157,7 +158,8 @@ export function renderGoldenAge(d: TemplateRenderData): TemplateOutput {
                target.innerHTML += '<br/>'; i += 4; 
            } else {
                // Make it look like ink flowing
-                target.innerHTML += \`<span class="ink-text" style="opacity:0; animation: inkReveal 0.5s forwards">\${char}</span>\`;
+                target.innerHTML += \`<span class="ink-text" style="opacity:0; animation: inkReveal 0.5s forwards">\${char}</span>\
+    ${gallery.js}`;
            }
            i++;
            setTimeout(type, 40);

@@ -1,10 +1,11 @@
 // ═══════════════════════════════════════════════════════════════
 // STYLE #16: LIQUID DREAM — Fluid Dynamic Art
 // ═══════════════════════════════════════════════════════════════
-import { TemplateRenderData, TemplateOutput } from './index';
+import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderLiquidDream(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
+  const gallery = renderVipGallery(d, "liquiddream");
   const c = d.accentColor || '#00d2ff';
 
   const css = `
@@ -65,7 +66,7 @@ export function renderLiquidDream(d: TemplateRenderData): TemplateOutput {
       <div class="liq-card">
         <p class="liq-label">Flujo Continuo</p>
         <h1 class="liq-title">${d.title}</h1>
-        ${d.imageUrl ? `<img class="liq-photo" src="${d.imageUrl}" />` : ''}
+        ${d.imageUrl ? gallery.html : ''}
         <div class="liq-div"></div>
         <p class="liq-msg" id="type-target"></p>
         <div class="liq-div"></div>
@@ -98,7 +99,7 @@ export function renderLiquidDream(d: TemplateRenderData): TemplateOutput {
         <h1 class="l-title gs-st" data-text="${d.title}">${d.title}</h1>
         ${d.imageUrl ? `
         <div class="l-photo-wrap gs-st">
-          <img class="l-photo" src="${d.imageUrl}" />
+          ${gallery.html}
         </div>` : ''}
         <div class="l-msg gs-st" id="type-target"></div>
         <p class="l-sender gs-st">Con fluidez,<br/><strong>${d.senderName || 'Alguien'}</strong></p>
@@ -181,7 +182,8 @@ export function renderLiquidDream(d: TemplateRenderData): TemplateOutput {
          onComplete: () => animateBlob(el)
       });
     }
-  `;
+  
+    ${gallery.js}`;
 
   return { css, html, js };
 }

@@ -1,10 +1,11 @@
 // ═══════════════════════════════════════════════════════════════
 // STYLE #12: MONO GRID — Monochrome Systematic
 // ═══════════════════════════════════════════════════════════════
-import { TemplateRenderData, TemplateOutput } from './index';
+import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderMonoGrid(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
+  const gallery = renderVipGallery(d, "monogrid");
   const c = d.accentColor || '#ffffff';
 
   const css = `
@@ -189,7 +190,8 @@ export function renderMonoGrid(d: TemplateRenderData): TemplateOutput {
         type();
       }, 1000);
     }
-  `;
+  
+    ${gallery.js}`;
 
   return { css, html, js };
 }

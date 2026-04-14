@@ -1,10 +1,11 @@
 // ═══════════════════════════════════════════════════════════════
 // STYLE #17: PARTICLE BURST — Dynamic Energy
 // ═══════════════════════════════════════════════════════════════
-import { TemplateRenderData, TemplateOutput } from './index';
+import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderParticleBurst(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
+  const gallery = renderVipGallery(d, "particleburst");
   const c = d.accentColor || '#ff0055';
 
   const css = `
@@ -61,7 +62,7 @@ export function renderParticleBurst(d: TemplateRenderData): TemplateOutput {
         <div class="pb-card">
           <p class="pb-label">Energía para ${d.recipientName || 'ti'}</p>
           <h1 class="pb-title">${d.title}</h1>
-          ${d.imageUrl ? `<img class="pb-photo" src="${d.imageUrl}" />` : ''}
+          ${d.imageUrl ? gallery.html : ''}
           <p class="pb-msg" id="type-target"></p>
           <p class="pb-sender">Emitido por <strong>${d.senderName || 'Alguien'}</strong></p>
         </div>
@@ -80,7 +81,7 @@ export function renderParticleBurst(d: TemplateRenderData): TemplateOutput {
         <div class="pb-card" id="main-card">
           <p class="pb-label gs-el">Para ${d.recipientName || 'Ti'}</p>
           <h1 class="pb-title gs-el">${d.title}</h1>
-          ${d.imageUrl ? `<img class="pb-photo gs-el" src="${d.imageUrl}" />` : ''}
+          ${d.imageUrl ? gallery.html : ''}
           <div class="pb-msg gs-el" id="type-target"></div>
           <p class="pb-sender gs-el">Desde el centro de la galaxia,<br/><strong>${d.senderName || 'Anónimo'}</strong></p>
         </div>
@@ -217,7 +218,8 @@ export function renderParticleBurst(d: TemplateRenderData): TemplateOutput {
          gsap.to(card, { rotationY: x, rotationX: -y, duration: 0.5 });
       });
     }
-  `;
+  
+    ${gallery.js}`;
 
   return { css, html, js };
 }

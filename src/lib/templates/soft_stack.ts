@@ -1,10 +1,11 @@
 // ═══════════════════════════════════════════════════════════════
 // STYLE #15: SOFT STACK — Layered Depth
 // ═══════════════════════════════════════════════════════════════
-import { TemplateRenderData, TemplateOutput } from './index';
+import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderSoftStack(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
+  const gallery = renderVipGallery(d, "softstack");
   const c = d.accentColor || '#6c5ce7';
 
   const css = `
@@ -65,7 +66,7 @@ export function renderSoftStack(d: TemplateRenderData): TemplateOutput {
           <div class="st-icon">✤</div>
           <p class="st-label">Para ${d.recipientName || 'Ti'}</p>
           <h1 class="st-title">${d.title}</h1>
-          ${d.imageUrl ? `<img class="st-photo" src="${d.imageUrl}" />` : ''}
+          ${d.imageUrl ? gallery.html : ''}
           <div class="st-div"></div>
           <p class="st-msg" id="type-target"></p>
           <div class="st-div"></div>
@@ -91,7 +92,7 @@ export function renderSoftStack(d: TemplateRenderData): TemplateOutput {
         <!-- Photo Card -->
         ${d.imageUrl ? `
         <div class="stack-item s-photo-card" style="z-index: 2; padding: 1rem;">
-          <img class="item-photo" src="${d.imageUrl}" />
+          ${gallery.html}
         </div>` : ''}
         
         <!-- Title Card -->
@@ -187,7 +188,8 @@ export function renderSoftStack(d: TemplateRenderData): TemplateOutput {
        gsap.to(stack, { rotationY: x, rotationX: y, duration: 0.5 });
     });
     stack.addEventListener('mouseleave', () => gsap.to(stack, {rotationY:0, rotationX:0, duration:1, ease:'elastic.out'}));
-  `;
+  
+    ${gallery.js}`;
 
   return { css, html, js };
 }

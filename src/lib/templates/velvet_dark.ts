@@ -1,10 +1,11 @@
 // ═══════════════════════════════════════════════════════════════
 // STYLE #9: VELVET DARK — Rich Dramatic Luxury
 // ═══════════════════════════════════════════════════════════════
-import { TemplateRenderData, TemplateOutput } from './index';
+import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderVelvetDark(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
+  const gallery = renderVipGallery(d, "velvetdark");
   const c = d.accentColor || '#ff3366';
 
   const css = `
@@ -80,7 +81,7 @@ export function renderVelvetDark(d: TemplateRenderData): TemplateOutput {
         <p class="v-label">Para ${d.recipientName || 'ti'}</p>
         <h1 class="v-title">${d.title}</h1>
         <div class="v-div"></div>
-        ${d.imageUrl ? `<img class="v-photo" src="${d.imageUrl}" />` : ''}
+        ${d.imageUrl ? gallery.html : ''}
         <p class="v-msg" id="type-target"></p>
         <p class="v-sender">Siempre, <strong>${d.senderName || 'Alguien'}</strong></p>
       </div>
@@ -108,7 +109,7 @@ export function renderVelvetDark(d: TemplateRenderData): TemplateOutput {
         <div class="v-div gs-el"></div>
         ${d.imageUrl ? `
         <div class="v-photo-wrap gs-el">
-          <img class="v-photo" src="${d.imageUrl}" />
+          ${gallery.html}
         </div>` : ''}
         <div class="v-msg gs-el" id="type-target"></div>
         <p class="v-sender gs-el">Entregado por <strong>${d.senderName || 'Alguien especial'}</strong></p>
@@ -217,7 +218,8 @@ export function renderVelvetDark(d: TemplateRenderData): TemplateOutput {
       });
       card.addEventListener('mouseleave', () => { gsap.to(card, { rotationY: 0, rotationX: 0, duration: 1, ease: 'elastic.out' }); });
     }
-  `;
+  
+    ${gallery.js}`;
 
   return { css, html, js };
 }

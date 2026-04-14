@@ -1,10 +1,11 @@
 // ═══════════════════════════════════════════════════════════════
 // STYLE #18: BRUTALIST BOLD — Raw & Unapologetic
 // ═══════════════════════════════════════════════════════════════
-import { TemplateRenderData, TemplateOutput } from './index';
+import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderBrutalistBold(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
+  const gallery = renderVipGallery(d, "brutalistbold");
   const c = d.accentColor || '#fffc00'; // Yellow
 
   const css = `
@@ -69,7 +70,7 @@ export function renderBrutalistBold(d: TemplateRenderData): TemplateOutput {
       <div class="brut-card">
         <div class="brut-tag">RAW MESSAGE</div>
         <h1 class="brut-title">${d.title}</h1>
-        ${d.imageUrl ? `<img class="brut-photo" src="${d.imageUrl}" />` : ''}
+        ${d.imageUrl ? gallery.html : ''}
         <div class="brut-msg" id="type-target"></div>
         <div class="brut-sender">${d.senderName || 'ANÓNIMO'}</div>
       </div>
@@ -99,7 +100,7 @@ export function renderBrutalistBold(d: TemplateRenderData): TemplateOutput {
           ${d.imageUrl ? `
           <div class="b-photo-container">
             <div class="b-photo-bg"></div>
-            <img class="b-photo" src="${d.imageUrl}" />
+            ${gallery.html}
           </div>` : ''}
           
           <div class="b-msg-box">
@@ -170,7 +171,8 @@ export function renderBrutalistBold(d: TemplateRenderData): TemplateOutput {
       if(!isDown) return;
       e.preventDefault();
       const y = e.clientY - startY;
-      dragger.style.transform = \`translateY(\${y}px) rotate(\${startRot + y*0.01}deg)\`;
+      dragger.style.transform = \`translateY(\${y}px) rotate(\${startRot + y*0.01}deg)\
+    ${gallery.js}`;
     });
     
     // Hardcore hover parallax on card

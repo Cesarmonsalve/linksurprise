@@ -1,10 +1,11 @@
 // ═══════════════════════════════════════════════════════════════
 // STYLE #8: CINEMATIC SCROLL — Deep Parallax Storytelling
 // ═══════════════════════════════════════════════════════════════
-import { TemplateRenderData, TemplateOutput } from './index';
+import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderCinematicScroll(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
+  const gallery = renderVipGallery(d, 'cine');
   const paragraphs = d.escapedMessage.split('<br/>').filter((p: string) => p.trim() !== '');
 
   const css = `
@@ -101,7 +102,7 @@ export function renderCinematicScroll(d: TemplateRenderData): TemplateOutput {
         ${d.imageUrl ? `
         <section class="cine-panel panel-img">
           <div class="cine-inner">
-            <div class="cine-photo-cont gs-img"><img class="cine-photo" src="${d.imageUrl}" /></div>
+            <div class="cine-photo-cont gs-img">${gallery.html}</div>
           </div>
         </section>` : ''}
     `;
@@ -168,6 +169,8 @@ export function renderCinematicScroll(d: TemplateRenderData): TemplateOutput {
     
     // Parallax BG
     gsap.to('.bg-image', { yPercent: 20, ease: 'none', scrollTrigger: { trigger: '#pin-container', start: 'top top', end: 'bottom bottom', scrub: true } });
+
+    ${gallery.js}
 
     document.body.addEventListener('click', () => { const a = document.getElementById('bg-music'); if(a){a.play(); gsap.to(a,{volume:0.8, duration:5})} }, {once:true});
   `;

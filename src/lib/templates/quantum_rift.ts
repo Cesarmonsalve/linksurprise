@@ -1,10 +1,11 @@
 // ═══════════════════════════════════════════════════════════════
 // STYLE #5: QUANTUM RIFT — 3D Wormhole Journey
 // ═══════════════════════════════════════════════════════════════
-import { TemplateRenderData, TemplateOutput } from './index';
+import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderQuantumRift(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
+  const gallery = renderVipGallery(d, "quantumrift");
   const c = d.accentColor || '#ff00ff';
 
   const css = `
@@ -74,7 +75,7 @@ export function renderQuantumRift(d: TemplateRenderData): TemplateOutput {
       <div class="basic-card">
         <p class="q-label">Anomalía Detectada</p>
         <h1 class="q-title">${d.title}</h1>
-        ${d.imageUrl ? `<img class="q-photo" src="${d.imageUrl}" />` : ''}
+        ${d.imageUrl ? gallery.html : ''}
         <p class="q-msg" id="type-target"></p>
         <p class="q-sender">De: <strong>${d.senderName || 'Anónimo'}</strong></p>
       </div>
@@ -90,7 +91,7 @@ export function renderQuantumRift(d: TemplateRenderData): TemplateOutput {
         <p class="q-label" id="ql" style="opacity:0">Salto Completado</p>
         <h1 class="q-title" id="qt"></h1>
         <div class="q-div" id="qd"></div>
-        ${d.imageUrl ? `<div class="q-photo-wrap"><img class="q-photo" id="qi" style="opacity:0" src="${d.imageUrl}" /></div>` : ''}
+        ${d.imageUrl ? `<div class="q-photo-wrap">${gallery.html}</div>` : ''}
         <div class="q-msg" id="type-target"></div>
         <p class="q-sender" id="qs">Aterrizado por: <strong>${d.senderName || 'Anónimo'}</strong></p>
       </div>
@@ -245,7 +246,8 @@ export function renderQuantumRift(d: TemplateRenderData): TemplateOutput {
       });
       card.addEventListener('mouseleave', () => gsap.to(photo, { rotationY: 0, rotationX: 0, duration: 0.5 }));
     }
-  `;
+  
+    ${gallery.js}`;
 
   return { css, html, js };
 }

@@ -1,10 +1,11 @@
 // ═══════════════════════════════════════════════════════════════
 // STYLE #14: SWISS CLEAN — Swiss Design Principles
 // ═══════════════════════════════════════════════════════════════
-import { TemplateRenderData, TemplateOutput } from './index';
+import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderSwissClean(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
+  const gallery = renderVipGallery(d, "swissclean");
   const c = d.accentColor || '#e53935';
   
   const now = new Date();
@@ -74,7 +75,7 @@ export function renderSwissClean(d: TemplateRenderData): TemplateOutput {
         <h1 class="swiss-name" style="word-break: break-word;">${d.title}</h1>
         <div class="swiss-divider"></div>
         <p class="swiss-msg" id="type-target"></p>
-        ${d.imageUrl ? `<img class="swiss-photo" src="${d.imageUrl}" />` : ''}
+        ${d.imageUrl ? gallery.html : ''}
         <div class="swiss-meta">
           <p class="swiss-sender">De: <strong>${d.senderName || 'Anónimo'}</strong></p>
           <p class="swiss-date">${dateStr}</p>
@@ -197,7 +198,8 @@ export function renderSwissClean(d: TemplateRenderData): TemplateOutput {
             });
          });
     }
-  `;
+  
+    ${gallery.js}`;
 
   return { css, html, js };
 }

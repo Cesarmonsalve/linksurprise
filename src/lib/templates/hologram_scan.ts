@@ -1,10 +1,11 @@
 // ═══════════════════════════════════════════════════════════════
 // STYLE #4: HOLOGRAM SCAN — Holographic Reveal
 // ═══════════════════════════════════════════════════════════════
-import { TemplateRenderData, TemplateOutput } from './index';
+import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderHologramScan(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
+  const gallery = renderVipGallery(d, "hologramscan");
   const c = d.accentColor || '#00ffcc';
 
   const css = `
@@ -82,7 +83,7 @@ export function renderHologramScan(d: TemplateRenderData): TemplateOutput {
         <div class="scan-line"></div>
         <div class="holo-status">TRANSMISIÓN ENTRANTE</div>
         <h1 class="holo-title">${d.title}</h1>
-        ${d.imageUrl ? `<img class="holo-photo" src="${d.imageUrl}" />` : ''}
+        ${d.imageUrl ? gallery.html : ''}
         <p class="holo-msg" id="type-target"></p>
         <p class="holo-sender">Origen: <strong>${d.senderName || 'Desconocido'}</strong></p>
       </div>
@@ -109,7 +110,7 @@ export function renderHologramScan(d: TemplateRenderData): TemplateOutput {
         <p class="holo-label" id="h-label" style="opacity:0">Sujeto Id: ${d.recipientName || 'Desconocido'}</p>
         <h1 class="holo-title" id="h-title"></h1>
         <div class="holo-divider" id="h-div"></div>
-        ${d.imageUrl ? `<img class="holo-photo" id="h-img" style="opacity:0" src="${d.imageUrl}" />` : ''}
+        ${d.imageUrl ? gallery.html : ''}
         <div class="holo-msg" id="type-target"></div>
         <p class="holo-sender" id="h-sender" style="opacity:0">Origen: <strong>${d.senderName || 'Clasificado'}</strong></p>
       </div>
@@ -215,7 +216,8 @@ export function renderHologramScan(d: TemplateRenderData): TemplateOutput {
         
       }});
     }
-  `;
+  
+    ${gallery.js}`;
 
   return { css, html, js };
 }

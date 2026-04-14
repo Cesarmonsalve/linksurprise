@@ -1,10 +1,11 @@
 // ═══════════════════════════════════════════════════════════════
 // STYLE #19: NEON WAVE — Cyberpunk / Synthwave
 // ═══════════════════════════════════════════════════════════════
-import { TemplateRenderData, TemplateOutput } from './index';
+import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderNeonWave(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
+  const gallery = renderVipGallery(d, "neonwave");
   const c = d.accentColor || '#ff00ff';
   const c2 = '#00ffff'; // Cyan secondary
 
@@ -57,7 +58,7 @@ export function renderNeonWave(d: TemplateRenderData): TemplateOutput {
       <div class="neon-card">
         <p class="neon-label">Conexión Segura</p>
         <h1 class="neon-title">${d.title}</h1>
-        ${d.imageUrl ? `<img class="neon-photo" src="${d.imageUrl}" />` : ''}
+        ${d.imageUrl ? gallery.html : ''}
         <p class="neon-msg" id="type-target"></p>
         <p class="neon-sender">// ${d.senderName || 'USER_UNKNOWN'}</p>
       </div>
@@ -80,7 +81,7 @@ export function renderNeonWave(d: TemplateRenderData): TemplateOutput {
         <h1 class="n-title gs-el">${d.title}</h1>
         ${d.imageUrl ? `
         <div class="n-photo-wrap gs-el">
-          <img class="n-photo" src="${d.imageUrl}" />
+          ${gallery.html}
         </div>` : ''}
         <div class="n-msg gs-el" id="type-target"></div>
         <p class="n-sender gs-el">// DATOS DE: ${d.senderName || 'ANÓNIMO'}</p>
@@ -183,7 +184,8 @@ export function renderNeonWave(d: TemplateRenderData): TemplateOutput {
         ctx.beginPath();
         ctx.moveTo(lastMouse.x, lastMouse.y);
         ctx.lineTo(mouse.x, mouse.y);
-        ctx.strokeStyle = \`hsl(\${hue}, 100%, 50%)\`;
+        ctx.strokeStyle = \`hsl(\${hue}, 100%, 50%)\
+    ${gallery.js}`;
         ctx.lineWidth = 4;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';

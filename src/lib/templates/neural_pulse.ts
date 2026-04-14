@@ -1,10 +1,11 @@
 // ═══════════════════════════════════════════════════════════════
 // STYLE #3: NEURAL PULSE — Neural Network Connections
 // ═══════════════════════════════════════════════════════════════
-import { TemplateRenderData, TemplateOutput } from './index';
+import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderNeuralPulse(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
+  const gallery = renderVipGallery(d, "neuralpulse");
   
   const css = `
     body { background: #060612; overflow-x: hidden; margin: 0; padding: 0; font-family: sans-serif; }
@@ -65,7 +66,7 @@ export function renderNeuralPulse(d: TemplateRenderData): TemplateOutput {
         <p class="neural-label">Conexión Establecida</p>
         <h1 class="neural-title">${d.title}</h1>
         <div class="neural-divider"></div>
-        ${d.imageUrl ? `<img class="neural-photo" src="${d.imageUrl}" />` : ''}
+        ${d.imageUrl ? gallery.html : ''}
         <p class="neural-msg" id="type-target"></p>
         <p class="neural-sender">De: <strong>${d.senderName || 'Alguien especial'}</strong></p>
       </div>
@@ -89,7 +90,7 @@ export function renderNeuralPulse(d: TemplateRenderData): TemplateOutput {
         <p class="neural-label" id="n-label" style="opacity:0">Sincronización Completa</p>
         <h1 class="neural-title" id="n-title"></h1>
         <div class="neural-divider" id="n-div"></div>
-        ${d.imageUrl ? `<img class="neural-photo" id="n-img" style="opacity:0" src="${d.imageUrl}" />` : ''}
+        ${d.imageUrl ? gallery.html : ''}
         <div class="neural-msg" id="type-target"></div>
         <p class="neural-sender" id="n-sender">Sincronizado por: <strong>${d.senderName || 'Alguien especial'}</strong></p>
       </div>
@@ -259,7 +260,8 @@ export function renderNeuralPulse(d: TemplateRenderData): TemplateOutput {
         type();
       }, delayImg * 1000 + 500);
     }
-  `;
+  
+    ${gallery.js}`;
 
   return { css, html, js };
 }

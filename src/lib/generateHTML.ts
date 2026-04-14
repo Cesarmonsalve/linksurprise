@@ -101,6 +101,7 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false, renderM
         fontFamily,
         musicUrl,
         imageUrl,
+        scenes: data.scenes, // Pass the scenes from DB
         title: safeTitle,
         template: resolvedTemplate,
         renderMode,
@@ -372,30 +373,6 @@ export function generateHTML(data: ProjectData, isPaid: boolean = false, renderM
   ${preloaderHTML}
   ${passwordHTML}
   ${musicUrl && (renderMode === 'vip') ? `<audio id="bg-music" src="${musicUrl}" loop style="display:none;"></audio>` : ''}
-  
-  <!-- Scenes Gallery Logic (VIP Only) -->
-  ${(renderMode === 'vip' && data.scenes && data.scenes.length > 0) ? `
-  <div id="vip-scenes-container" style="position:fixed;inset:0;z-index:5;pointer-events:none;overflow:hidden;">
-    ${data.scenes.map((s, idx) => `
-      <div class="vip-scene" style="position:absolute;inset:0;background:url('${s}') center/cover no-repeat;opacity:0;z-index:${10 + idx};"></div>
-    `).join('')}
-  </div>
-  <script>
-    window.addEventListener('load', () => {
-      const scenes = document.querySelectorAll('.vip-scene');
-      if (scenes.length > 0) {
-        let current = 0;
-        gsap.set(scenes[0], { opacity: 1 });
-        setInterval(() => {
-          const next = (current + 1) % scenes.length;
-          gsap.to(scenes[current], { opacity: 0, duration: 2 });
-          gsap.to(scenes[next], { opacity: 1, duration: 2 });
-          current = next;
-        }, 5000);
-      }
-    });
-  </script>
-  ` : ''}
   
   <!-- Template Engine: ${resolvedTemplate} -->
   ${templateHTML}

@@ -1,10 +1,11 @@
 // ═══════════════════════════════════════════════════════════════
 // STYLE #1: NEBULA GLASS — 3D WebGL + GSAP
 // ═══════════════════════════════════════════════════════════════
-import { TemplateRenderData, TemplateOutput } from './index';
+import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderNebulaGlass(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
+  const gallery = renderVipGallery(d, 'nebula');
 
   const css = `
     body { background: #03030a; overflow-x: hidden; margin: 0; padding: 0; }
@@ -79,6 +80,7 @@ export function renderNebulaGlass(d: TemplateRenderData): TemplateOutput {
       background: radial-gradient(circle, ${d.accentColor}20 0%, transparent 70%); border-radius: 50%; pointer-events: none; z-index: 5;
       transform: translate(-50%, -50%); transition: opacity 0.3s; mix-blend-mode: screen; opacity: 0;
     }
+    ${gallery.css}
     `}
   `;
 
@@ -105,7 +107,7 @@ export function renderNebulaGlass(d: TemplateRenderData): TemplateOutput {
         <p class="nebula-label item-reveal">Para ${d.recipientName || 'ti'}</p>
         <h1 class="nebula-title" id="title-text"></h1>
         <div class="nebula-divider divider-reveal"></div>
-        ${d.imageUrl ? `<div class="nebula-photo-wrap item-reveal" id="photo-container"><img class="nebula-photo" src="${d.imageUrl}" alt="Sorpresa" /></div>` : ''}
+        ${d.imageUrl ? `<div class="nebula-photo-wrap item-reveal" id="photo-container">${gallery.html}</div>` : ''}
         <div class="nebula-msg" id="type-target"></div>
         <p class="nebula-sender item-reveal">Con cariño, <strong>${d.senderName || 'Alguien especial'}</strong></p>
       </div>
@@ -193,6 +195,8 @@ export function renderNebulaGlass(d: TemplateRenderData): TemplateOutput {
         .to('.divider-reveal', { width: '80%', duration: 1 }, "-=0.6")
         .to('#title-text', { text: "${d.title}", duration: 1.2, ease: "none" }, "-=0.4")
         .call(() => {
+          ${gallery.js}
+
           const target = document.getElementById('type-target');
           const txt = "${d.escapedMessage}";
           let i = 0;

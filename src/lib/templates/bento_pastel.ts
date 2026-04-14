@@ -1,10 +1,11 @@
 // ═══════════════════════════════════════════════════════════════
 // STYLE #11: BENTO PASTEL — Soft Playful Grid
 // ═══════════════════════════════════════════════════════════════
-import { TemplateRenderData, TemplateOutput } from './index';
+import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderBentoPastel(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
+  const gallery = renderVipGallery(d, "bentopastel");
   const c = d.accentColor || '#ffb3ba';
 
   const css = `
@@ -74,7 +75,7 @@ export function renderBentoPastel(d: TemplateRenderData): TemplateOutput {
         </div>
         ${d.imageUrl ? `
         <div class="bento-card bento-photo-wrap">
-          <img class="bento-photo" src="${d.imageUrl}" />
+          ${gallery.html}
         </div>` : ''}
         <div class="bento-card bento-wide">
           <p class="bento-msg" id="type-target"></p>
@@ -113,7 +114,7 @@ export function renderBentoPastel(d: TemplateRenderData): TemplateOutput {
         
         ${d.imageUrl ? `
         <div class="bento-card bento-photo-wrap gs-card">
-          <img class="bento-photo" src="${d.imageUrl}" />
+          ${gallery.html}
         </div>` : ''}
         
         <div class="bento-card ${d.imageUrl ? '' : 'bento-wide'} gs-card" style="grid-column: span ${d.imageUrl ? '2' : '2'};">
@@ -281,7 +282,8 @@ export function renderBentoPastel(d: TemplateRenderData): TemplateOutput {
         });
       }
     }
-  `;
+  
+    ${gallery.js}`;
 
   return { css, html, js };
 }

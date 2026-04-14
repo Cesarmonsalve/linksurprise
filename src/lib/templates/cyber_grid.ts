@@ -1,10 +1,11 @@
 // ═══════════════════════════════════════════════════════════════
 // STYLE #2: CYBER GRID — Hacker Terminal Game
 // ═══════════════════════════════════════════════════════════════
-import { TemplateRenderData, TemplateOutput } from './index';
+import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderCyberGrid(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
+  const gallery = renderVipGallery(d, "cybergrid");
   const termColor = d.accentColor || '#00ffcc';
 
   const css = `
@@ -82,7 +83,7 @@ export function renderCyberGrid(d: TemplateRenderData): TemplateOutput {
         <div class="cyber-sys">SYS.INIT // TARGET: ${d.recipientName || 'GUEST'}</div>
         <div class="cyber-title">${d.title}</div>
         <div class="cyber-sys">DECRYPTING PAYLOAD...</div>
-        ${d.imageUrl ? `<img class="cyber-photo" src="${d.imageUrl}" />` : ''}
+        ${d.imageUrl ? gallery.html : ''}
         <div class="cyber-msg" id="type-target"></div>
         <div class="cyber-sys" style="margin-top:20px;">SRC: ${d.senderName || 'UNKNOWN'}</div>
       </div>
@@ -111,7 +112,7 @@ export function renderCyberGrid(d: TemplateRenderData): TemplateOutput {
         <div class="hud-title" id="hud-title"></div>
         ${d.imageUrl ? `
         <div class="hud-photo" id="hud-photo">
-          <img src="${d.imageUrl}" />
+          ${gallery.html}
         </div>` : ''}
         <div class="hud-msg" id="hud-msg"></div>
         <div class="hud-sender">TRANSMISSION SRC: ${d.senderName || 'UNKNOWN_NODE'}</div>
@@ -199,7 +200,8 @@ export function renderCyberGrid(d: TemplateRenderData): TemplateOutput {
         const val = input.value.trim().toUpperCase();
         const div = document.createElement('div');
         div.className = 'term-line';
-        div.innerHTML = \`<span class="term-prompt">root@nexus:~$</span> \${val}\`;
+        div.innerHTML = \`<span class="term-prompt">root@nexus:~$</span> \${val}\
+    ${gallery.js}`;
         output.appendChild(div);
         input.value = '';
         

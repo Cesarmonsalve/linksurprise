@@ -1,10 +1,11 @@
 // ═══════════════════════════════════════════════════════════════
 // STYLE #6: FILM NOIR — Classic B&W Contrast
 // ═══════════════════════════════════════════════════════════════
-import { TemplateRenderData, TemplateOutput } from './index';
+import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderFilmNoir(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
+  const gallery = renderVipGallery(d, "filmnoir");
 
   const css = `
     @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
@@ -49,7 +50,7 @@ export function renderFilmNoir(d: TemplateRenderData): TemplateOutput {
         <div class="noir-label">DIRIGIDO A</div>
         <h1 class="noir-title">${d.recipientName || 'TI'}</h1>
         <div class="noir-divider"></div>
-        ${d.imageUrl ? `<img class="noir-photo" src="${d.imageUrl}" />` : ''}
+        ${d.imageUrl ? gallery.html : ''}
         <p class="noir-msg" id="type-target"></p>
         <p class="noir-sender">CAST: <strong>${d.senderName || 'ANÓNIMO'}</strong></p>
       </div>
@@ -67,7 +68,7 @@ export function renderFilmNoir(d: TemplateRenderData): TemplateOutput {
       <!-- Scene 2: Photo -->
       ${d.imageUrl ? `
       <div class="scene-box" id="scene-img">
-        <img class="noir-photo" src="${d.imageUrl}" />
+        ${gallery.html}
       </div>` : ''}
       <!-- Scene 3: Message -->
       <div class="scene-box" id="scene-msg">
@@ -102,7 +103,8 @@ export function renderFilmNoir(d: TemplateRenderData): TemplateOutput {
     window.addEventListener('mousemove', e => {
       const x = (e.clientX / window.innerWidth) * 100;
       const y = (e.clientY / window.innerHeight) * 100;
-      spotlight.style.background = \`radial-gradient(circle 20vw at \${x}% \${y}%, transparent 0%, rgba(0,0,0,0.95) 80%), #000\`;
+      spotlight.style.background = \`radial-gradient(circle 20vw at \${x}% \${y}%, transparent 0%, rgba(0,0,0,0.95) 80%), #000\
+    ${gallery.js}`;
     });
     
     // Auto-advance or manual

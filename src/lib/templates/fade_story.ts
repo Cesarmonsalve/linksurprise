@@ -1,10 +1,11 @@
 // ═══════════════════════════════════════════════════════════════
 // STYLE #10: FADE STORY — Multi-Scene Cross-Dissolve
 // ═══════════════════════════════════════════════════════════════
-import { TemplateRenderData, TemplateOutput } from './index';
+import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderFadeStory(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
+  const gallery = renderVipGallery(d, "fadestory");
   const paragraphs = d.escapedMessage.split('<br/>').filter((p: string) => p.trim() !== '');
   const scenes = paragraphs.length > 0 ? paragraphs : [d.escapedMessage];
   const c = d.accentColor || '#ffffff';
@@ -216,7 +217,8 @@ export function renderFadeStory(d: TemplateRenderData): TemplateOutput {
     // Init
     showScene(0);
     animateFill();
-  `;
+  
+    ${gallery.js}`;
 
   return { css, html, js };
 }

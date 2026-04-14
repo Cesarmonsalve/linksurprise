@@ -1,10 +1,11 @@
 // ═══════════════════════════════════════════════════════════════
 // STYLE #13: ZEN MINIMAL — Breathing Whitespace
 // ═══════════════════════════════════════════════════════════════
-import { TemplateRenderData, TemplateOutput } from './index';
+import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderZenMinimal(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
+  const gallery = renderVipGallery(d, "zenminimal");
   const c = d.accentColor || '#333333';
 
   const css = `
@@ -58,7 +59,7 @@ export function renderZenMinimal(d: TemplateRenderData): TemplateOutput {
       <p class="zen-label zen-reveal">Para ${d.recipientName || 'ti'}</p>
       <h1 class="zen-title zen-reveal">${d.title}</h1>
       <div class="zen-divider zen-reveal"></div>
-      ${d.imageUrl ? `<img class="zen-photo zen-reveal" src="${d.imageUrl}" />` : ''}
+      ${d.imageUrl ? gallery.html : ''}
       <p class="zen-msg zen-reveal" id="type-target"></p>
       <p class="zen-sender zen-reveal">De <strong>${d.senderName || 'Alguien'}</strong></p>
     </div>
@@ -80,7 +81,7 @@ export function renderZenMinimal(d: TemplateRenderData): TemplateOutput {
     <div id="main-content">
       <h1 class="z-title" id="z-title">${d.title}</h1>
       <div class="z-div" id="z-div"></div>
-      ${d.imageUrl ? `<img class="z-photo" id="z-photo" src="${d.imageUrl}" />` : ''}
+      ${d.imageUrl ? gallery.html : ''}
       <div class="z-msg" id="type-target"></div>
       <p class="z-sender" id="z-sender">Entregado con paz por<br/><strong>${d.senderName || 'Anónimo'}</strong></p>
     </div>
@@ -171,7 +172,8 @@ export function renderZenMinimal(d: TemplateRenderData): TemplateOutput {
         }, document.getElementById('z-photo') ? 5000 : 3000);
       }});
     }
-  `;
+  
+    ${gallery.js}`;
 
   return { css, html, js };
 }

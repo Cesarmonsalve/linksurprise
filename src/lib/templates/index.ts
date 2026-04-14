@@ -13,6 +13,7 @@ export interface TemplateRenderData {
   fontFamily: string;
   musicUrl: string;
   imageUrl: string;
+  scenes?: string[]; // Multiple photos for VIP Gallery
   title: string;
   template: string;
   renderMode?: 'basic' | 'vip';
@@ -110,4 +111,44 @@ export const LEGACY_TEMPLATE_MAP: Record<string, string> = {
 export function resolveTemplateId(id: string): string {
   if (TEMPLATE_RENDERERS[id]) return id;
   return LEGACY_TEMPLATE_MAP[id] || 'nebula_glass';
+}
+
+// ═══════════════════════════════════════
+// SHARED VIP GALLERY HELPER
+// Generates integrated HTML/CSS/JS for multi-photo gallery
+// ═══════════════════════════════════════
+export function renderVipGallery(d: TemplateRenderData, className: string = 'vip-gallery'): { html: string; js: string; css: string } {
+  const hasScenes = d.renderMode === 'vip' && d.scenes && d.scenes.length > 0;
+  
+  if (!hasScenes) {
+    return {
+      html: d.imageUrl ? `<img class="${className}" src="${d.imageUrl}" />` : '',
+      js: '',
+      css: ''
+    };
+  }
+
+  const scenes = d.scenes || [];
+  const html = `
+    <div class="${className}-container" style="position:relative; width:100%; height:100%; overflow:hidden;">
+      ${scenes.map((s, i) => `<img class="${className}-img" src="${s}" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:${i===0?1:0};" />`).join('')}
+    </div>
+  `;
+
+  const js = `
+    (function(){
+      const imgs = document.querySelectorAll('.${className}-img');
+      if (imgs.length > 1) {
+        let cur = 0;
+        setInterval(() => {
+          const next = (cur + 1) % imgs.length;
+          gsap.to(imgs[cur], { opacity: 0, duration: 2, ease: 'power2.inOut' });
+          gsap.to(imgs[next], { opacity: 1, duration: 2, ease: 'power2.inOut' });
+          cur = next;
+        }, 5000);
+      }
+    })();
+  `;
+
+  return { html, js, css: '' };
 }

@@ -1,10 +1,11 @@
 // ═══════════════════════════════════════════════════════════════
 // STYLE #20: AURORA FLOW — Mesmerizing Gradient
 // ═══════════════════════════════════════════════════════════════
-import { TemplateRenderData, TemplateOutput } from './index';
+import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderAuroraFlow(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
+  const gallery = renderVipGallery(d, "auroraflow");
   const c = d.accentColor || '#00ffcc'; // Cyan
   const c2 = '#7b2ff7'; // Purple
 
@@ -62,7 +63,7 @@ export function renderAuroraFlow(d: TemplateRenderData): TemplateOutput {
       <div class="a-card">
         <p class="a-label">Para ti</p>
         <h1 class="a-title">${d.title}</h1>
-        ${d.imageUrl ? `<img class="a-photo" src="${d.imageUrl}" />` : ''}
+        ${d.imageUrl ? gallery.html : ''}
         <div class="a-div"></div>
         <p class="a-msg" id="type-target"></p>
         <div class="a-div"></div>
@@ -82,7 +83,7 @@ export function renderAuroraFlow(d: TemplateRenderData): TemplateOutput {
         <h1 class="a-title gs-st">${d.title}</h1>
         ${d.imageUrl ? `
         <div class="photo-wrapper gs-st">
-           <img class="a-photo" src="${d.imageUrl}" />
+           ${gallery.html}
         </div>` : ''}
         <div class="a-msg gs-st" id="type-target"></div>
         <p class="a-sender gs-st">Con cariño,<br/><strong>${d.senderName || 'Anónimo'}</strong></p>
@@ -174,7 +175,8 @@ export function renderAuroraFlow(d: TemplateRenderData): TemplateOutput {
             if(x===0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
          }
-         ctx.strokeStyle = col1 + \`\${Math.floor(20 - i*5)}\`;
+         ctx.strokeStyle = col1 + \`\${Math.floor(20 - i*5)}\
+    ${gallery.js}`;
          ctx.lineWidth = 100 + i*50;
          ctx.lineCap = 'round';
          ctx.stroke();

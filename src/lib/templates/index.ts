@@ -1,5 +1,6 @@
 // ═══════════════════════════════════════════════════════════════
-// TEMPLATE RENDERER REGISTRY — 20 Premium Visual Styles
+// TEMPLATE RENDERER REGISTRY — 20 Premium Visual Styles v2.0
+// Modern Redesigned Templates with Enhanced VIP Features
 // ═══════════════════════════════════════════════════════════════
 
 export interface TemplateRenderData {

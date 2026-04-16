@@ -1,223 +1,116 @@
-// ═══════════════════════════════════════════════════════════════
-// STYLE #4: HOLOGRAM SCAN — Holographic Reveal
-// ═══════════════════════════════════════════════════════════════
+// STYLE: HOLOGRAM SCAN - Futuristic Holographic
 import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderHologramScan(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
   const gallery = renderVipGallery(d, "hologramscan");
-  const c = d.accentColor || '#00ffcc';
+  const accent = d.accentColor || '#00ff88';
 
   const css = `
-    body { background: #030308; overflow-x: hidden; margin: 0; font-family: 'Space Grotesk', sans-serif; }
-    
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@300;400;600;800&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: linear-gradient(180deg, #001111 0%, #002233 100%); min-height: 100vh; overflow-x: hidden; font-family: 'Orbitron', sans-serif; }
     ${isBasic ? `
-    .basic-shell { min-height: 100vh; padding: 2rem; display: flex; align-items: center; justify-content: center; background: radial-gradient(ellipse at 50% 50%, ${c}10, transparent 70%); }
-    .basic-card { border: 1px solid ${c}30; border-radius: 12px; padding: 3rem 2rem; max-width: 460px; width: 100%; text-align: center; position: relative; overflow: hidden; background: rgba(0,0,0,0.5); }
-    .scan-line { position: absolute; left: 0; width: 100%; height: 3px; background: ${c}; box-shadow: 0 0 20px ${c}; animation: scan 3s infinite linear; }
-    @keyframes scan { 0% { top: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
-    .holo-status { display: inline-block; padding: 4px 12px; border: 1px solid ${c}; border-radius: 20px; font-size: 0.7rem; color: ${c}; margin-bottom: 2rem; }
-    .holo-title { font-size: 2rem; color: #fff; margin-bottom: 1rem; }
-    .holo-photo { width: 100%; border-radius: 8px; margin: 1rem 0; border: 1px solid ${c}40; opacity: 0.8; }
-    .holo-msg { color: #ccc; line-height: 1.6; margin: 1.5rem 0; }
-    .holo-sender { font-size: 0.8rem; color: #888; }
-    .holo-sender strong { color: ${c}; }
-    `: `
-    /* VIP MODE */
-    .holo-bg { position: fixed; inset: 0; background: radial-gradient(ellipse at 50% 50%, ${c}08 0%, transparent 80%); pointer-events: none; }
-    
-    /* Preloader Hologram Scan */
-    #scanner-overlay {
-      position: fixed; inset: 0; z-index: 100; background: #000;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-    }
-    .scanner-target {
-      width: 250px; height: 250px; border: 2px dashed ${c}40; border-radius: 50%;
-      position: relative; overflow: hidden; margin-bottom: 2rem;
-    }
-    .scanner-target::before {
-      content: ''; position: absolute; inset: 0; border: 4px solid ${c}; border-radius: 50%;
-      clip-path: polygon(0 0, 100% 0, 100% 20%, 0 20%);
-      animation: spin 4s linear infinite;
-    }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-    .scanner-line-vertical { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: ${c}40; }
-    .scanner-line-horizontal { position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: ${c}40; }
-    .scanner-bar { position: absolute; left:-50%; width: 200%; height: 4px; background: ${c}; box-shadow: 0 0 20px ${c}; top: 0; }
-    
-    .scanner-text { color: ${c}; font-family: monospace; letter-spacing: 2px; text-align: center; }
-    #scan-progress { font-size: 2rem; font-weight: bold; margin-bottom: 10px; }
-    #scan-status { font-size: 0.8rem; height: 1em; }
-
-    #main-content {
-      position: relative; z-index: 10; min-height: 100vh;
-      display: none; align-items: center; justify-content: center; padding: 2rem;
-    }
-    .holo-card {
-      background: rgba(0,0,0,0.6); border: 1px solid ${c}30; border-radius: 20px;
-      padding: 3rem 2rem; max-width: 500px; width: 100%; text-align: center;
-      position: relative; overflow: hidden; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    }
-    /* Hologram Glitch FX */
-    .holo-card::before { content: ''; position: fixed; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, ${c}10 3px, ${c}10 3px); pointer-events: none; z-index: 50; }
-    
-    .holo-status { display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; border: 1px solid ${c}; border-radius: 20px; font-size: 0.7rem; color: ${c}; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 2px; }
-    .holo-status-dot { width: 6px; height: 6px; border-radius: 50%; background: ${c}; animation: blink 1s infinite; }
-    @keyframes blink { 50% { opacity: 0; } }
-    
-    .holo-label { font-size: 0.65rem; letter-spacing: 0.4em; color: ${c}80; text-transform: uppercase; margin-bottom: 1rem; }
-    .holo-title { font-size: clamp(1.8rem,6vw,2.5rem); font-weight: 800; color: #fff; text-shadow: 0 0 10px ${c}80, 2px 0 0 red, -2px 0 0 cyan; margin-bottom: 1.5rem; position: relative; }
-    .holo-divider { width: 100px; height: 1px; background: ${c}50; margin: 1.5rem auto; }
-    
-    .holo-photo { width: 100%; max-width: 300px; border-radius: 12px; margin: 1.5rem auto; display: block; border: 1px solid ${c}40; box-shadow: 0 0 40px ${c}20; filter: contrast(1.2) hue-rotate(180deg) opacity(0.8) drop-shadow(0 0 10px ${c}); }
-    
-    .holo-msg { font-size: 1.1rem; line-height: 1.8; color: #ddd; margin: 1.5rem 0; text-shadow: 0 0 2px ${c}40; }
-    .holo-sender { font-size: 0.85rem; color: #888; }
-    .holo-sender strong { color: ${c}; text-shadow: 0 0 5px ${c}80; }
+      .shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative; overflow: hidden; }
+      .bg-orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.3; animation: float 10s ease-in-out infinite; }
+      .orb-1 { width: 280px; height: 280px; background: ${accent}; top: -80px; left: -80px; }
+      .orb-2 { width: 220px; height: 220px; background: #00ccff; bottom: -60px; right: -60px; animation-delay: -5s; }
+      @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(25px, -40px) scale(1.05); } }
+      .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); border-radius: 28px; padding: 2.5rem; max-width: 480px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.25); position: relative; z-index: 10; }
+      .label { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 0.75rem; }
+      .title { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 1.25rem; }
+      .photo-wrap { width: 100%; aspect-ratio: 1; border-radius: 20px; overflow: hidden; margin: 1.25rem 0; border: 2px solid rgba(255,255,255,0.15); }
+      .photo { width: 100%; height: 100%; object-fit: cover; }
+      .msg { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.9); margin-bottom: 1.25rem; }
+      .sender { font-size: 0.85rem; color: rgba(255,255,255,0.6); font-weight: 300; }
+    ` : `
+      #vip-canvas { position: fixed; inset: 0; z-index: 0; }
+      .stars { position: fixed; inset: 0; z-index: 1; background-image: radial-gradient(1px 1px at 50% 50%, #fff, transparent); background-size: 100px 100px; animation: twinkle 4s ease-in-out infinite; opacity: 0.4; }
+      @keyframes twinkle { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.2; } }
+      .vip-intro { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at center, #1a1a2e 0%, #0f0c29 100%); }
+      .intro-text { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 800; color: #fff; text-align: center; margin-bottom: 2rem; opacity: 0; }
+      .tap-hint { font-size: 1rem; color: ${accent}; animation: pulse 2s ease-in-out infinite; }
+      @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+      #main-content { position: relative; z-index: 10; min-height: 100vh; display: none; align-items: center; justify-content: center; padding: 3rem 2rem; }
+      .vip-card { background: rgba(255,255,255,0.08); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.15); border-radius: 36px; padding: 3.5rem 2.5rem; max-width: 580px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.35); position: relative; overflow: hidden; }
+      .vip-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent, ${accent}, transparent); animation: rotate 12s linear infinite; opacity: 0.25; }
+      @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      .card-inner { position: relative; z-index: 1; }
+      .vip-label { font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 1.25rem; }
+      .vip-title { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 1.75rem; }
+      .vip-gallery-wrap { width: 100%; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; margin: 1.75rem 0; border: 2px solid rgba(255,255,255,0.1); }
+      .vip-photo { width: 100%; height: 100%; object-fit: cover; }
+      .vip-msg { font-size: 1.1rem; line-height: 1.8; color: rgba(255,255,255,0.95); margin-bottom: 1.75rem; }
+      .vip-sender { font-size: 0.95rem; color: ${accent}; font-weight: 600; letter-spacing: 0.08em; }
     `}
   `;
 
   const html = isBasic ? `
-    <div class="basic-shell">
-      <div class="basic-card">
-        <div class="scan-line"></div>
-        <div class="holo-status">TRANSMISIÓN ENTRANTE</div>
-        <h1 class="holo-title">${d.title}</h1>
-        ${d.imageUrl ? gallery.html : ''}
-        <p class="holo-msg" id="type-target"></p>
-        <p class="holo-sender">Origen: <strong>${d.senderName || 'Desconocido'}</strong></p>
+    <div class="shell">
+      <div class="bg-orb orb-1"></div>
+      <div class="bg-orb orb-2"></div>
+      <div class="card">
+        <p class="label">${d.title || 'Para Ti'}</p>
+        <h1 class="title">${d.recipientName || 'Especial'}</h1>
+        ${d.imageUrl ? '<div class="photo-wrap">' + gallery.html + '</div>' : ''}
+        <p class="msg" id="type-target"></p>
+        <p class="sender">De: ${d.senderName || 'Alguien Especial'}</p>
       </div>
     </div>
   ` : `
-    <div class="holo-bg"></div>
-    
-    <div id="scanner-overlay">
-      <div class="scanner-target">
-        <div class="scanner-line-vertical"></div>
-        <div class="scanner-line-horizontal"></div>
-        <div class="scanner-bar" id="scan-bar"></div>
-      </div>
-      <div class="scanner-text">
-        <div id="scan-progress">0%</div>
-        <div id="scan-status">Alineando sensores...</div>
-      </div>
-      <button id="start-scan-btn" style="margin-top:20px; background:transparent; border: 1px solid ${c}; color: ${c}; padding: 10px 20px; border-radius: 4px; cursor: pointer; letter-spacing: 2px;">INICIAR ESCÁNER</button>
+    <canvas id="vip-canvas"></canvas>
+    <div class="stars"></div>
+    <div class="vip-intro" id="intro">
+      <p class="intro-text" id="introText">Una experiencia especial<br/>te espera</p>
+      <p class="tap-hint">Toca para comenzar</p>
     </div>
-
     <div id="main-content">
-      <div class="holo-card" id="main-card">
-        <div class="holo-status" id="h-status" style="opacity:0"><span class="holo-status-dot"></span> SEÑAL ESTABLE</div>
-        <p class="holo-label" id="h-label" style="opacity:0">Sujeto Id: ${d.recipientName || 'Desconocido'}</p>
-        <h1 class="holo-title" id="h-title"></h1>
-        <div class="holo-divider" id="h-div"></div>
-        ${d.imageUrl ? gallery.html : ''}
-        <div class="holo-msg" id="type-target"></div>
-        <p class="holo-sender" id="h-sender" style="opacity:0">Origen: <strong>${d.senderName || 'Clasificado'}</strong></p>
+      <div class="vip-card">
+        <div class="card-inner">
+          <p class="vip-label">${d.title || 'Exclusivo Para Ti'}</p>
+          <h1 class="vip-title">${d.recipientName || 'Increible'}</h1>
+          ${d.imageUrl ? '<div class="vip-gallery-wrap">' + gallery.html + '</div>' : ''}
+          <p class="vip-msg" id="type-target"></p>
+          <p class="vip-sender">De: ${d.senderName || 'Alguien Especial'}</p>
+        </div>
       </div>
     </div>
   `;
 
   const js = isBasic ? `
-    const target = document.getElementById('type-target');
-    const txt = "${d.escapedMessage}";
-    let i = 0;
-    function type() {
-      if(i < txt.length){
-        if(txt.substring(i,i+5)==='<br/>'){target.innerHTML+='<br/>';i+=5;}
-        else{target.innerHTML+=txt.charAt(i);i++;}
-        setTimeout(type, 30);
-      }
-    }
-    setTimeout(type, 800);
+    (function() {
+      const target = document.getElementById('type-target');
+      if (!target) return;
+      const text = "${d.escapedMessage}";
+      let i = 0;
+      function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 50); } }
+      setTimeout(type, 500);
+    })();
   ` : `
-    // VIP MODE
-    const btn = document.getElementById('start-scan-btn');
-    const prog = document.getElementById('scan-progress');
-    const stat = document.getElementById('scan-status');
-    const bar = document.getElementById('scan-bar');
-    
-    btn.addEventListener('click', () => {
-      btn.style.display = 'none';
-      
-      const audio = document.getElementById('bg-music');
-      if (audio) { audio.volume = 0; audio.play(); gsap.to(audio, {volume: 0.6, duration: 2}); }
-      
-      // Animate scanner bar
-      gsap.to(bar, { top: '100%', duration: 1.5, repeat: -1, yoyo: true, ease: 'sine.inOut' });
-      
-      // Simulate loading
-      let p = 0;
-      const statusMsgs = ['Analizando biorritmo...', 'Desencriptando paquete...', 'Reconstruyendo holograma...', 'Finalizando...'];
-      
-      const interval = setInterval(() => {
-        p += Math.floor(Math.random() * 5) + 1;
-        if(p > 100) p = 100;
-        prog.innerText = p + '%';
-        
-        if (p < 30) stat.innerText = statusMsgs[0];
-        else if (p < 60) stat.innerText = statusMsgs[1];
-        else if (p < 90) stat.innerText = statusMsgs[2];
-        else stat.innerText = statusMsgs[3];
-        
-        if(p === 100) {
-          clearInterval(interval);
-          setTimeout(showHologram, 500);
-        }
-      }, 80);
-    });
-    
-    function showHologram() {
-      gsap.to('#scanner-overlay', { opacity: 0, duration: 0.5, onComplete: () => {
-        document.getElementById('scanner-overlay').style.display = 'none';
-        
-        document.getElementById('main-content').style.display = 'flex';
-        
-        // Hologram Glitch in
-        const card = document.getElementById('main-card');
-        gsap.fromTo(card, 
-          { opacity: 0, scale: 0.8, filter: 'blur(10px) hue-rotate(90deg)' },
-          { opacity: 1, scale: 1, filter: 'blur(0px) hue-rotate(0deg)', duration: 1.5, ease: 'power4.out' }
-        );
-        
-        gsap.to('#h-status', { opacity: 1, duration: 0.5, delay: 1 });
-        gsap.to('#h-label', { opacity: 1, duration: 0.5, delay: 1.2 });
-        
-        // Title Text Scramble
-        const targetTitle = document.getElementById('h-title');
-        const finalTitle = "${d.title}";
-        let iters = 0;
-        const scramInterval = setInterval(() => {
-          targetTitle.innerText = finalTitle.split('').map((c, i) => {
-            if(i < iters) return c;
-            return String.fromCharCode(65 + Math.floor(Math.random() * 26));
-          }).join('');
-          iters += 1/3;
-          if(iters >= finalTitle.length) { clearInterval(scramInterval); targetTitle.innerText = finalTitle; }
-        }, 30);
-        
-        gsap.to('#h-div', { width: '100px', duration: 0.5, delay: 2 });
-        if(document.getElementById('h-img')) gsap.to('#h-img', { opacity: 1, duration: 1, delay: 2.2 });
-        
-        setTimeout(() => {
-          const target = document.getElementById('type-target');
-          const txt = "${d.escapedMessage}";
-          let i = 0;
-          function type() {
-            if(i < txt.length) {
-              if(txt.substring(i,i+5)==='<br/>'){target.innerHTML+='<br/>';i+=5;}
-              else{target.innerHTML+=txt.charAt(i);i++;}
-              setTimeout(type, 30);
-            } else {
-               gsap.to('#h-sender', { opacity: 1, duration: 1 });
-            }
-          }
-          type();
-        }, (document.getElementById('h-img') ? 3000 : 2500));
-        
-      }});
-    }
-  
-    ${gallery.js}`;
+    (function() {
+      const canvas = document.getElementById('vip-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width, height, particles = [], mouseX = 0, mouseY = 0;
+      function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+      class Particle { constructor() { this.reset(); } reset() { this.x = Math.random() * width; this.y = Math.random() * height; this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5; this.radius = Math.random() * 2 + 1; this.alpha = Math.random() * 0.5 + 0.2; } update() { this.x += this.vx + (mouseX - this.x) * 0.0001; this.y += this.vy + (mouseY - this.y) * 0.0001; if (this.x < 0 || this.x > width) this.vx *= -1; if (this.y < 0 || this.y > height) this.vy *= -1; } draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.fillStyle = '${accent}'; ctx.globalAlpha = this.alpha; ctx.fill(); } }
+      function init() { resize(); for (let i = 0; i < 80; i++) particles.push(new Particle()); animate(); }
+      function animate() { ctx.clearRect(0, 0, width, height); for (let i = 0; i < particles.length; i++) { for (let j = i + 1; j < particles.length; j++) { const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y, dist = Math.sqrt(dx * dx + dy * dy); if (dist < 100) { ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.strokeStyle = '${accent}'; ctx.globalAlpha = 0.1 * (1 - dist / 100); ctx.stroke(); } } } particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+      window.addEventListener('resize', resize);
+      window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+      window.addEventListener('touchmove', e => { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; });
+      init();
+      const intro = document.getElementById('intro'), mainContent = document.getElementById('main-content'), introText = document.getElementById('introText');
+      if (intro && introText) {
+        if (typeof gsap !== 'undefined') { gsap.to(introText, { opacity: 1, duration: 2, delay: 0.5 }); } else { introText.style.opacity = 1; }
+        intro.addEventListener('click', () => {
+          const finish = () => { intro.style.display = 'none'; mainContent.style.display = 'flex'; const target = document.getElementById('type-target'); if (target) { const text = "${d.escapedMessage}"; let i = 0; function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 40); } } setTimeout(type, 800); } };
+          if (typeof gsap !== 'undefined') { gsap.to(intro, { opacity: 0, duration: 1, onComplete: finish }); } else { intro.style.opacity = 0; setTimeout(finish, 1000); }
+        });
+      }
+    })();
+    ${gallery.js}
+  `;
 
   return { css, html, js };
 }

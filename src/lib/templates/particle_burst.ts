@@ -1,225 +1,116 @@
-// ═══════════════════════════════════════════════════════════════
-// STYLE #17: PARTICLE BURST — Dynamic Energy
-// ═══════════════════════════════════════════════════════════════
+// STYLE: PARTICLE BURST - Explosive Celebration
 import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderParticleBurst(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
   const gallery = renderVipGallery(d, "particleburst");
-  const c = d.accentColor || '#ff0055';
+  const accent = d.accentColor || '#fbbf24';
 
   const css = `
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700;900&display=swap');
-    body { background: #050505; overflow-x: hidden; margin: 0; font-family: 'Montserrat', sans-serif; }
-    
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: radial-gradient(circle at 50% 50%, #312e81 0%, #1e1b4b 100%); min-height: 100vh; overflow-x: hidden; font-family: 'Montserrat', sans-serif; }
     ${isBasic ? `
-    .pb-shell { min-height: 100vh; padding: 2rem; display: flex; align-items: center; justify-content: center; position: relative; }
-    
-    .particles-css { position: absolute; inset: 0; overflow: hidden; z-index: 0; pointer-events: none; }
-    .p-css { position: absolute; background: ${c}; border-radius: 50%; opacity: 0; animation: floatUp var(--dr) ease-in infinite forwards; }
-    @keyframes floatUp { 0% { transform: translateY(100vh) scale(0); opacity: 0; } 20% { opacity: 0.8; } 80% { opacity: 0.8; } 100% { transform: translateY(-20vh) scale(1); opacity: 0; } }
-    
-    .pb-card { background: rgba(20,20,20,0.8); backdrop-filter: blur(10px); border: 2px solid ${c}40; border-radius: 20px; padding: 3rem 2rem; max-width: 500px; width: 100%; text-align: center; position: relative; z-index: 10; box-shadow: 0 0 40px ${c}20; }
-    .pb-label { font-size: 0.7rem; letter-spacing: 0.4em; color: ${c}; text-transform: uppercase; font-weight: 700; margin-bottom: 1rem; }
-    .pb-title { font-size: clamp(2rem, 6vw, 3rem); font-weight: 900; color: #fff; line-height: 1.1; margin-bottom: 2rem; text-shadow: 0 0 10px ${c}80; }
-    .pb-photo { width: 100%; border-radius: 10px; margin: 1.5rem auto; display: block; border: 1px solid ${c}60; box-shadow: 0 0 20px ${c}40; }
-    .pb-msg { font-size: 1.1rem; line-height: 1.8; color: #ddd; font-weight: 300; }
-    .pb-sender { font-size: 0.9rem; color: #888; font-weight: 300; margin-top: 2rem; }
-    .pb-sender strong { color: ${c}; font-weight: 700; }
-    `: `
-    /* VIP MODE - Canvas Particle Engine */
-    #canvas-container { position: fixed; inset: 0; z-index: 0; background: #000; cursor: crosshair; }
-    
-    #start-overlay { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); }
-    .burst-inst { font-size: 2rem; font-weight: 900; color: #fff; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 2rem; text-align: center; text-shadow: 0 0 20px ${c}; animation: pulseT 2s infinite; }
-    @keyframes pulseT { 50% { opacity: 0.5; transform: scale(0.95); } }
-    .burst-btn { background: transparent; border: 2px solid ${c}; color: ${c}; font-family: 'Montserrat'; font-weight: 700; padding: 15px 40px; font-size: 1.2rem; cursor: pointer; transition: all 0.3s; box-shadow: inset 0 0 10px ${c}00, 0 0 20px ${c}40; }
-    .burst-btn:hover { background: ${c}; color: #000; box-shadow: inset 0 0 10px ${c}, 0 0 40px ${c}; }
-
-    #main-content { position: relative; z-index: 10; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; pointer-events: none; opacity: 0; }
-    .pb-card { background: rgba(10,10,10,0.6); backdrop-filter: blur(15px); border: 1px solid ${c}30; border-radius: 30px; padding: 4rem 3rem; max-width: 600px; width: 100%; text-align: center; pointer-events: auto; transform: scale(0.9); }
-    
-    .pb-label { font-size: 0.8rem; letter-spacing: 0.5em; color: ${c}; text-transform: uppercase; font-weight: 700; margin-bottom: 1rem; }
-    .pb-title { font-size: clamp(2.5rem, 8vw, 4rem); font-weight: 900; color: #fff; line-height: 1.1; margin-bottom: 2rem; text-shadow: 0 0 20px ${c}; }
-    .pb-photo { width: 100%; max-width: 400px; border-radius: 20px; box-shadow: 0 0 50px ${c}40; margin: 2rem auto; border: 2px solid ${c}50; }
-    
-    .pb-msg { font-size: 1.2rem; line-height: 1.8; color: #fff; font-weight: 300; margin-bottom: 2rem; }
-    .pb-sender { margin-top: 3rem; font-size: 1rem; color: #888; font-weight: 300; }
-    .pb-sender strong { display: block; font-size: 1.5rem; color: ${c}; font-weight: 900; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px; }
+      .shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative; overflow: hidden; }
+      .bg-orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.3; animation: float 10s ease-in-out infinite; }
+      .orb-1 { width: 280px; height: 280px; background: ${accent}; top: -80px; left: -80px; }
+      .orb-2 { width: 220px; height: 220px; background: #f97316; bottom: -60px; right: -60px; animation-delay: -5s; }
+      @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(25px, -40px) scale(1.05); } }
+      .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); border-radius: 28px; padding: 2.5rem; max-width: 480px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.25); position: relative; z-index: 10; }
+      .label { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 0.75rem; }
+      .title { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 1.25rem; }
+      .photo-wrap { width: 100%; aspect-ratio: 1; border-radius: 20px; overflow: hidden; margin: 1.25rem 0; border: 2px solid rgba(255,255,255,0.15); }
+      .photo { width: 100%; height: 100%; object-fit: cover; }
+      .msg { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.9); margin-bottom: 1.25rem; }
+      .sender { font-size: 0.85rem; color: rgba(255,255,255,0.6); font-weight: 300; }
+    ` : `
+      #vip-canvas { position: fixed; inset: 0; z-index: 0; }
+      .stars { position: fixed; inset: 0; z-index: 1; background-image: radial-gradient(1px 1px at 50% 50%, #fff, transparent); background-size: 100px 100px; animation: twinkle 4s ease-in-out infinite; opacity: 0.4; }
+      @keyframes twinkle { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.2; } }
+      .vip-intro { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at center, #1a1a2e 0%, #0f0c29 100%); }
+      .intro-text { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 800; color: #fff; text-align: center; margin-bottom: 2rem; opacity: 0; }
+      .tap-hint { font-size: 1rem; color: ${accent}; animation: pulse 2s ease-in-out infinite; }
+      @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+      #main-content { position: relative; z-index: 10; min-height: 100vh; display: none; align-items: center; justify-content: center; padding: 3rem 2rem; }
+      .vip-card { background: rgba(255,255,255,0.08); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.15); border-radius: 36px; padding: 3.5rem 2.5rem; max-width: 580px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.35); position: relative; overflow: hidden; }
+      .vip-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent, ${accent}, transparent); animation: rotate 12s linear infinite; opacity: 0.25; }
+      @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      .card-inner { position: relative; z-index: 1; }
+      .vip-label { font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 1.25rem; }
+      .vip-title { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 1.75rem; }
+      .vip-gallery-wrap { width: 100%; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; margin: 1.75rem 0; border: 2px solid rgba(255,255,255,0.1); }
+      .vip-photo { width: 100%; height: 100%; object-fit: cover; }
+      .vip-msg { font-size: 1.1rem; line-height: 1.8; color: rgba(255,255,255,0.95); margin-bottom: 1.75rem; }
+      .vip-sender { font-size: 0.95rem; color: ${accent}; font-weight: 600; letter-spacing: 0.08em; }
     `}
   `;
 
-  let html = '';
-  if (isBasic) {
-    let parts = '';
-    for(let i=0; i<30; i++) {
-        const l = Math.random()*100; const d = Math.random()*5+3; const s = Math.random()*6+2;
-        parts += `<div class="p-css" style="left:${l}%; width:${s}px; height:${s}px; --dr:${d}s; animation-delay:${Math.random()*2}s;"></div>`;
-    }
-    html = `
-      <div class="particles-css">${parts}</div>
-      <div class="pb-shell">
-        <div class="pb-card">
-          <p class="pb-label">Energía para ${d.recipientName || 'ti'}</p>
-          <h1 class="pb-title">${d.title}</h1>
-          ${d.imageUrl ? gallery.html : ''}
-          <p class="pb-msg" id="type-target"></p>
-          <p class="pb-sender">Emitido por <strong>${d.senderName || 'Alguien'}</strong></p>
+  const html = isBasic ? `
+    <div class="shell">
+      <div class="bg-orb orb-1"></div>
+      <div class="bg-orb orb-2"></div>
+      <div class="card">
+        <p class="label">${d.title || 'Para Ti'}</p>
+        <h1 class="title">${d.recipientName || 'Especial'}</h1>
+        ${d.imageUrl ? '<div class="photo-wrap">' + gallery.html + '</div>' : ''}
+        <p class="msg" id="type-target"></p>
+        <p class="sender">De: ${d.senderName || 'Alguien Especial'}</p>
+      </div>
+    </div>
+  ` : `
+    <canvas id="vip-canvas"></canvas>
+    <div class="stars"></div>
+    <div class="vip-intro" id="intro">
+      <p class="intro-text" id="introText">Una experiencia especial<br/>te espera</p>
+      <p class="tap-hint">Toca para comenzar</p>
+    </div>
+    <div id="main-content">
+      <div class="vip-card">
+        <div class="card-inner">
+          <p class="vip-label">${d.title || 'Exclusivo Para Ti'}</p>
+          <h1 class="vip-title">${d.recipientName || 'Increible'}</h1>
+          ${d.imageUrl ? '<div class="vip-gallery-wrap">' + gallery.html + '</div>' : ''}
+          <p class="vip-msg" id="type-target"></p>
+          <p class="vip-sender">De: ${d.senderName || 'Alguien Especial'}</p>
         </div>
       </div>
-    `;
-  } else {
-    html = `
-      <canvas id="canvas-container"></canvas>
-      
-      <div id="start-overlay">
-        <div class="burst-inst">TOCA PARA DETONAR</div>
-        <button class="burst-btn" id="start-btn">INICIAR REACCIÓN</button>
-      </div>
-      
-      <div id="main-content">
-        <div class="pb-card" id="main-card">
-          <p class="pb-label gs-el">Para ${d.recipientName || 'Ti'}</p>
-          <h1 class="pb-title gs-el">${d.title}</h1>
-          ${d.imageUrl ? gallery.html : ''}
-          <div class="pb-msg gs-el" id="type-target"></div>
-          <p class="pb-sender gs-el">Desde el centro de la galaxia,<br/><strong>${d.senderName || 'Anónimo'}</strong></p>
-        </div>
-      </div>
-    `;
-  }
+    </div>
+  `;
 
   const js = isBasic ? `
-    const target = document.getElementById('type-target');
-    const txt = "${d.escapedMessage}";
-    let i = 0;
-    function type() {
-      if(i < txt.length){
-        if(txt.substring(i,i+5)==='<br/>'){target.innerHTML+='<br/>';i+=5;}
-        else{target.innerHTML+=txt.charAt(i);i++;}
-        setTimeout(type, 30);
-      }
-    }
-    setTimeout(type, 800);
+    (function() {
+      const target = document.getElementById('type-target');
+      if (!target) return;
+      const text = "${d.escapedMessage}";
+      let i = 0;
+      function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 50); } }
+      setTimeout(type, 500);
+    })();
   ` : `
-    // VIP MODE ENGINE - Canvas Particle Physics System
-    const canvas = document.getElementById('canvas-container');
-    const ctx = canvas.getContext('2d');
-    let W = window.innerWidth; let H = window.innerHeight;
-    canvas.width = W; canvas.height = H;
-    
-    window.addEventListener('resize', () => { W = window.innerWidth; H = window.innerHeight; canvas.width = W; canvas.height = H; });
-
-    class Particle {
-      constructor(x, y, isBurst = false) {
-        this.x = x; this.y = y;
-        this.r = Math.random() * 4 + 1;
-        const angle = Math.random() * Math.PI * 2;
-        const speed = isBurst ? Math.random() * 20 + 5 : Math.random() * 2 + 0.5;
-        this.vx = Math.cos(angle) * speed;
-        this.vy = Math.sin(angle) * speed;
-        this.color = Math.random() > 0.5 ? '${c}' : '#ffffff';
-        this.alpha = 1;
-        this.decay = isBurst ? Math.random() * 0.02 + 0.01 : 0.005;
+    (function() {
+      const canvas = document.getElementById('vip-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width, height, particles = [], mouseX = 0, mouseY = 0;
+      function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+      class Particle { constructor() { this.reset(); } reset() { this.x = Math.random() * width; this.y = Math.random() * height; this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5; this.radius = Math.random() * 2 + 1; this.alpha = Math.random() * 0.5 + 0.2; } update() { this.x += this.vx + (mouseX - this.x) * 0.0001; this.y += this.vy + (mouseY - this.y) * 0.0001; if (this.x < 0 || this.x > width) this.vx *= -1; if (this.y < 0 || this.y > height) this.vy *= -1; } draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.fillStyle = '${accent}'; ctx.globalAlpha = this.alpha; ctx.fill(); } }
+      function init() { resize(); for (let i = 0; i < 80; i++) particles.push(new Particle()); animate(); }
+      function animate() { ctx.clearRect(0, 0, width, height); for (let i = 0; i < particles.length; i++) { for (let j = i + 1; j < particles.length; j++) { const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y, dist = Math.sqrt(dx * dx + dy * dy); if (dist < 100) { ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.strokeStyle = '${accent}'; ctx.globalAlpha = 0.1 * (1 - dist / 100); ctx.stroke(); } } } particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+      window.addEventListener('resize', resize);
+      window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+      window.addEventListener('touchmove', e => { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; });
+      init();
+      const intro = document.getElementById('intro'), mainContent = document.getElementById('main-content'), introText = document.getElementById('introText');
+      if (intro && introText) {
+        if (typeof gsap !== 'undefined') { gsap.to(introText, { opacity: 1, duration: 2, delay: 0.5 }); } else { introText.style.opacity = 1; }
+        intro.addEventListener('click', () => {
+          const finish = () => { intro.style.display = 'none'; mainContent.style.display = 'flex'; const target = document.getElementById('type-target'); if (target) { const text = "${d.escapedMessage}"; let i = 0; function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 40); } } setTimeout(type, 800); } };
+          if (typeof gsap !== 'undefined') { gsap.to(intro, { opacity: 0, duration: 1, onComplete: finish }); } else { intro.style.opacity = 0; setTimeout(finish, 1000); }
+        });
       }
-      update() {
-        this.x += this.vx; this.y += this.vy;
-        this.alpha -= this.decay;
-        this.r *= 0.98;
-      }
-      draw() {
-        ctx.save();
-        ctx.globalAlpha = this.alpha;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.shadowBlur = 10; ctx.shadowColor = this.color;
-        ctx.fill();
-        ctx.restore();
-      }
-    }
-
-    let particles = [];
-    let isRunning = true;
-    
-    function animate() {
-      if(!isRunning) return;
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // trailing effect
-      ctx.fillRect(0, 0, W, H);
-      
-      for(let i=particles.length-1; i>=0; i--) {
-         particles[i].update();
-         particles[i].draw();
-         if(particles[i].alpha <= 0 || particles[i].r <= 0.1) particles.splice(i, 1);
-      }
-      requestAnimationFrame(animate);
-    }
-    animate();
-
-    function createBurst(x, y, count) {
-      for(let i=0; i<count; i++) particles.push(new Particle(x, y, true));
-    }
-    
-    // Auto ambient particles
-    setInterval(() => {
-      if(particles.length < 50) particles.push(new Particle(Math.random()*W, Math.random()*H, false));
-    }, 100);
-
-    const startBtn = document.getElementById('start-btn');
-    startBtn.addEventListener('click', (e) => {
-      const audio = document.getElementById('bg-music');
-      if (audio) { audio.volume = 0; audio.play(); gsap.to(audio, {volume: 0.8, duration: 2}); }
-      
-      const rect = startBtn.getBoundingClientRect();
-      const cX = rect.left + rect.width/2;
-      const cY = rect.top + rect.height/2;
-      
-      createBurst(cX, cY, 200); // MEGA BURST
-      
-      gsap.to('#start-overlay', { opacity: 0, duration: 0.5, onComplete: () => document.getElementById('start-overlay').style.display='none' });
-      
-      setTimeout(showContent, 1000);
-    });
-    
-    // Interactive mouse bursts
-    canvas.addEventListener('mousemove', (e) => {
-       if(Math.random() > 0.8) createBurst(e.clientX, e.clientY, 5);
-    });
-    canvas.addEventListener('click', (e) => {
-       createBurst(e.clientX, e.clientY, 50);
-       // Sound effect could go here
-    });
-
-    function showContent() {
-      const mc = document.getElementById('main-content');
-      mc.style.opacity = '1';
-      
-      gsap.set('.gs-el', { autoAlpha: 0, y: 50, scale: 0.8 });
-      gsap.to('#main-card', { scale: 1, duration: 1, ease: 'back.out(1.5)' });
-      gsap.to('.gs-el', { autoAlpha: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.15, ease: 'power2.out', delay: 0.5, onComplete: () => {
-         const target = document.getElementById('type-target');
-         const txt = "${d.escapedMessage}";
-         let i = 0;
-         function type() {
-           if(i < txt.length) {
-             if(txt.substring(i,i+5)==='<br/>'){target.innerHTML+='<br/>';i+=5;}
-             else{target.innerHTML+=txt.charAt(i);i++;}
-             setTimeout(type, 20);
-           }
-         }
-         type();
-      }});
-      
-      // Card Parallax
-      const card = document.getElementById('main-card');
-      window.addEventListener('mousemove', e => {
-         const x = (e.clientX / W - 0.5) * 20;
-         const y = (e.clientY / H - 0.5) * 20;
-         gsap.to(card, { rotationY: x, rotationX: -y, duration: 0.5 });
-      });
-    }
-  
-    ${gallery.js}`;
+    })();
+    ${gallery.js}
+  `;
 
   return { css, html, js };
 }

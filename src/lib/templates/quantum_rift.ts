@@ -1,253 +1,116 @@
-// ═══════════════════════════════════════════════════════════════
-// STYLE #5: QUANTUM RIFT — 3D Wormhole Journey
-// ═══════════════════════════════════════════════════════════════
+// STYLE: QUANTUM RIFT - Dimensional Portal
 import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderQuantumRift(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
   const gallery = renderVipGallery(d, "quantumrift");
-  const c = d.accentColor || '#ff00ff';
+  const accent = d.accentColor || '#ff00ff';
 
   const css = `
-    body { background: #010105; overflow-x: hidden; margin: 0; padding: 0; font-family: sans-serif; }
-    
+    @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;800&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: radial-gradient(circle at 30% 30%, #1a0a2e 0%, #0d0d2b 100%); min-height: 100vh; overflow-x: hidden; font-family: 'Exo+2', sans-serif; }
     ${isBasic ? `
-    /* BASIC MODE */
-    .basic-shell { min-height: 100vh; padding: 2rem; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-    .bg-gradient { position: absolute; inset: 0; background: radial-gradient(circle at center, ${c}30 0%, #010105 70%); z-index: 0; }
-    .ring { position: absolute; border: 1px solid ${c}20; border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-    .ring-1 { width: 300px; height: 300px; animation: spin 20s linear infinite; }
-    .ring-2 { width: 600px; height: 600px; animation: spin 30s linear infinite reverse; border-style: dashed; }
-    .ring-3 { width: 900px; height: 900px; animation: spin 40s linear infinite; border-width: 2px; border-color: ${c}10; }
-    @keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
-    
-    .basic-card { background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border: 1px solid ${c}40; border-radius: 20px; padding: 3rem 2rem; max-width: 480px; width: 100%; text-align: center; z-index: 10; box-shadow: 0 0 40px ${c}20; }
-    .q-label { font-size: 0.7rem; letter-spacing: 0.4em; color: ${c}; text-transform: uppercase; margin-bottom: 0.5rem; }
-    .q-title { font-size: clamp(1.8rem,6vw,2.4rem); font-weight: 800; color: #fff; margin-bottom: 1.5rem; letter-spacing: 1px; }
-    .q-photo { width: 100%; border-radius: 12px; margin: 1rem 0; }
-    .q-msg { color: #ccc; line-height: 1.6; margin: 1.5rem 0; }
-    .q-sender { font-size: 0.8rem; color: #888; }
-    .q-sender strong { color: ${c}; }
-    `: `
-    /* VIP MODE */
-    #webgl-container { position: fixed; inset: 0; z-index: 0; }
-    
-    #overlay-start {
-      position: fixed; inset: 0; z-index: 100; background: rgba(1,1,5,0.9);
-      display: flex; align-items: center; justify-content: center;
-      transition: opacity 1s;
-    }
-    .btn-warp {
-      background: transparent; border: 2px solid ${c}; color: ${c}; padding: 15px 40px;
-      font-size: 1.2rem; cursor: pointer; border-radius: 30px; letter-spacing: 3px;
-      text-transform: uppercase; box-shadow: 0 0 20px ${c}40, inset 0 0 10px ${c}40;
-      transition: all 0.3s;
-    }
-    .btn-warp:hover { background: ${c}; color: #000; box-shadow: 0 0 40px ${c}; }
-    
-    #main-content {
-      position: relative; z-index: 10; min-height: 100vh;
-      display: none; align-items: center; justify-content: center; padding: 2rem;
-    }
-    .q-card {
-      background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-      border: 1px solid ${c}30; border-radius: 20px; padding: 3rem 2rem;
-      max-width: 500px; width: 100%; text-align: center;
-      box-shadow: 0 0 80px ${c}20; transform: perspective(1000px) translateZ(100px);
-    }
-    .q-label { font-size: 0.65rem; letter-spacing: 0.4em; color: ${c}; text-transform: uppercase; margin-bottom: 1rem; }
-    .q-title { font-size: clamp(2rem,6vw,2.8rem); font-weight: 800; color: #fff; margin-bottom: 1.5rem; text-shadow: 0 0 10px ${c}80; }
-    .q-div { width: 0%; height: 2px; background: ${c}; margin: 1.5rem auto; box-shadow: 0 0 10px ${c}; }
-    .q-photo-wrap { perspective: 1000px; margin: 1.5rem auto; }
-    .q-photo { width: 100%; max-width: 320px; border-radius: 12px; box-shadow: 0 0 30px ${c}40; filter: contrast(1.1); transform-style: preserve-3d; }
-    .q-msg { font-size: 1.1rem; line-height: 1.8; color: #ddd; margin: 1.5rem 0; min-height: 50px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
-    .q-sender { font-size: 0.9rem; color: #aaa; margin-top: 2rem; opacity: 0; }
-    .q-sender strong { color: ${c}; }
+      .shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative; overflow: hidden; }
+      .bg-orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.3; animation: float 10s ease-in-out infinite; }
+      .orb-1 { width: 280px; height: 280px; background: ${accent}; top: -80px; left: -80px; }
+      .orb-2 { width: 220px; height: 220px; background: #00ffff; bottom: -60px; right: -60px; animation-delay: -5s; }
+      @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(25px, -40px) scale(1.05); } }
+      .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); border-radius: 28px; padding: 2.5rem; max-width: 480px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.25); position: relative; z-index: 10; }
+      .label { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 0.75rem; }
+      .title { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 1.25rem; }
+      .photo-wrap { width: 100%; aspect-ratio: 1; border-radius: 20px; overflow: hidden; margin: 1.25rem 0; border: 2px solid rgba(255,255,255,0.15); }
+      .photo { width: 100%; height: 100%; object-fit: cover; }
+      .msg { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.9); margin-bottom: 1.25rem; }
+      .sender { font-size: 0.85rem; color: rgba(255,255,255,0.6); font-weight: 300; }
+    ` : `
+      #vip-canvas { position: fixed; inset: 0; z-index: 0; }
+      .stars { position: fixed; inset: 0; z-index: 1; background-image: radial-gradient(1px 1px at 50% 50%, #fff, transparent); background-size: 100px 100px; animation: twinkle 4s ease-in-out infinite; opacity: 0.4; }
+      @keyframes twinkle { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.2; } }
+      .vip-intro { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at center, #1a1a2e 0%, #0f0c29 100%); }
+      .intro-text { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 800; color: #fff; text-align: center; margin-bottom: 2rem; opacity: 0; }
+      .tap-hint { font-size: 1rem; color: ${accent}; animation: pulse 2s ease-in-out infinite; }
+      @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+      #main-content { position: relative; z-index: 10; min-height: 100vh; display: none; align-items: center; justify-content: center; padding: 3rem 2rem; }
+      .vip-card { background: rgba(255,255,255,0.08); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.15); border-radius: 36px; padding: 3.5rem 2.5rem; max-width: 580px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.35); position: relative; overflow: hidden; }
+      .vip-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent, ${accent}, transparent); animation: rotate 12s linear infinite; opacity: 0.25; }
+      @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      .card-inner { position: relative; z-index: 1; }
+      .vip-label { font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 1.25rem; }
+      .vip-title { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 1.75rem; }
+      .vip-gallery-wrap { width: 100%; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; margin: 1.75rem 0; border: 2px solid rgba(255,255,255,0.1); }
+      .vip-photo { width: 100%; height: 100%; object-fit: cover; }
+      .vip-msg { font-size: 1.1rem; line-height: 1.8; color: rgba(255,255,255,0.95); margin-bottom: 1.75rem; }
+      .vip-sender { font-size: 0.95rem; color: ${accent}; font-weight: 600; letter-spacing: 0.08em; }
     `}
   `;
 
   const html = isBasic ? `
-    <div class="basic-shell">
-      <div class="bg-gradient"></div>
-      <div class="ring ring-1"></div>
-      <div class="ring ring-2"></div>
-      <div class="ring ring-3"></div>
-      <div class="basic-card">
-        <p class="q-label">Anomalía Detectada</p>
-        <h1 class="q-title">${d.title}</h1>
-        ${d.imageUrl ? gallery.html : ''}
-        <p class="q-msg" id="type-target"></p>
-        <p class="q-sender">De: <strong>${d.senderName || 'Anónimo'}</strong></p>
+    <div class="shell">
+      <div class="bg-orb orb-1"></div>
+      <div class="bg-orb orb-2"></div>
+      <div class="card">
+        <p class="label">${d.title || 'Para Ti'}</p>
+        <h1 class="title">${d.recipientName || 'Especial'}</h1>
+        ${d.imageUrl ? '<div class="photo-wrap">' + gallery.html + '</div>' : ''}
+        <p class="msg" id="type-target"></p>
+        <p class="sender">De: ${d.senderName || 'Alguien Especial'}</p>
       </div>
     </div>
   ` : `
-    <div id="webgl-container"></div>
-    <div id="overlay-start">
-      <button class="btn-warp" id="start-btn">INICIAR SALTO CUÁNTICO</button>
+    <canvas id="vip-canvas"></canvas>
+    <div class="stars"></div>
+    <div class="vip-intro" id="intro">
+      <p class="intro-text" id="introText">Una experiencia especial<br/>te espera</p>
+      <p class="tap-hint">Toca para comenzar</p>
     </div>
-
     <div id="main-content">
-      <div class="q-card" id="main-card">
-        <p class="q-label" id="ql" style="opacity:0">Salto Completado</p>
-        <h1 class="q-title" id="qt"></h1>
-        <div class="q-div" id="qd"></div>
-        ${d.imageUrl ? `<div class="q-photo-wrap">${gallery.html}</div>` : ''}
-        <div class="q-msg" id="type-target"></div>
-        <p class="q-sender" id="qs">Aterrizado por: <strong>${d.senderName || 'Anónimo'}</strong></p>
+      <div class="vip-card">
+        <div class="card-inner">
+          <p class="vip-label">${d.title || 'Exclusivo Para Ti'}</p>
+          <h1 class="vip-title">${d.recipientName || 'Increible'}</h1>
+          ${d.imageUrl ? '<div class="vip-gallery-wrap">' + gallery.html + '</div>' : ''}
+          <p class="vip-msg" id="type-target"></p>
+          <p class="vip-sender">De: ${d.senderName || 'Alguien Especial'}</p>
+        </div>
       </div>
     </div>
   `;
 
   const js = isBasic ? `
-    const target = document.getElementById('type-target');
-    const txt = "${d.escapedMessage}";
-    let i = 0;
-    function type() {
-      if(i < txt.length){
-        if(txt.substring(i,i+5)==='<br/>'){target.innerHTML+='<br/>';i+=5;}
-        else{target.innerHTML+=txt.charAt(i);i++;}
-        setTimeout(type, 30);
-      }
-    }
-    setTimeout(type, 800);
+    (function() {
+      const target = document.getElementById('type-target');
+      if (!target) return;
+      const text = "${d.escapedMessage}";
+      let i = 0;
+      function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 50); } }
+      setTimeout(type, 500);
+    })();
   ` : `
-    // VIP MODE ENGINE - Three.js Wormhole
-    const container = document.getElementById('webgl-container');
-    const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x010105, 0.001);
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 200;
-    
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    container.appendChild(renderer.domElement);
-
-    // Create Wormhole Tube
-    const path = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-100, 0, 0),
-      new THREE.Vector3(0, 50, -200),
-      new THREE.Vector3(100, -50, -400),
-      new THREE.Vector3(0, 0, -600),
-      new THREE.Vector3(-100, 50, -800),
-      new THREE.Vector3(0, 0, -1000)
-    ]);
-    const geo = new THREE.TubeGeometry(path, 100, 25, 20, false);
-    const mat = new THREE.MeshBasicMaterial({ color: '${c}', wireframe: true, transparent: true, opacity: 0.3 });
-    const tube = new THREE.Mesh(geo, mat);
-    scene.add(tube);
-    
-    // Add particles inside tube
-    const pGeo = new THREE.BufferGeometry();
-    const pCount = 1000;
-    const pos = new Float32Array(pCount * 3);
-    for(let i=0; i<pCount; i++) {
-        const u = Math.random();
-        const pt = path.getPointAt(u);
-        const randR = Math.random() * 20;
-        const randAngle = Math.random() * Math.PI * 2;
-        pos[i*3] = pt.x + Math.cos(randAngle) * randR;
-        pos[i*3+1] = pt.y + Math.sin(randAngle) * randR;
-        pos[i*3+2] = pt.z + (Math.random() - 0.5) * 50;
-    }
-    pGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    const canvasObj = document.createElement('canvas'); canvasObj.width = 16; canvasObj.height = 16;
-    const ctxObj = canvasObj.getContext('2d'); ctxObj.beginPath(); ctxObj.arc(8, 8, 8, 0, Math.PI * 2);
-    ctxObj.fillStyle = '#ffffff'; ctxObj.fill();
-    const texture = new THREE.CanvasTexture(canvasObj);
-    const pMat = new THREE.PointsMaterial({ color: '${c}', size: 2, map: texture, transparent: true, blending: THREE.AdditiveBlending });
-    const particles = new THREE.Points(pGeo, pMat);
-    scene.add(particles);
-
-    // Camera animation variables
-    let camPos = 0;
-    let isWarping = false;
-    let speed = 0.0001;
-
-    function animate() {
-      requestAnimationFrame(animate);
-      if(isWarping) {
-        speed += 0.00005; // Accelerate
+    (function() {
+      const canvas = document.getElementById('vip-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width, height, particles = [], mouseX = 0, mouseY = 0;
+      function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+      class Particle { constructor() { this.reset(); } reset() { this.x = Math.random() * width; this.y = Math.random() * height; this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5; this.radius = Math.random() * 2 + 1; this.alpha = Math.random() * 0.5 + 0.2; } update() { this.x += this.vx + (mouseX - this.x) * 0.0001; this.y += this.vy + (mouseY - this.y) * 0.0001; if (this.x < 0 || this.x > width) this.vx *= -1; if (this.y < 0 || this.y > height) this.vy *= -1; } draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.fillStyle = '${accent}'; ctx.globalAlpha = this.alpha; ctx.fill(); } }
+      function init() { resize(); for (let i = 0; i < 80; i++) particles.push(new Particle()); animate(); }
+      function animate() { ctx.clearRect(0, 0, width, height); for (let i = 0; i < particles.length; i++) { for (let j = i + 1; j < particles.length; j++) { const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y, dist = Math.sqrt(dx * dx + dy * dy); if (dist < 100) { ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.strokeStyle = '${accent}'; ctx.globalAlpha = 0.1 * (1 - dist / 100); ctx.stroke(); } } } particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+      window.addEventListener('resize', resize);
+      window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+      window.addEventListener('touchmove', e => { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; });
+      init();
+      const intro = document.getElementById('intro'), mainContent = document.getElementById('main-content'), introText = document.getElementById('introText');
+      if (intro && introText) {
+        if (typeof gsap !== 'undefined') { gsap.to(introText, { opacity: 1, duration: 2, delay: 0.5 }); } else { introText.style.opacity = 1; }
+        intro.addEventListener('click', () => {
+          const finish = () => { intro.style.display = 'none'; mainContent.style.display = 'flex'; const target = document.getElementById('type-target'); if (target) { const text = "${d.escapedMessage}"; let i = 0; function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 40); } } setTimeout(type, 800); } };
+          if (typeof gsap !== 'undefined') { gsap.to(intro, { opacity: 0, duration: 1, onComplete: finish }); } else { intro.style.opacity = 0; setTimeout(finish, 1000); }
+        });
       }
-      camPos += speed;
-      if(camPos > 1) camPos = 1;
-      
-      if(camPos < 1) {
-        const p1 = path.getPointAt(camPos);
-        const p2 = path.getPointAt(Math.min(camPos + 0.01, 1));
-        camera.position.copy(p1);
-        camera.lookAt(p2);
-      } else if(isWarping) {
-        // Reached end of wormhole
-        isWarping = false;
-        showContent();
-      }
-      
-      tube.rotation.z += 0.005;
-      renderer.render(scene, camera);
-    }
-    animate();
-
-    document.getElementById('start-btn').addEventListener('click', () => {
-      document.getElementById('overlay-start').style.opacity = '0';
-      const audio = document.getElementById('bg-music');
-      if (audio) { audio.volume = 0; audio.play(); gsap.to(audio, {volume: 0.8, duration: 2}); }
-      
-      setTimeout(() => {
-        document.getElementById('overlay-start').style.display = 'none';
-        isWarping = true; // start warp
-      }, 1000);
-    });
-
-    function showContent() {
-      // Big Bang Flash
-      const flash = document.createElement('div');
-      flash.style.cssText = 'position:fixed;inset:0;background:#fff;z-index:99;opacity:1';
-      document.body.appendChild(flash);
-      
-      gsap.to(flash, { opacity: 0, duration: 2, ease: 'power2.out', onComplete:()=>flash.remove() });
-      
-      // Reveal Content
-      document.getElementById('main-content').style.display = 'flex';
-      gsap.from('#main-card', { opacity: 0, scale: 0.1, rotationZ: 180, duration: 2, ease: 'elastic.out(1, 0.5)' });
-      
-      gsap.to('#ql', { opacity: 1, duration: 1, delay: 1 });
-      gsap.to('#qt', { text: "${d.title}", duration: 1.5, delay: 1.5 });
-      gsap.to('#qd', { width: '60%', duration: 1, delay: 2.5 });
-      
-      if(document.getElementById('qi')) gsap.to('#qi', { opacity: 1, rotationY: 360, duration: 1.5, delay: 3 });
-      
-      setTimeout(() => {
-        const target = document.getElementById('type-target');
-        const txt = "${d.escapedMessage}";
-        let i = 0;
-        function type() {
-          if(i < txt.length) {
-            if(txt.substring(i,i+5)==='<br/>'){target.innerHTML+='<br/>';i+=5;}
-            else{target.innerHTML+=txt.charAt(i);i++;}
-            setTimeout(type, 30);
-          } else {
-             gsap.to('#qs', { opacity: 1, duration: 1 });
-          }
-        }
-        type();
-      }, (document.getElementById('qi') ? 4500 : 3500));
-    }
-    
-    // Mouse Parallax on Photo
-    const card = document.getElementById('main-card');
-    const photo = document.getElementById('qi');
-    if(card && photo) {
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width/2;
-        const y = e.clientY - rect.top - rect.height/2;
-        gsap.to(photo, { rotationY: x*0.05, rotationX: -y*0.05, duration: 0.5 });
-      });
-      card.addEventListener('mouseleave', () => gsap.to(photo, { rotationY: 0, rotationX: 0, duration: 0.5 }));
-    }
-  
-    ${gallery.js}`;
+    })();
+    ${gallery.js}
+  `;
 
   return { css, html, js };
 }

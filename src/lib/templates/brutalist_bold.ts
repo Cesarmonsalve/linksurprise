@@ -1,203 +1,116 @@
+// STYLE: BRUTALIST BOLD - Raw Typography
 import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderBrutalistBold(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
   const gallery = renderVipGallery(d, "brutalistbold");
-  const c = d.accentColor || '#fffc00'; // Yellow
+  const accent = d.accentColor || '#00ff00';
 
   const css = `
-    @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
-    body { background: #dedede; overflow-x: hidden; margin: 0; font-family: 'Space Mono', monospace; color: #000; cursor: crosshair; }
-    
+    @import url('https://fonts.googleapis.com/css2?family=Archivo+Black:wght@300;400;600;800&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: linear-gradient(180deg, #111111 0%, #000000 100%); min-height: 100vh; overflow-x: hidden; font-family: 'Archivo+Black', sans-serif; }
     ${isBasic ? `
-    .brut-shell { min-height: 100vh; padding: 2rem; display: flex; align-items: center; justify-content: center; }
-    .brut-card { background: #fff; border: 4px solid #000; padding: 3rem 2rem; max-width: 600px; width: 100%; box-shadow: 15px 15px 0px #000; transition: transform 0.2s, box-shadow 0.2s; }
-    .brut-card:hover { transform: translate(-5px, -5px); box-shadow: 20px 20px 0px ${c}; }
-    
-    .brut-tag { display: inline-block; background: #000; color: #fff; padding: 5px 15px; font-weight: bold; text-transform: uppercase; margin-bottom: 2rem; font-size: 0.9rem; }
-    .brut-title { font-family: 'Archivo Black', sans-serif; font-size: clamp(3rem, 8vw, 5rem); line-height: 1; margin: 0 0 2rem 0; text-transform: uppercase; word-break: break-word; }
-    .brut-photo { width: 100%; border: 4px solid #000; filter: grayscale(100%) contrast(1.5); margin-bottom: 2rem; box-shadow: 10px 10px 0px #000; }
-    .brut-photo:hover { filter: none; }
-    .brut-msg { font-size: 1.2rem; line-height: 1.6; border-left: 4px solid ${c}; padding-left: 1rem; margin-bottom: 2rem; background: #f4f4f4; padding: 1rem; }
-    .brut-sender { font-weight: bold; font-size: 1.5rem; text-transform: uppercase; background: ${c}; display: inline-block; padding: 5px 10px; border: 2px solid #000; }
-    `: `
-    /* VIP MODE - Interactive Brutalism */
-    .brut-marquee { position: fixed; top: 10vh; left: -10vw; width: 120vw; background: ${c}; color: #000; font-family: 'Archivo Black'; font-size: 4rem; white-space: nowrap; padding: 10px 0; border-top: 4px solid #000; border-bottom: 4px solid #000; transform: rotate(-5deg); z-index: 0; box-shadow: 10px 10px 0px rgba(0,0,0,1); cursor: grab; }
-    .brut-marquee:active { cursor: grabbing; box-shadow: 20px 20px 0px rgba(0,0,0,1); }
-    .m-track { display: inline-block; animation: scroll 15s linear infinite; }
-    .brut-marquee:hover .m-track { animation-play-state: paused; }
-    @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-    #main-content { position: relative; z-index: 10; min-height: 100vh; padding: 4rem 2rem; display: flex; align-items: center; justify-content: center; perspective: 1000px; display: none; }
-    
-    .b-wrap { position: relative; }
-    .b-card { background: #fff; border: 6px solid #000; padding: 4rem 3rem; max-width: 700px; width: 100%; box-shadow: 20px 20px 0px #000; transition: transform 0.1s; transform-style: preserve-3d; }
-    
-    .b-tag-wrap { display: flex; justify-content: space-between; border-bottom: 4px solid #000; padding-bottom: 1rem; margin-bottom: 2rem; }
-    .b-tag { background: ${c}; color: #000; font-weight: bold; padding: 5px 15px; border: 2px solid #000; box-shadow: 4px 4px 0px #000; font-size: 1.2rem; transform: translateZ(20px); }
-    .b-id { font-weight: bold; font-size: 1.2rem; }
-    
-    .b-title { font-family: 'Archivo Black', sans-serif; font-size: clamp(4rem, 10vw, 7rem); line-height: 0.9; margin: 0 0 2rem 0; text-transform: uppercase; position: relative; z-index: 2; transform: translateZ(40px); word-break: break-word; mix-blend-mode: exclusion; color: #fff; }
-    .b-title:hover { color: ${c}; mix-blend-mode: normal; text-shadow: 4px 4px 0px #000; }
-    
-    .b-photo-container { position: relative; margin-bottom: 3rem; transform: translateZ(30px); }
-    .b-photo { width: 100%; border: 6px solid #000; filter: contrast(1.5) grayscale(100%); transition: all 0.3s; position: relative; z-index: 2; }
-    .b-photo-bg { position: absolute; inset: -10px; background: ${c}; z-index: 1; border: 4px solid #000; transform: rotate(3deg); transition: transform 0.3s; }
-    .b-photo-container:hover .b-photo { filter: none; transform: translate(-10px, -10px); }
-    .b-photo-container:hover .b-photo-bg { transform: rotate(-3deg) translate(10px, 10px); background: #f0f; }
-
-    .b-msg-box { background: #000; color: #fff; font-size: 1.2rem; line-height: 1.7; padding: 2rem; border: 4px solid ${c}; transform: translateZ(20px); box-shadow: -10px 10px 0px ${c}; position: relative; }
-    .b-msg-box::before { content: '>'; position: absolute; left: 10px; top: 10px; color: ${c}; font-family: 'Archivo Black'; font-size: 2rem; }
-    
-    .b-sender { font-family: 'Archivo Black'; font-size: 2.5rem; text-transform: uppercase; color: #000; background: ${c}; display: inline-block; padding: 10px 20px; border: 4px solid #000; box-shadow: 10px 10px 0px #000; margin-top: 3rem; transform: translateZ(50px) rotate(-2deg); transition: transform 0.2s; cursor: pointer; }
-    .b-sender:hover { transform: translateZ(60px) rotate(2deg) scale(1.1); background: #f0f; color: #fff; }
-
-    .sticker { position: absolute; font-size: 3rem; z-index: 100; pointer-events: none; animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-    @keyframes pop { 0% { transform: scale(0); } 100% { transform: scale(1); } }
-    
-    #enter-screen { position: fixed; inset: 0; background: ${c}; z-index: 200; display: flex; align-items: center; justify-content: center; }
-    .enter-btn { font-family: 'Archivo Black'; font-size: 4rem; background: #000; color: #fff; border: none; padding: 20px 40px; cursor: pointer; border: 8px solid #000; box-shadow: 20px 20px 0px rgba(0,0,0,0.5); transition: all 0.1s; text-transform: uppercase; }
-    .enter-btn:hover { background: #fff; color: #000; transform: translate(-10px, -10px); box-shadow: 30px 30px 0px rgba(0,0,0,1); }
-    .enter-btn:active { transform: translate(5px, 5px); box-shadow: 0px 0px 0px transparent; }
+      .shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative; overflow: hidden; }
+      .bg-orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.3; animation: float 10s ease-in-out infinite; }
+      .orb-1 { width: 280px; height: 280px; background: ${accent}; top: -80px; left: -80px; }
+      .orb-2 { width: 220px; height: 220px; background: #ffff00; bottom: -60px; right: -60px; animation-delay: -5s; }
+      @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(25px, -40px) scale(1.05); } }
+      .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); border-radius: 28px; padding: 2.5rem; max-width: 480px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.25); position: relative; z-index: 10; }
+      .label { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 0.75rem; }
+      .title { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 1.25rem; }
+      .photo-wrap { width: 100%; aspect-ratio: 1; border-radius: 20px; overflow: hidden; margin: 1.25rem 0; border: 2px solid rgba(255,255,255,0.15); }
+      .photo { width: 100%; height: 100%; object-fit: cover; }
+      .msg { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.9); margin-bottom: 1.25rem; }
+      .sender { font-size: 0.85rem; color: rgba(255,255,255,0.6); font-weight: 300; }
+    ` : `
+      #vip-canvas { position: fixed; inset: 0; z-index: 0; }
+      .stars { position: fixed; inset: 0; z-index: 1; background-image: radial-gradient(1px 1px at 50% 50%, #fff, transparent); background-size: 100px 100px; animation: twinkle 4s ease-in-out infinite; opacity: 0.4; }
+      @keyframes twinkle { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.2; } }
+      .vip-intro { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at center, #1a1a2e 0%, #0f0c29 100%); }
+      .intro-text { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 800; color: #fff; text-align: center; margin-bottom: 2rem; opacity: 0; }
+      .tap-hint { font-size: 1rem; color: ${accent}; animation: pulse 2s ease-in-out infinite; }
+      @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+      #main-content { position: relative; z-index: 10; min-height: 100vh; display: none; align-items: center; justify-content: center; padding: 3rem 2rem; }
+      .vip-card { background: rgba(255,255,255,0.08); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.15); border-radius: 36px; padding: 3.5rem 2.5rem; max-width: 580px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.35); position: relative; overflow: hidden; }
+      .vip-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent, ${accent}, transparent); animation: rotate 12s linear infinite; opacity: 0.25; }
+      @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      .card-inner { position: relative; z-index: 1; }
+      .vip-label { font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 1.25rem; }
+      .vip-title { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 1.75rem; }
+      .vip-gallery-wrap { width: 100%; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; margin: 1.75rem 0; border: 2px solid rgba(255,255,255,0.1); }
+      .vip-photo { width: 100%; height: 100%; object-fit: cover; }
+      .vip-msg { font-size: 1.1rem; line-height: 1.8; color: rgba(255,255,255,0.95); margin-bottom: 1.75rem; }
+      .vip-sender { font-size: 0.95rem; color: ${accent}; font-weight: 600; letter-spacing: 0.08em; }
     `}
   `;
 
   const html = isBasic ? `
-    <div class="brut-shell">
-      <div class="brut-card">
-        <div class="brut-tag">RAW MESSAGE</div>
-        <h1 class="brut-title">${d.title}</h1>
-        ${d.imageUrl ? gallery.html : ''}
-        <div class="brut-msg" id="type-target"></div>
-        <div class="brut-sender">${d.senderName || 'ANÓNIMO'}</div>
+    <div class="shell">
+      <div class="bg-orb orb-1"></div>
+      <div class="bg-orb orb-2"></div>
+      <div class="card">
+        <p class="label">${d.title || 'Para Ti'}</p>
+        <h1 class="title">${d.recipientName || 'Especial'}</h1>
+        ${d.imageUrl ? '<div class="photo-wrap">' + gallery.html + '</div>' : ''}
+        <p class="msg" id="type-target"></p>
+        <p class="sender">De: ${d.senderName || 'Alguien Especial'}</p>
       </div>
     </div>
   ` : `
-    <div id="enter-screen">
-      <button class="enter-btn" id="enter-btn">DESTRUIR</button>
+    <canvas id="vip-canvas"></canvas>
+    <div class="stars"></div>
+    <div class="vip-intro" id="intro">
+      <p class="intro-text" id="introText">Una experiencia especial<br/>te espera</p>
+      <p class="tap-hint">Toca para comenzar</p>
     </div>
-
-    <!-- Draggable Marquee Background -->
-    <div class="brut-marquee" id="dragger">
-      <div class="m-track">
-        ${Array(10).fill(`★ ${d.recipientName || 'RECIPIENT'} ★ NO RULES `).join('')}
-      </div>
-    </div>
-
     <div id="main-content">
-      <div class="b-wrap">
-        <div class="b-card" id="b-card">
-          <div class="b-tag-wrap">
-            <div class="b-tag">URGENT</div>
-            <div class="b-id">ID: #${Math.floor(Math.random() * 90000) + 10000}</div>
-          </div>
-          
-          <h1 class="b-title">${d.title}</h1>
-          
-          ${d.imageUrl ? `
-          <div class="b-photo-container">
-            <div class="b-photo-bg"></div>
-            ${gallery.html}
-          </div>` : ''}
-          
-          <div class="b-msg-box">
-             <div style="margin-left: 30px;" id="type-target"></div>
-          </div>
-          
-          <div class="b-sender" id="sender-btn">${d.senderName || 'ANÓNIMO'}</div>
+      <div class="vip-card">
+        <div class="card-inner">
+          <p class="vip-label">${d.title || 'Exclusivo Para Ti'}</p>
+          <h1 class="vip-title">${d.recipientName || 'Increible'}</h1>
+          ${d.imageUrl ? '<div class="vip-gallery-wrap">' + gallery.html + '</div>' : ''}
+          <p class="vip-msg" id="type-target"></p>
+          <p class="vip-sender">De: ${d.senderName || 'Alguien Especial'}</p>
         </div>
       </div>
     </div>
   `;
 
   const js = isBasic ? `
-    const target = document.getElementById('type-target');
-    const txt = "${d.escapedMessage}";
-    let i = 0;
-    function type() {
-      if(i < txt.length){
-        if(txt.substring(i,i+5)==='<br/>'){target.innerHTML+='<br/>';i+=5;}
-        else{target.innerHTML+=txt.charAt(i);i++;}
-        setTimeout(type, 20);
-      }
-    }
-    setTimeout(type, 500);
+    (function() {
+      const target = document.getElementById('type-target');
+      if (!target) return;
+      const text = "${d.escapedMessage}";
+      let i = 0;
+      function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 50); } }
+      setTimeout(type, 500);
+    })();
   ` : `
-    // VIP MODE ENGINE - Brutalist Interactions
-    const enterBtn = document.getElementById('enter-btn');
-    enterBtn.addEventListener('click', () => {
-      const audio = document.getElementById('bg-music');
-      if (audio) { audio.volume = 0; audio.play(); gsap.to(audio, {volume: 1, duration: 0.1}); }
-      
-      // Screen smash effect
-      gsap.to('#enter-screen', { scale: 1.5, opacity: 0, rotation: 10, duration: 0.5, ease: 'power4.in', onComplete: () => {
-         document.getElementById('enter-screen').style.display = 'none';
-         document.getElementById('main-content').style.display = 'flex';
-         startSeq();
-      }});
-    });
-    
-    function startSeq() {
-      gsap.from('#b-card', { y: 1000, rotation: -20, duration: 0.8, ease: 'back.out(1.2)' });
-      
-      setTimeout(() => {
-        const target = document.getElementById('type-target');
-        const txt = "${d.escapedMessage}";
-        let i = 0;
-        target.innerHTML += ' '; // buffer for cursor
-        function type() {
-          if(i < txt.length) {
-            if(txt.substring(i,i+5)==='<br/>'){target.innerHTML+='<br/>';i+=5;}
-            else{target.innerHTML+=txt.charAt(i);i++;}
-            setTimeout(type, 10); // super fast
-          }
-        }
-        type();
-      }, 1000);
-    }
-    
-    // Draggable Marquee (Vanilla JS)
-    const dragger = document.getElementById('dragger');
-    let isDown = false;
-    let startY, startRot = -5;
-    
-    dragger.addEventListener('mousedown', e => { isDown = true; startY = e.clientY; dragger.style.transition = 'none'; });
-    dragger.addEventListener('mouseleave', () => { isDown = false; dragger.style.transition = 'transform 0.5s'; });
-    dragger.addEventListener('mouseup', () => { isDown = false; dragger.style.transition = 'transform 0.5s'; });
-    dragger.addEventListener('mousemove', e => {
-      if(!isDown) return;
-      e.preventDefault();
-      const y = e.clientY - startY;
-      dragger.style.transform = \`translateY(\${y}px) rotate(\${startRot + y*0.01}deg)\`;
-    });
-    
-    // Hardcore hover parallax on card
-    const card = document.getElementById('b-card');
-    document.addEventListener('mousemove', e => {
-       const x = (e.clientX / window.innerWidth - 0.5) * 30;
-       const y = (e.clientY / window.innerHeight - 0.5) * 30;
-       gsap.to(card, { rotationY: x, rotationX: -y, duration: 0.1 }); // Fast reactive
-    });
-    
-    // Click anywhere to spawn stickers
-    const stickers = ['💣', '🔥', '⚡', '💥', '⚠️'];
-    document.body.addEventListener('click', e => {
-      if(e.target.id === 'enter-btn') return;
-      const st = document.createElement('div');
-      st.className = 'sticker';
-      st.innerText = stickers[Math.floor(Math.random() * stickers.length)];
-      st.style.left = (e.clientX - 25) + 'px';
-      st.style.top = (e.clientY - 25) + 'px';
-      st.style.transform = \`rotate(\${Math.random()*60 - 30}deg)\`;
-      document.body.appendChild(st);
-      
-      // Auto remove
-      setTimeout(() => {
-         gsap.to(st, { scale: 0, opacity: 0, duration: 0.2, onComplete: () => st.remove() });
-      }, 2000);
-    });
-
-    ${gallery.js}`;
+    (function() {
+      const canvas = document.getElementById('vip-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width, height, particles = [], mouseX = 0, mouseY = 0;
+      function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+      class Particle { constructor() { this.reset(); } reset() { this.x = Math.random() * width; this.y = Math.random() * height; this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5; this.radius = Math.random() * 2 + 1; this.alpha = Math.random() * 0.5 + 0.2; } update() { this.x += this.vx + (mouseX - this.x) * 0.0001; this.y += this.vy + (mouseY - this.y) * 0.0001; if (this.x < 0 || this.x > width) this.vx *= -1; if (this.y < 0 || this.y > height) this.vy *= -1; } draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.fillStyle = '${accent}'; ctx.globalAlpha = this.alpha; ctx.fill(); } }
+      function init() { resize(); for (let i = 0; i < 80; i++) particles.push(new Particle()); animate(); }
+      function animate() { ctx.clearRect(0, 0, width, height); for (let i = 0; i < particles.length; i++) { for (let j = i + 1; j < particles.length; j++) { const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y, dist = Math.sqrt(dx * dx + dy * dy); if (dist < 100) { ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.strokeStyle = '${accent}'; ctx.globalAlpha = 0.1 * (1 - dist / 100); ctx.stroke(); } } } particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+      window.addEventListener('resize', resize);
+      window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+      window.addEventListener('touchmove', e => { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; });
+      init();
+      const intro = document.getElementById('intro'), mainContent = document.getElementById('main-content'), introText = document.getElementById('introText');
+      if (intro && introText) {
+        if (typeof gsap !== 'undefined') { gsap.to(introText, { opacity: 1, duration: 2, delay: 0.5 }); } else { introText.style.opacity = 1; }
+        intro.addEventListener('click', () => {
+          const finish = () => { intro.style.display = 'none'; mainContent.style.display = 'flex'; const target = document.getElementById('type-target'); if (target) { const text = "${d.escapedMessage}"; let i = 0; function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 40); } } setTimeout(type, 800); } };
+          if (typeof gsap !== 'undefined') { gsap.to(intro, { opacity: 0, duration: 1, onComplete: finish }); } else { intro.style.opacity = 0; setTimeout(finish, 1000); }
+        });
+      }
+    })();
+    ${gallery.js}
+  `;
 
   return { css, html, js };
 }

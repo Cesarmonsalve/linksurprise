@@ -1,189 +1,116 @@
-// ═══════════════════════════════════════════════════════════════
-// STYLE #16: LIQUID DREAM — Fluid Dynamic Art
-// ═══════════════════════════════════════════════════════════════
+// STYLE: LIQUID DREAM - Flowing Abstract
 import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderLiquidDream(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
   const gallery = renderVipGallery(d, "liquiddream");
-  const c = d.accentColor || '#00d2ff';
+  const accent = d.accentColor || '#2dd4bf';
 
   const css = `
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&display=swap');
-    body { background: #0b0b1a; overflow-x: hidden; margin: 0; font-family: 'Outfit', sans-serif; }
-    
+    @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface:wght@300;400;600;800&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: linear-gradient(135deg, #0c4a6e 0%, #1e3a5f 100%); min-height: 100vh; overflow-x: hidden; font-family: 'Abril+Fatface', sans-serif; }
     ${isBasic ? `
-    .liq-shell { min-height: 100vh; padding: 2rem; display: flex; align-items: center; justify-content: center; position: relative; }
-    
-    .liq-bg { position: absolute; inset: 0; overflow: hidden; z-index: 0; }
-    .liq-shape { position: absolute; background: linear-gradient(135deg, ${c}, #3a7bd5); filter: blur(40px); opacity: 0.3; border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
-    .shape-1 { width: 50vw; height: 50vw; top: -10vw; left: -10vw; animation: morph 15s ease-in-out infinite alternate; }
-    .shape-2 { width: 40vw; height: 40vw; bottom: -5vw; right: -10vw; animation: morph 20s ease-in-out infinite alternate-reverse; }
-    @keyframes morph { 0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; } 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: rotate(45deg); } }
-    
-    .liq-card { background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 40px; padding: 3rem 2rem; max-width: 500px; width: 100%; text-align: center; position: relative; z-index: 10; box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
-    .liq-label { font-size: 0.8rem; letter-spacing: 0.3em; color: ${c}; text-transform: uppercase; margin-bottom: 1rem; }
-    .liq-title { font-size: clamp(2rem, 6vw, 3rem); font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 2rem; }
-    .liq-photo { width: 100%; border-radius: 20px; margin: 1.5rem auto; display: block; border: 2px solid rgba(255,255,255,0.1); }
-    .liq-msg { font-size: 1.1rem; line-height: 1.8; color: #d0d0d0; font-weight: 300; }
-    .liq-div { width: 40px; height: 4px; background: ${c}; margin: 2rem auto; border-radius: 2px; }
-    .liq-sender { font-size: 0.9rem; color: #888; }
-    .liq-sender strong { color: #fff; font-weight: 600; }
-    `: `
-    /* VIP MODE - Gooey Effect & Ripple */
-    .gooey-container { position: fixed; inset: 0; filter: url('#gooey'); background: #0b0b1a; z-index: 0; }
-    .drop { position: absolute; background: ${c}; border-radius: 50%; transform: translate(-50%, -50%); transform-origin: center; z-index: 1; }
-    
-    #main-content { position: relative; z-index: 10; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; pointer-events: none; }
-    .l-card { background: transparent; max-width: 600px; width: 100%; text-align: center; pointer-events: auto; }
-    
-    .l-label { font-size: 0.8rem; letter-spacing: 0.4em; color: #fff; text-transform: uppercase; margin-bottom: 1rem; opacity: 0; transform: translateY(20px); }
-    .l-title { font-size: clamp(3rem, 10vw, 5rem); font-weight: 800; color: transparent; -webkit-text-stroke: 2px #fff; line-height: 1; margin-bottom: 2rem; position: relative; overflow: hidden; opacity: 0; }
-    .l-title::after { content: attr(data-text); position: absolute; left: 0; top: 0; width: 0%; color: ${c}; -webkit-text-stroke: 0px; overflow: hidden; white-space: nowrap; transition: width 1s cubic-bezier(0.85, 0, 0.15, 1); }
-    .l-card:hover .l-title::after { width: 100%; }
-    
-    .l-photo-wrap { position: relative; display: inline-block; padding: 10px; opacity: 0; transform: scale(0.9); }
-    .l-photo-wrap::before { content: ''; position: absolute; inset: 0; border: 2px solid ${c}; border-radius: 30px; transform: rotate(-5deg); transition: transform 0.5s; z-index: -1; }
-    .l-photo-wrap:hover::before { transform: rotate(0deg); }
-    .l-photo { width: 100%; max-width: 350px; border-radius: 20px; box-shadow: 0 40px 80px rgba(0,0,0,0.8); }
-    
-    .l-msg { font-size: 1.2rem; line-height: 1.8; color: #fff; font-weight: 300; margin: 3rem 0; opacity: 0; }
-    .l-sender { font-size: 1rem; color: #888; opacity: 0; }
-    .l-sender strong { display: block; font-size: 2rem; color: ${c}; font-weight: 800; margin-top: 10px; }
-
-    #start-screen { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; background: rgba(11,11,26,0.9); backdrop-filter: blur(10px); }
-    .start-btn { background: transparent; border: 2px solid ${c}; color: ${c}; padding: 15px 40px; font-size: 1.2rem; border-radius: 40px; cursor: pointer; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s; font-family: 'Outfit'; z-index: 101; }
-    .start-btn:hover { background: ${c}; color: #0b0b1a; }
+      .shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative; overflow: hidden; }
+      .bg-orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.3; animation: float 10s ease-in-out infinite; }
+      .orb-1 { width: 280px; height: 280px; background: ${accent}; top: -80px; left: -80px; }
+      .orb-2 { width: 220px; height: 220px; background: #f472b6; bottom: -60px; right: -60px; animation-delay: -5s; }
+      @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(25px, -40px) scale(1.05); } }
+      .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); border-radius: 28px; padding: 2.5rem; max-width: 480px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.25); position: relative; z-index: 10; }
+      .label { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 0.75rem; }
+      .title { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 1.25rem; }
+      .photo-wrap { width: 100%; aspect-ratio: 1; border-radius: 20px; overflow: hidden; margin: 1.25rem 0; border: 2px solid rgba(255,255,255,0.15); }
+      .photo { width: 100%; height: 100%; object-fit: cover; }
+      .msg { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.9); margin-bottom: 1.25rem; }
+      .sender { font-size: 0.85rem; color: rgba(255,255,255,0.6); font-weight: 300; }
+    ` : `
+      #vip-canvas { position: fixed; inset: 0; z-index: 0; }
+      .stars { position: fixed; inset: 0; z-index: 1; background-image: radial-gradient(1px 1px at 50% 50%, #fff, transparent); background-size: 100px 100px; animation: twinkle 4s ease-in-out infinite; opacity: 0.4; }
+      @keyframes twinkle { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.2; } }
+      .vip-intro { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at center, #1a1a2e 0%, #0f0c29 100%); }
+      .intro-text { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 800; color: #fff; text-align: center; margin-bottom: 2rem; opacity: 0; }
+      .tap-hint { font-size: 1rem; color: ${accent}; animation: pulse 2s ease-in-out infinite; }
+      @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+      #main-content { position: relative; z-index: 10; min-height: 100vh; display: none; align-items: center; justify-content: center; padding: 3rem 2rem; }
+      .vip-card { background: rgba(255,255,255,0.08); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.15); border-radius: 36px; padding: 3.5rem 2.5rem; max-width: 580px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.35); position: relative; overflow: hidden; }
+      .vip-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent, ${accent}, transparent); animation: rotate 12s linear infinite; opacity: 0.25; }
+      @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      .card-inner { position: relative; z-index: 1; }
+      .vip-label { font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 1.25rem; }
+      .vip-title { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 1.75rem; }
+      .vip-gallery-wrap { width: 100%; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; margin: 1.75rem 0; border: 2px solid rgba(255,255,255,0.1); }
+      .vip-photo { width: 100%; height: 100%; object-fit: cover; }
+      .vip-msg { font-size: 1.1rem; line-height: 1.8; color: rgba(255,255,255,0.95); margin-bottom: 1.75rem; }
+      .vip-sender { font-size: 0.95rem; color: ${accent}; font-weight: 600; letter-spacing: 0.08em; }
     `}
   `;
 
   const html = isBasic ? `
-    <div class="liq-shell">
-      <div class="liq-bg">
-        <div class="liq-shape shape-1"></div>
-        <div class="liq-shape shape-2"></div>
-      </div>
-      <div class="liq-card">
-        <p class="liq-label">Flujo Continuo</p>
-        <h1 class="liq-title">${d.title}</h1>
-        ${d.imageUrl ? gallery.html : ''}
-        <div class="liq-div"></div>
-        <p class="liq-msg" id="type-target"></p>
-        <div class="liq-div"></div>
-        <p class="liq-sender">Para <strong>${d.recipientName || 'Ti'}</strong>, de <strong>${d.senderName || 'Alguien'}</strong></p>
+    <div class="shell">
+      <div class="bg-orb orb-1"></div>
+      <div class="bg-orb orb-2"></div>
+      <div class="card">
+        <p class="label">${d.title || 'Para Ti'}</p>
+        <h1 class="title">${d.recipientName || 'Especial'}</h1>
+        ${d.imageUrl ? '<div class="photo-wrap">' + gallery.html + '</div>' : ''}
+        <p class="msg" id="type-target"></p>
+        <p class="sender">De: ${d.senderName || 'Alguien Especial'}</p>
       </div>
     </div>
   ` : `
-    <!-- SVG Filter for Gooey Effect -->
-    <svg style="position: absolute; width: 0; height: 0;" xmlns="http://www.w3.org/2000/svg" version="1.1">
-      <defs>
-        <filter id="gooey">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="15" result="blur" />
-          <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 35 -15" result="goo" />
-          <feBlend in="SourceGraphic" in2="goo" />
-        </filter>
-      </defs>
-    </svg>
-
-    <div class="gooey-container" id="g-cont">
-       <div class="drop" id="cursor-drop" style="width:100px; height:100px; left:50%; top:50%; display:none;"></div>
+    <canvas id="vip-canvas"></canvas>
+    <div class="stars"></div>
+    <div class="vip-intro" id="intro">
+      <p class="intro-text" id="introText">Una experiencia especial<br/>te espera</p>
+      <p class="tap-hint">Toca para comenzar</p>
     </div>
-    
-    <div id="start-screen">
-      <button class="start-btn" id="start-btn">SUMERGIR</button>
-    </div>
-    
     <div id="main-content">
-      <div class="l-card">
-        <p class="l-label gs-st">Para ${d.recipientName || 'Ti'}</p>
-        <h1 class="l-title gs-st" data-text="${d.title}">${d.title}</h1>
-        ${d.imageUrl ? `
-        <div class="l-photo-wrap gs-st">
-          ${gallery.html}
-        </div>` : ''}
-        <div class="l-msg gs-st" id="type-target"></div>
-        <p class="l-sender gs-st">Con fluidez,<br/><strong>${d.senderName || 'Alguien'}</strong></p>
+      <div class="vip-card">
+        <div class="card-inner">
+          <p class="vip-label">${d.title || 'Exclusivo Para Ti'}</p>
+          <h1 class="vip-title">${d.recipientName || 'Increible'}</h1>
+          ${d.imageUrl ? '<div class="vip-gallery-wrap">' + gallery.html + '</div>' : ''}
+          <p class="vip-msg" id="type-target"></p>
+          <p class="vip-sender">De: ${d.senderName || 'Alguien Especial'}</p>
+        </div>
       </div>
     </div>
   `;
 
   const js = isBasic ? `
-    const target = document.getElementById('type-target');
-    const txt = "${d.escapedMessage}";
-    let i = 0;
-    function type() {
-      if(i < txt.length){
-        if(txt.substring(i,i+5)==='<br/>'){target.innerHTML+='<br/>';i+=5;}
-        else{target.innerHTML+=txt.charAt(i);i++;}
-        setTimeout(type, 30);
-      }
-    }
-    setTimeout(type, 800);
+    (function() {
+      const target = document.getElementById('type-target');
+      if (!target) return;
+      const text = "${d.escapedMessage}";
+      let i = 0;
+      function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 50); } }
+      setTimeout(type, 500);
+    })();
   ` : `
-    // VIP MODE ENGINE - Gooey Interactive Background
-    const startBtn = document.getElementById('start-btn');
-    const gCont = document.getElementById('g-cont');
-    const cDrop = document.getElementById('cursor-drop');
-    
-    startBtn.addEventListener('click', () => {
-      const audio = document.getElementById('bg-music');
-      if (audio) { audio.volume = 0; audio.play(); gsap.to(audio, {volume: 0.8, duration: 2}); }
-      
-      gsap.to('#start-screen', { opacity: 0, duration: 1, onComplete: () => {
-         document.getElementById('start-screen').style.display = 'none';
-         cDrop.style.display = 'block';
-         startLiquid();
-      }});
-    });
-    
-    function startLiquid() {
-      // Create random blobs
-      for(let i=0; i<10; i++) {
-         const b = document.createElement('div');
-         b.className = 'drop';
-         b.style.width = Math.random()*200 + 100 + 'px';
-         b.style.height = b.style.width;
-         b.style.left = Math.random()*100 + '%';
-         b.style.top = Math.random()*100 + '%';
-         gCont.appendChild(b);
-         
-         animateBlob(b);
+    (function() {
+      const canvas = document.getElementById('vip-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width, height, particles = [], mouseX = 0, mouseY = 0;
+      function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+      class Particle { constructor() { this.reset(); } reset() { this.x = Math.random() * width; this.y = Math.random() * height; this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5; this.radius = Math.random() * 2 + 1; this.alpha = Math.random() * 0.5 + 0.2; } update() { this.x += this.vx + (mouseX - this.x) * 0.0001; this.y += this.vy + (mouseY - this.y) * 0.0001; if (this.x < 0 || this.x > width) this.vx *= -1; if (this.y < 0 || this.y > height) this.vy *= -1; } draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.fillStyle = '${accent}'; ctx.globalAlpha = this.alpha; ctx.fill(); } }
+      function init() { resize(); for (let i = 0; i < 80; i++) particles.push(new Particle()); animate(); }
+      function animate() { ctx.clearRect(0, 0, width, height); for (let i = 0; i < particles.length; i++) { for (let j = i + 1; j < particles.length; j++) { const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y, dist = Math.sqrt(dx * dx + dy * dy); if (dist < 100) { ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.strokeStyle = '${accent}'; ctx.globalAlpha = 0.1 * (1 - dist / 100); ctx.stroke(); } } } particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+      window.addEventListener('resize', resize);
+      window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+      window.addEventListener('touchmove', e => { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; });
+      init();
+      const intro = document.getElementById('intro'), mainContent = document.getElementById('main-content'), introText = document.getElementById('introText');
+      if (intro && introText) {
+        if (typeof gsap !== 'undefined') { gsap.to(introText, { opacity: 1, duration: 2, delay: 0.5 }); } else { introText.style.opacity = 1; }
+        intro.addEventListener('click', () => {
+          const finish = () => { intro.style.display = 'none'; mainContent.style.display = 'flex'; const target = document.getElementById('type-target'); if (target) { const text = "${d.escapedMessage}"; let i = 0; function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 40); } } setTimeout(type, 800); } };
+          if (typeof gsap !== 'undefined') { gsap.to(intro, { opacity: 0, duration: 1, onComplete: finish }); } else { intro.style.opacity = 0; setTimeout(finish, 1000); }
+        });
       }
-      
-      // Cursor follow blob
-      window.addEventListener('mousemove', e => {
-         gsap.to(cDrop, { x: e.clientX, y: e.clientY, duration: 0.5, ease: 'power2.out', xPercent: -50, yPercent: -50 });
-      });
-      
-      // Reveal Content
-      gsap.to('.gs-st', { opacity: 1, y: 0, scale: 1, duration: 1.5, stagger: 0.2, ease: 'power3.out', delay: 0.5 });
-      
-      setTimeout(() => {
-        const target = document.getElementById('type-target');
-        const txt = "${d.escapedMessage}";
-        let i = 0;
-        function type() {
-          if(i < txt.length) {
-            if(txt.substring(i,i+5)==='<br/>'){target.innerHTML+='<br/>';i+=5;}
-            else{target.innerHTML+=txt.charAt(i);i++;}
-            setTimeout(type, 30);
-          }
-        }
-        type();
-      }, 2000);
-    }
-    
-    function animateBlob(el) {
-      gsap.to(el, {
-         x: (Math.random()-0.5) * window.innerWidth,
-         y: (Math.random()-0.5) * window.innerHeight,
-         duration: Math.random()*5 + 5,
-         ease: 'sine.inOut',
-         onComplete: () => animateBlob(el)
-      });
-    }
-  
-    ${gallery.js}`;
+    })();
+    ${gallery.js}
+  `;
 
   return { css, html, js };
 }

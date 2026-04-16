@@ -1,268 +1,116 @@
+// STYLE: CYBER GRID - Digital Matrix Interface
 import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderCyberGrid(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
   const gallery = renderVipGallery(d, "cybergrid");
-  const termColor = d.accentColor || '#00ffcc';
+  const accent = d.accentColor || '#00ffcc';
 
   const css = `
-    body { background: #000; overflow-x: hidden; font-family: 'Courier New', Courier, monospace; margin: 0; padding: 0; }
-    
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono:wght@300;400;600;800&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: linear-gradient(180deg, #000 0%, #0a1a1a 100%); min-height: 100vh; overflow-x: hidden; font-family: 'Share+Tech+Mono', sans-serif; }
     ${isBasic ? `
-    /* BASIC MODE STYLES */
-    .basic-shell {
-      min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem;
-      background: linear-gradient(180deg, #000 0%, #051015 100%);
-    }
-    .basic-card {
-      background: rgba(0,20,20,0.4); border: 1px solid ${termColor}40;
-      box-shadow: 0 0 20px ${termColor}20, inset 0 0 10px ${termColor}10;
-      border-radius: 8px; padding: 3rem 2rem; max-width: 500px; width: 100%; text-align: left;
-    }
-    .cyber-sys { font-weight: bold; color: ${termColor}; font-size: 0.8rem; margin-bottom: 5px; text-transform: uppercase; }
-    .cyber-title { font-size: 1.5rem; font-weight: bold; color: #fff; margin-bottom: 20px; }
-    .cyber-photo { width: 100%; border: 1px solid ${termColor}50; margin: 20px 0; border-radius: 4px; filter: contrast(1.2) sepia(1) hue-rotate(130deg) saturate(2); }
-    .cyber-msg { color: #aaa; line-height: 1.6; }
-    .cyber-cursor { display: inline-block; width: 10px; height: 1em; background: ${termColor}; animation: blink 1s step-end infinite; vertical-align: text-bottom; }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-    `: `
-    /* VIP MODE STYLES */
-    #matrix-canvas { position: fixed; inset: 0; z-index: 0; opacity: 0.15; }
-    .scanlines { position: fixed; inset: 0; background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2)); background-size: 100% 4px; z-index: 99; pointer-events: none; }
-    
-    #terminal-overlay {
-      position: fixed; inset: 0; z-index: 50; background: #000;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 2rem; color: ${termColor};
-    }
-    
-    .term-box {
-      width: 100%; max-width: 600px; border: 2px solid ${termColor}; padding: 20px;
-      background: rgba(0,20,20,0.8); box-shadow: 0 0 30px ${termColor}40;
-    }
-    .term-header { border-bottom: 1px solid ${termColor}; padding-bottom: 10px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
-    .term-line { margin-bottom: 10px; }
-    .term-input-line { display: flex; align-items: center; margin-top: 20px; }
-    .term-prompt { margin-right: 10px; font-weight: bold; }
-    .term-input { 
-      background: transparent; border: none; color: #fff; font-family: 'Courier New', Courier, monospace; 
-      font-size: 1rem; outline: none; flex-grow: 1; text-transform: uppercase;
-    }
-    .term-input::placeholder { color: ${termColor}50; }
-    
-    #main-content {
-      position: relative; z-index: 10; display: none; flex-direction: column; align-items: center;
-      min-height: 100vh; padding: 4rem 2rem;
-    }
-    .hud-box {
-      border: 1px solid ${termColor}60; padding: 30px; background: rgba(0,0,0,0.7);
-      box-shadow: 0 0 50px ${termColor}30, inset 0 0 20px ${termColor}20;
-      max-width: 600px; width: 100%; position: relative;
-    }
-    .hud-corner { position: absolute; width: 20px; height: 20px; border: 2px solid ${termColor}; }
-    .hud-tl { top: -2px; left: -2px; border-right: none; border-bottom: none; }
-    .hud-tr { top: -2px; right: -2px; border-left: none; border-bottom: none; }
-    .hud-bl { bottom: -2px; left: -2px; border-right: none; border-top: none; }
-    .hud-br { bottom: -2px; right: -2px; border-left: none; border-top: none; }
-    
-    .hud-sys { font-size: 0.8rem; letter-spacing: 2px; color: ${termColor}; margin-bottom: 10px; }
-    .hud-title { font-size: 2rem; color: #fff; text-shadow: 0 0 10px #fff; margin-bottom: 30px; }
-    .hud-photo { width: 100%; border: 1px solid ${termColor}; margin-bottom: 20px; filter: grayscale(100%) contrast(1.5) sepia(1) hue-rotate(140deg); }
-    .hud-photo img { width: 100%; display: block; opacity: 0.8; }
-    .hud-msg { color: #ddd; line-height: 1.8; font-size: 1.1rem; }
-    .hud-sender { margin-top: 30px; border-top: 1px dashed ${termColor}; padding-top: 20px; color: ${termColor}; }
+      .shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative; overflow: hidden; }
+      .bg-orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.3; animation: float 10s ease-in-out infinite; }
+      .orb-1 { width: 280px; height: 280px; background: ${accent}; top: -80px; left: -80px; }
+      .orb-2 { width: 220px; height: 220px; background: #ff00ff; bottom: -60px; right: -60px; animation-delay: -5s; }
+      @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(25px, -40px) scale(1.05); } }
+      .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); border-radius: 28px; padding: 2.5rem; max-width: 480px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.25); position: relative; z-index: 10; }
+      .label { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 0.75rem; }
+      .title { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 1.25rem; }
+      .photo-wrap { width: 100%; aspect-ratio: 1; border-radius: 20px; overflow: hidden; margin: 1.25rem 0; border: 2px solid rgba(255,255,255,0.15); }
+      .photo { width: 100%; height: 100%; object-fit: cover; }
+      .msg { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.9); margin-bottom: 1.25rem; }
+      .sender { font-size: 0.85rem; color: rgba(255,255,255,0.6); font-weight: 300; }
+    ` : `
+      #vip-canvas { position: fixed; inset: 0; z-index: 0; }
+      .stars { position: fixed; inset: 0; z-index: 1; background-image: radial-gradient(1px 1px at 50% 50%, #fff, transparent); background-size: 100px 100px; animation: twinkle 4s ease-in-out infinite; opacity: 0.4; }
+      @keyframes twinkle { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.2; } }
+      .vip-intro { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at center, #1a1a2e 0%, #0f0c29 100%); }
+      .intro-text { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 800; color: #fff; text-align: center; margin-bottom: 2rem; opacity: 0; }
+      .tap-hint { font-size: 1rem; color: ${accent}; animation: pulse 2s ease-in-out infinite; }
+      @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+      #main-content { position: relative; z-index: 10; min-height: 100vh; display: none; align-items: center; justify-content: center; padding: 3rem 2rem; }
+      .vip-card { background: rgba(255,255,255,0.08); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.15); border-radius: 36px; padding: 3.5rem 2.5rem; max-width: 580px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.35); position: relative; overflow: hidden; }
+      .vip-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent, ${accent}, transparent); animation: rotate 12s linear infinite; opacity: 0.25; }
+      @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      .card-inner { position: relative; z-index: 1; }
+      .vip-label { font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 1.25rem; }
+      .vip-title { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 1.75rem; }
+      .vip-gallery-wrap { width: 100%; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; margin: 1.75rem 0; border: 2px solid rgba(255,255,255,0.1); }
+      .vip-photo { width: 100%; height: 100%; object-fit: cover; }
+      .vip-msg { font-size: 1.1rem; line-height: 1.8; color: rgba(255,255,255,0.95); margin-bottom: 1.75rem; }
+      .vip-sender { font-size: 0.95rem; color: ${accent}; font-weight: 600; letter-spacing: 0.08em; }
     `}
   `;
 
   const html = isBasic ? `
-    <div class="basic-shell">
-      <div class="basic-card">
-        <div class="cyber-sys">SYS.INIT // TARGET: ${d.recipientName || 'GUEST'}</div>
-        <div class="cyber-title">${d.title}</div>
-        <div class="cyber-sys">DECRYPTING PAYLOAD...</div>
-        ${d.imageUrl ? gallery.html : ''}
-        <div class="cyber-msg" id="type-target"></div>
-        <div class="cyber-sys" style="margin-top:20px;">SRC: ${d.senderName || 'UNKNOWN'}</div>
+    <div class="shell">
+      <div class="bg-orb orb-1"></div>
+      <div class="bg-orb orb-2"></div>
+      <div class="card">
+        <p class="label">${d.title || 'Para Ti'}</p>
+        <h1 class="title">${d.recipientName || 'Especial'}</h1>
+        ${d.imageUrl ? '<div class="photo-wrap">' + gallery.html + '</div>' : ''}
+        <p class="msg" id="type-target"></p>
+        <p class="sender">De: ${d.senderName || 'Alguien Especial'}</p>
       </div>
     </div>
   ` : `
-    <canvas id="matrix-canvas"></canvas>
-    <div class="scanlines"></div>
-    
-    <div id="terminal-overlay">
-      <div class="term-box">
-        <div class="term-header">SURPRISE_OS v2.4.1 [ENCRYPTED]</div>
-        <div id="term-output"></div>
-        <div class="term-input-line" id="input-container" style="display:none;">
-          <span class="term-prompt">root@nexus:~$</span>
-          <input type="text" id="term-input" class="term-input" autocomplete="off" placeholder="INGRESE CLAVE...">
-        </div>
-      </div>
+    <canvas id="vip-canvas"></canvas>
+    <div class="stars"></div>
+    <div class="vip-intro" id="intro">
+      <p class="intro-text" id="introText">Una experiencia especial<br/>te espera</p>
+      <p class="tap-hint">Toca para comenzar</p>
     </div>
-    
     <div id="main-content">
-      <div class="hud-box" id="hud-box">
-        <div class="hud-corner hud-tl"></div><div class="hud-corner hud-tr"></div>
-        <div class="hud-corner hud-bl"></div><div class="hud-corner hud-br"></div>
-        
-        <div class="hud-sys">TARGET LOCKED: ${d.recipientName || 'GUEST'}</div>
-        <div class="hud-title" id="hud-title"></div>
-        ${d.imageUrl ? `
-        <div class="hud-photo" id="hud-photo">
-          ${gallery.html}
-        </div>` : ''}
-        <div class="hud-msg" id="hud-msg"></div>
-        <div class="hud-sender">TRANSMISSION SRC: ${d.senderName || 'UNKNOWN_NODE'}</div>
+      <div class="vip-card">
+        <div class="card-inner">
+          <p class="vip-label">${d.title || 'Exclusivo Para Ti'}</p>
+          <h1 class="vip-title">${d.recipientName || 'Increible'}</h1>
+          ${d.imageUrl ? '<div class="vip-gallery-wrap">' + gallery.html + '</div>' : ''}
+          <p class="vip-msg" id="type-target"></p>
+          <p class="vip-sender">De: ${d.senderName || 'Alguien Especial'}</p>
+        </div>
       </div>
     </div>
   `;
 
   const js = isBasic ? `
-    const target = document.getElementById('type-target');
-    const txt = "${d.escapedMessage}";
-    let i = 0;
-    function type() {
-      if(i < txt.length){
-        if(txt.substring(i,i+5)==='<br/>'){target.innerHTML+='<br/>';i+=5;}
-        else{target.innerHTML+=txt.charAt(i);i++;}
-        target.innerHTML = target.innerHTML.replace('<span class="cyber-cursor"></span>', '') + '<span class="cyber-cursor"></span>';
-        setTimeout(type, 30);
-      }
-    }
-    setTimeout(type, 800);
+    (function() {
+      const target = document.getElementById('type-target');
+      if (!target) return;
+      const text = "${d.escapedMessage}";
+      let i = 0;
+      function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 50); } }
+      setTimeout(type, 500);
+    })();
   ` : `
-    // VIP MODE ENGINE
-    
-    // Matrix Background
-    const canvas = document.getElementById('matrix-canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+'.split('');
-    const fontSize = 14; const columns = canvas.width/fontSize;
-    const drops = []; for(let x=0; x<columns; x++) drops[x] = 1;
-    function drawMatrix() {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '${termColor}'; ctx.font = fontSize + 'px monospace';
-      for(let i=0; i<drops.length; i++) {
-        const text = chars[Math.floor(Math.random()*chars.length)];
-        ctx.fillText(text, i*fontSize, drops[i]*fontSize);
-        if(drops[i]*fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-        drops[i]++;
+    (function() {
+      const canvas = document.getElementById('vip-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width, height, particles = [], mouseX = 0, mouseY = 0;
+      function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+      class Particle { constructor() { this.reset(); } reset() { this.x = Math.random() * width; this.y = Math.random() * height; this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5; this.radius = Math.random() * 2 + 1; this.alpha = Math.random() * 0.5 + 0.2; } update() { this.x += this.vx + (mouseX - this.x) * 0.0001; this.y += this.vy + (mouseY - this.y) * 0.0001; if (this.x < 0 || this.x > width) this.vx *= -1; if (this.y < 0 || this.y > height) this.vy *= -1; } draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.fillStyle = '${accent}'; ctx.globalAlpha = this.alpha; ctx.fill(); } }
+      function init() { resize(); for (let i = 0; i < 80; i++) particles.push(new Particle()); animate(); }
+      function animate() { ctx.clearRect(0, 0, width, height); for (let i = 0; i < particles.length; i++) { for (let j = i + 1; j < particles.length; j++) { const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y, dist = Math.sqrt(dx * dx + dy * dy); if (dist < 100) { ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.strokeStyle = '${accent}'; ctx.globalAlpha = 0.1 * (1 - dist / 100); ctx.stroke(); } } } particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+      window.addEventListener('resize', resize);
+      window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+      window.addEventListener('touchmove', e => { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; });
+      init();
+      const intro = document.getElementById('intro'), mainContent = document.getElementById('main-content'), introText = document.getElementById('introText');
+      if (intro && introText) {
+        if (typeof gsap !== 'undefined') { gsap.to(introText, { opacity: 1, duration: 2, delay: 0.5 }); } else { introText.style.opacity = 1; }
+        intro.addEventListener('click', () => {
+          const finish = () => { intro.style.display = 'none'; mainContent.style.display = 'flex'; const target = document.getElementById('type-target'); if (target) { const text = "${d.escapedMessage}"; let i = 0; function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 40); } } setTimeout(type, 800); } };
+          if (typeof gsap !== 'undefined') { gsap.to(intro, { opacity: 0, duration: 1, onComplete: finish }); } else { intro.style.opacity = 0; setTimeout(finish, 1000); }
+        });
       }
-    }
-    setInterval(drawMatrix, 33);
-    window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
-
-    // Terminal Logic
-    const output = document.getElementById('term-output');
-    const inputContainer = document.getElementById('input-container');
-    const input = document.getElementById('term-input');
-    const expectedKey = 'OPEN';
-    
-    const bootSequence = [
-      "Iniciando conexión segura...",
-      "Estableciendo enlace cuántico...",
-      "Mensaje encriptado detectado.",
-      "Para descriptar, usa la clave: OPEN"
-    ];
-    
-    let bootIndex = 0;
-    function printBootLine() {
-      if(bootIndex < bootSequence.length) {
-        const div = document.createElement('div');
-        div.className = 'term-line';
-        output.appendChild(div);
-        
-        let charIndex = 0;
-        const lineText = bootSequence[bootIndex];
-        const typeInt = setInterval(() => {
-          div.textContent += lineText[charIndex];
-          charIndex++;
-          if(charIndex >= lineText.length) {
-            clearInterval(typeInt);
-            bootIndex++;
-            setTimeout(printBootLine, 400);
-          }
-        }, 30);
-      } else {
-        inputContainer.style.display = 'flex';
-        input.focus();
-      }
-    }
-    setTimeout(printBootLine, 1000);
-    
-    input.addEventListener('keydown', (e) => {
-      if(e.key === 'Enter') {
-        const val = input.value.trim().toUpperCase();
-        const div = document.createElement('div');
-        div.className = 'term-line';
-        div.innerHTML = \`<span class="term-prompt">root@nexus:~$</span> \${val}\`;
-        output.appendChild(div);
-        input.value = '';
-        
-        const resp = document.createElement('div');
-        resp.className = 'term-line';
-        if(val === expectedKey) {
-          resp.textContent = 'ACCESO CONCEDIDO. Desencriptando payload...';
-          resp.style.color = '#fff';
-          output.appendChild(resp);
-          inputContainer.style.display = 'none';
-          setTimeout(unlockPayload, 1500);
-        } else {
-          resp.textContent = 'ERROR: Clave incorrecta. Intentos restantes: INIFINITOS.';
-          resp.style.color = 'red';
-          output.appendChild(resp);
-          // Auto scroll
-          document.querySelector('.term-box').scrollTop = document.querySelector('.term-box').scrollHeight;
-        }
-      }
-    });
-    
-    function unlockPayload() {
-      const audio = document.getElementById('bg-music');
-      if (audio) { audio.volume = 0; audio.play(); gsap.to(audio, {volume: 0.8, duration: 2}); }
-      
-      const termOverlay = document.getElementById('terminal-overlay');
-      const mainContent = document.getElementById('main-content');
-      
-      // Glitch transition
-      gsap.to(termOverlay, { opacity: 0, duration: 0.1, yoyo: true, repeat: 5 });
-      setTimeout(() => {
-        termOverlay.style.display = 'none';
-        mainContent.style.display = 'flex';
-        
-        // HUD Animation
-        gsap.from('#hud-box', { scale: 0.9, opacity: 0, duration: 1, ease: 'power4.out' });
-        
-        // Type title
-        const targetTitle = document.getElementById('hud-title');
-        gsap.to(targetTitle, { text: "${d.title}", duration: 1.5, ease: "none", delay: 0.5 });
-        
-        // Image reveal
-        if(document.getElementById('hud-photo')) {
-          gsap.from('#hud-photo', { height: 0, opacity: 0, duration: 1, delay: 1 });
-        }
-        
-        // Type Msg
-        setTimeout(() => {
-          const targetMsg = document.getElementById('hud-msg');
-          const txtMsg = "${d.escapedMessage}";
-          let mi = 0;
-          function typeMsg() {
-            if(mi < txtMsg.length) {
-              if(txtMsg.substring(mi,mi+5)==='<br/>'){targetMsg.innerHTML+='<br/>';mi+=5;}
-              else{targetMsg.innerHTML+=txtMsg.charAt(mi);mi++;}
-              setTimeout(typeMsg, 20);
-            }
-          }
-          typeMsg();
-        }, 2000);
-        
-      }, 800);
-    }
-    
-    ${gallery.js}`;
+    })();
+    ${gallery.js}
+  `;
 
   return { css, html, js };
 }

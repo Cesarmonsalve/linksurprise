@@ -1,205 +1,116 @@
-// ═══════════════════════════════════════════════════════════════
-// STYLE #14: SWISS CLEAN — Swiss Design Principles
-// ═══════════════════════════════════════════════════════════════
+// STYLE: SWISS CLEAN - International Typographic
 import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderSwissClean(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
   const gallery = renderVipGallery(d, "swissclean");
-  const c = d.accentColor || '#e53935';
-  
-  const now = new Date();
-  const dateStr = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
+  const accent = d.accentColor || '#ff0000';
 
   const css = `
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap');
-    body { background: #fff; overflow-x: hidden; margin: 0; font-family: 'Inter', sans-serif; }
-    
+    @import url('https://fonts.googleapis.com/css2?family=Helvetica+Now:wght@300;400;600;800&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: linear-gradient(180deg, #ffffff 0%, #f8f8f8 100%); min-height: 100vh; overflow-x: hidden; font-family: 'Helvetica+Now', sans-serif; }
     ${isBasic ? `
-    .swiss-shell { min-height: 100vh; padding: 3rem 2rem; display: flex; align-items: center; justify-content: center; }
-    .swiss-card { max-width: 480px; width: 100%; opacity: 0; animation: swissIn 0.8s cubic-bezier(0.22,1,0.36,1) 0.2s forwards; }
-    @keyframes swissIn { to { opacity: 1; } }
-    
-    .swiss-red-bar { width: 40px; height: 6px; background: ${c}; margin-bottom: 2rem; }
-    .swiss-label { font-size: 0.65rem; letter-spacing: 0.3em; color: #999; text-transform: uppercase; font-weight: 600; margin-bottom: 0.3rem; }
-    .swiss-name { font-size: clamp(3rem, 10vw, 5rem); font-weight: 900; color: #111; letter-spacing: -0.05em; line-height: 0.95; margin-bottom: 2rem; }
-    .swiss-divider { width: 100%; height: 1px; background: #e0e0e0; margin: 2rem 0; }
-    .swiss-msg { font-size: 1rem; line-height: 2; color: #333; font-weight: 300; max-width: 400px; }
-    .swiss-photo { width: 100%; border-radius: 4px; margin: 2rem 0; display: block; box-shadow: 0 4px 20px rgba(0,0,0,0.08); filter: grayscale(100%); transition: filter 0.5s; }
-    .swiss-photo:hover { filter: grayscale(0%); }
-    .swiss-meta { display: flex; justify-content: space-between; align-items: center; padding-top: 2rem; border-top: 1px solid #e0e0e0; margin-top: 2rem; }
-    .swiss-sender { font-size: 0.8rem; color: #999; font-weight: 400; }
-    .swiss-sender strong { color: #111; font-weight: 600; }
-    .swiss-date { font-size: 0.7rem; color: #bbb; font-weight: 300; font-family: monospace; }
-    `: `
-    /* VIP MODE - Kinetic Typography */
-    .viewport { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-    .grid-lines { position: absolute; inset: 0; background-size: 50px 50px; background-image: linear-gradient(to right, #f0f0f0 1px, transparent 1px), linear-gradient(to bottom, #f0f0f0 1px, transparent 1px); z-index: 0; opacity: 0.5; }
-    
-    .intro-canvas { position: absolute; inset: 0; z-index: 50; background: #fff; display: flex; align-items: center; justify-content: center; }
-    .big-name { font-size: clamp(4rem, 15vw, 12rem); font-weight: 900; color: #111; letter-spacing: -0.05em; text-transform: uppercase; line-height: 0.8; display: flex; overflow: hidden; }
-    .char { transform: translateY(100%); display: inline-block; }
-    .kinetic-bar { position: absolute; top: 0; left: 0; height: 100vh; width: 0; background: ${c}; z-index: 60; mix-blend-mode: multiply; }
-
-    #main-content { position: relative; z-index: 10; max-width: 900px; width: 100%; padding: 4rem 2rem; display: none; opacity: 0; }
-    .sys-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #111; padding-bottom: 1rem; margin-bottom: 3rem; overflow: hidden; }
-    .h-left p { margin: 0; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.2em; color: #999; text-transform: uppercase; transform: translateY(20px); opacity: 0; }
-    .h-right { font-family: monospace; font-size: 0.8rem; color: #111; font-weight: bold; transform: translateY(20px); opacity: 0; }
-    
-    .layout-grid { display: grid; grid-template-columns: 1fr; gap: 4rem; }
-    @media (min-width: 768px) { .layout-grid { grid-template-columns: 1fr 1fr; } }
-    
-    .left-col { position: relative; }
-    .red-accent { width: 0; height: 10px; background: ${c}; margin-bottom: 2rem; }
-    .s-title { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 900; line-height: 1; letter-spacing: -0.04em; color: #111; margin-bottom: 2rem; overflow:hidden; }
-    .s-title span { display: block; transform: translateY(100%); }
-    .s-msg { font-size: 1.1rem; line-height: 1.8; color: #333; font-weight: 400; opacity: 0; }
-    
-    .right-col { position: relative; }
-    .s-photo-wrap { width: 100%; border: 1px solid #111; padding: 10px; background: #fff; transform: rotate(2deg) scale(0.9); opacity: 0; }
-    .s-photo { width: 100%; display: block; filter: grayscale(100%); transition: filter 0.5s; }
-    .s-photo-wrap:hover .s-photo { filter: grayscale(0%); cursor: none; }
-    
-    .cursor-dot { width: 20px; height: 20px; background: ${c}; border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); mix-blend-mode: multiply; opacity: 0; transition: opacity 0.3s; }
-    
-    .s-footer { margin-top: 4rem; border-top: 1px solid #ddd; padding-top: 2rem; display: flex; justify-content: space-between; font-size: 0.8rem; color: #666; opacity: 0; }
-    .s-footer strong { color: #111; font-weight: 800; font-size: 1rem; }
+      .shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative; overflow: hidden; }
+      .bg-orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.3; animation: float 10s ease-in-out infinite; }
+      .orb-1 { width: 280px; height: 280px; background: ${accent}; top: -80px; left: -80px; }
+      .orb-2 { width: 220px; height: 220px; background: #000000; bottom: -60px; right: -60px; animation-delay: -5s; }
+      @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(25px, -40px) scale(1.05); } }
+      .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); border-radius: 28px; padding: 2.5rem; max-width: 480px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.25); position: relative; z-index: 10; }
+      .label { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 0.75rem; }
+      .title { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 1.25rem; }
+      .photo-wrap { width: 100%; aspect-ratio: 1; border-radius: 20px; overflow: hidden; margin: 1.25rem 0; border: 2px solid rgba(255,255,255,0.15); }
+      .photo { width: 100%; height: 100%; object-fit: cover; }
+      .msg { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.9); margin-bottom: 1.25rem; }
+      .sender { font-size: 0.85rem; color: rgba(255,255,255,0.6); font-weight: 300; }
+    ` : `
+      #vip-canvas { position: fixed; inset: 0; z-index: 0; }
+      .stars { position: fixed; inset: 0; z-index: 1; background-image: radial-gradient(1px 1px at 50% 50%, #fff, transparent); background-size: 100px 100px; animation: twinkle 4s ease-in-out infinite; opacity: 0.4; }
+      @keyframes twinkle { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.2; } }
+      .vip-intro { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at center, #1a1a2e 0%, #0f0c29 100%); }
+      .intro-text { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 800; color: #fff; text-align: center; margin-bottom: 2rem; opacity: 0; }
+      .tap-hint { font-size: 1rem; color: ${accent}; animation: pulse 2s ease-in-out infinite; }
+      @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+      #main-content { position: relative; z-index: 10; min-height: 100vh; display: none; align-items: center; justify-content: center; padding: 3rem 2rem; }
+      .vip-card { background: rgba(255,255,255,0.08); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.15); border-radius: 36px; padding: 3.5rem 2.5rem; max-width: 580px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.35); position: relative; overflow: hidden; }
+      .vip-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent, ${accent}, transparent); animation: rotate 12s linear infinite; opacity: 0.25; }
+      @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      .card-inner { position: relative; z-index: 1; }
+      .vip-label { font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 1.25rem; }
+      .vip-title { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 1.75rem; }
+      .vip-gallery-wrap { width: 100%; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; margin: 1.75rem 0; border: 2px solid rgba(255,255,255,0.1); }
+      .vip-photo { width: 100%; height: 100%; object-fit: cover; }
+      .vip-msg { font-size: 1.1rem; line-height: 1.8; color: rgba(255,255,255,0.95); margin-bottom: 1.75rem; }
+      .vip-sender { font-size: 0.95rem; color: ${accent}; font-weight: 600; letter-spacing: 0.08em; }
     `}
   `;
 
   const html = isBasic ? `
-    <div class="swiss-shell">
-      <div class="swiss-card">
-        <div class="swiss-red-bar"></div>
-        <p class="swiss-label">Para</p>
-        <h1 class="swiss-name" style="word-break: break-word;">${d.title}</h1>
-        <div class="swiss-divider"></div>
-        <p class="swiss-msg" id="type-target"></p>
-        ${d.imageUrl ? gallery.html : ''}
-        <div class="swiss-meta">
-          <p class="swiss-sender">De: <strong>${d.senderName || 'Anónimo'}</strong></p>
-          <p class="swiss-date">${dateStr}</p>
-        </div>
+    <div class="shell">
+      <div class="bg-orb orb-1"></div>
+      <div class="bg-orb orb-2"></div>
+      <div class="card">
+        <p class="label">${d.title || 'Para Ti'}</p>
+        <h1 class="title">${d.recipientName || 'Especial'}</h1>
+        ${d.imageUrl ? '<div class="photo-wrap">' + gallery.html + '</div>' : ''}
+        <p class="msg" id="type-target"></p>
+        <p class="sender">De: ${d.senderName || 'Alguien Especial'}</p>
       </div>
     </div>
   ` : `
-    <div class="cursor-dot" id="custom-cursor"></div>
-    <div class="viewport">
-      <div class="grid-lines"></div>
-      
-      <div class="intro-canvas" id="intro">
-        <div class="big-name" id="name-container"></div>
-        <div class="kinetic-bar" id="k-bar"></div>
-      </div>
-      
-      <div id="main-content">
-        <div class="sys-header">
-          <div class="h-left"><p class="hel">DATA VISUALIZATION</p><p class="hel" style="color:#111;font-weight:900">${d.recipientName || 'GUEST'}</p></div>
-          <div class="h-right hel">${dateStr}</div>
-        </div>
-        
-        <div class="layout-grid">
-          <div class="left-col">
-            <div class="red-accent" id="r-acc"></div>
-            <h1 class="s-title"><span id="s-t1">${d.title.split(' ')[0] || d.title}</span><span id="s-t2">${d.title.split(' ').slice(1).join(' ')}</span></h1>
-            <div class="s-msg" id="type-target"></div>
-          </div>
-          
-          <div class="right-col">
-            ${d.imageUrl ? `<div class="s-photo-wrap" id="s-img-wrap"><img class="s-photo" src="${d.imageUrl}" /></div>` : `<div class="s-photo-wrap" id="s-img-wrap" style="padding:40px; text-align:center; display:flex;align-items:center;justify-content:center;aspect-ratio:3/4;background:#f5f5f5;"><h2 style="color:#ccc;font-weight:900;font-size:3rem;">NO_IMG</h2></div>`}
-          </div>
-        </div>
-        
-        <div class="s-footer" id="s-foot">
-          <div><span style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;">ORIGIN</span><br/><strong>${d.senderName || 'Anónimo'}</strong></div>
-          <div style="text-align:right;"><span style="font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;">SYS.ID</span><br/>#${Math.floor(Math.random()*9000)+1000}</div>
+    <canvas id="vip-canvas"></canvas>
+    <div class="stars"></div>
+    <div class="vip-intro" id="intro">
+      <p class="intro-text" id="introText">Una experiencia especial<br/>te espera</p>
+      <p class="tap-hint">Toca para comenzar</p>
+    </div>
+    <div id="main-content">
+      <div class="vip-card">
+        <div class="card-inner">
+          <p class="vip-label">${d.title || 'Exclusivo Para Ti'}</p>
+          <h1 class="vip-title">${d.recipientName || 'Increible'}</h1>
+          ${d.imageUrl ? '<div class="vip-gallery-wrap">' + gallery.html + '</div>' : ''}
+          <p class="vip-msg" id="type-target"></p>
+          <p class="vip-sender">De: ${d.senderName || 'Alguien Especial'}</p>
         </div>
       </div>
     </div>
   `;
 
   const js = isBasic ? `
-    const target = document.getElementById('type-target');
-    const txt = "${d.escapedMessage}";
-    let i = 0;
-    function type() {
-      if(i < txt.length){
-        if(txt.substring(i,i+5)==='<br/>'){target.innerHTML+='<br/>';i+=5;}
-        else{target.innerHTML+=txt.charAt(i);i++;}
-        setTimeout(type, 30);
-      }
-    }
-    setTimeout(type, 800);
+    (function() {
+      const target = document.getElementById('type-target');
+      if (!target) return;
+      const text = "${d.escapedMessage}";
+      let i = 0;
+      function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 50); } }
+      setTimeout(type, 500);
+    })();
   ` : `
-    // VIP MODE ENGINE - Kinetic Typography
-    const nameStr = "${(d.recipientName || 'HOLA').toUpperCase()}";
-    const cont = document.getElementById('name-container');
-    nameStr.split('').forEach(c => {
-      const sp = document.createElement('span');
-      sp.className = 'char';
-      sp.innerText = c;
-      cont.appendChild(sp);
-    });
-    
-    // Custom cursor
-    const cursor = document.getElementById('custom-cursor');
-    if(window.matchMedia("(pointer: fine)").matches) {
-       document.addEventListener('mousemove', e => {
-           cursor.style.opacity = '1';
-           cursor.style.left = e.clientX + 'px';
-           cursor.style.top = e.clientY + 'px';
-       });
-       document.addEventListener('mouseleave', () => cursor.style.opacity = '0');
-    }
-    
-    // Intro sequence
-    const tl = gsap.timeline();
-    tl.to('.char', { y: '0%', duration: 0.8, stagger: 0.1, ease: 'power4.out', delay: 0.5 })
-      .to('#k-bar', { width: '100%', duration: 0.8, ease: 'power4.inOut' }, "+=0.5")
-      .to('#intro', { x: '100%', duration: 0.8, ease: 'power4.inOut' }, "+=0.2")
-      .call(startMain)
-      .set('#intro', {display: 'none'});
-      
-    function startMain() {
-      const audio = document.getElementById('bg-music');
-      if (audio) { audio.volume = 0; audio.play(); gsap.to(audio, {volume: 0.6, duration: 2}); }
-      
-      const main = document.getElementById('main-content');
-      main.style.display = 'block';
-      gsap.to(main, { opacity: 1, duration: 0.1 });
-      
-      const mTl = gsap.timeline();
-      mTl.to('.hel', { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power3.out' })
-         .to('#r-acc', { width: '80px', duration: 0.6, ease: 'power3.out' }, "-=0.4")
-         .to('#s-t1', { y: 0, duration: 0.8, ease: 'power4.out' }, "-=0.2")
-         .to('#s-t2', { y: 0, duration: 0.8, ease: 'power4.out' }, "-=0.6")
-         .to('#s-img-wrap', { opacity: 1, scale: 1, rotation: -2, duration: 1, ease: 'back.out(1.2)' }, "-=0.6")
-         .to('.s-msg', { opacity: 1, duration: 0.5 }, "-=0.2")
-         .to('#s-foot', { opacity: 1, y: -10, duration: 0.5 }, "-=0.2")
-         .call(() => {
-            const target = document.getElementById('type-target');
-            const txt = "${d.escapedMessage}";
-            let i = 0;
-            function type() {
-              if(i < txt.length) {
-                if(txt.substring(i,i+5)==='<br/>'){target.innerHTML+='<br/>';i+=5;}
-                else{target.innerHTML+=txt.charAt(i);i++;}
-                setTimeout(type, 15); // Fast type
-              }
-            }
-            type();
-            
-            // Image parallax
-            const wrap = document.getElementById('s-img-wrap');
-            window.addEventListener('mousemove', e => {
-                const x = (e.clientX / window.innerWidth - 0.5) * 20;
-                const y = (e.clientY / window.innerHeight - 0.5) * 20;
-                gsap.to(wrap, { x: x, y: y, duration: 1, ease: 'power2.out' });
-            });
-         });
-    }
-  
-    ${gallery.js}`;
+    (function() {
+      const canvas = document.getElementById('vip-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width, height, particles = [], mouseX = 0, mouseY = 0;
+      function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+      class Particle { constructor() { this.reset(); } reset() { this.x = Math.random() * width; this.y = Math.random() * height; this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5; this.radius = Math.random() * 2 + 1; this.alpha = Math.random() * 0.5 + 0.2; } update() { this.x += this.vx + (mouseX - this.x) * 0.0001; this.y += this.vy + (mouseY - this.y) * 0.0001; if (this.x < 0 || this.x > width) this.vx *= -1; if (this.y < 0 || this.y > height) this.vy *= -1; } draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.fillStyle = '${accent}'; ctx.globalAlpha = this.alpha; ctx.fill(); } }
+      function init() { resize(); for (let i = 0; i < 80; i++) particles.push(new Particle()); animate(); }
+      function animate() { ctx.clearRect(0, 0, width, height); for (let i = 0; i < particles.length; i++) { for (let j = i + 1; j < particles.length; j++) { const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y, dist = Math.sqrt(dx * dx + dy * dy); if (dist < 100) { ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.strokeStyle = '${accent}'; ctx.globalAlpha = 0.1 * (1 - dist / 100); ctx.stroke(); } } } particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+      window.addEventListener('resize', resize);
+      window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+      window.addEventListener('touchmove', e => { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; });
+      init();
+      const intro = document.getElementById('intro'), mainContent = document.getElementById('main-content'), introText = document.getElementById('introText');
+      if (intro && introText) {
+        if (typeof gsap !== 'undefined') { gsap.to(introText, { opacity: 1, duration: 2, delay: 0.5 }); } else { introText.style.opacity = 1; }
+        intro.addEventListener('click', () => {
+          const finish = () => { intro.style.display = 'none'; mainContent.style.display = 'flex'; const target = document.getElementById('type-target'); if (target) { const text = "${d.escapedMessage}"; let i = 0; function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 40); } } setTimeout(type, 800); } };
+          if (typeof gsap !== 'undefined') { gsap.to(intro, { opacity: 0, duration: 1, onComplete: finish }); } else { intro.style.opacity = 0; setTimeout(finish, 1000); }
+        });
+      }
+    })();
+    ${gallery.js}
+  `;
 
   return { css, html, js };
 }

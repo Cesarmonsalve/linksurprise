@@ -1,224 +1,116 @@
-// ═══════════════════════════════════════════════════════════════
-// STYLE #10: FADE STORY — Multi-Scene Cross-Dissolve
-// ═══════════════════════════════════════════════════════════════
+// STYLE: FADE STORY - Gentle Narrative
 import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderFadeStory(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
   const gallery = renderVipGallery(d, "fadestory");
-  const paragraphs = d.escapedMessage.split('<br/>').filter((p: string) => p.trim() !== '');
-  const scenes = paragraphs.length > 0 ? paragraphs : [d.escapedMessage];
-  const c = d.accentColor || '#ffffff';
+  const accent = d.accentColor || '#f472b6';
 
   const css = `
-    @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&display=swap');
-    body { background: #080808; overflow: hidden; margin: 0; font-family: 'Lora', serif; }
-    
-    .story-container { position: fixed; inset: 0; }
-    
-    .story-scene {
-      position: absolute; inset: 0; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; padding: 2rem;
-      opacity: 0; transition: opacity 1.5s cubic-bezier(0.22,1,0.36,1);
-      text-align: center;
-    }
-    .story-scene.active { opacity: 1; z-index: 10; }
-    
+    @import url('https://fonts.googleapis.com/css2?family=Lora:wght@300;400;600;800&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: linear-gradient(180deg, #312e81 0%, #1e1b4b 100%); min-height: 100vh; overflow-x: hidden; font-family: 'Lora', sans-serif; }
     ${isBasic ? `
-    /* BASIC MODE */
-    .story-nav { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 20; }
-    .story-dot { width: 8px; height: 8px; border-radius: 50%; background: ${d.textColor}30; cursor: pointer; transition: all 0.3s; }
-    .story-dot.active { background: ${c}; transform: scale(1.3); }
-    .story-tap-hint { position: fixed; top: 50%; right: 20px; transform: translateY(-50%); font-size: 1.5rem; color: ${c}; z-index: 20; animation: tapPulse 2s infinite; }
-    @keyframes tapPulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
-    `: `
-    /* VIP MODE - Insta Stories Style */
-    .progress-container { position: fixed; top: 20px; left: 10px; right: 10px; display: flex; gap: 5px; z-index: 50; }
-    .progress-bar { flex-grow: 1; height: 3px; background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden; }
-    .progress-fill { height: 100%; background: ${c}; width: 0%; transform-origin: left; }
-    
-    .story-scene.active .s-bg { transform: scale(1.1); transition: transform 5s linear; }
-    .s-bg { position: absolute; inset: -10%; background-size: cover; background-position: center; filter: blur(5px) brightness(0.2); z-index: -1; }
-    
-    .touch-left { position: fixed; top: 0; left: 0; width: 30%; height: 100%; z-index: 40; }
-    .touch-right { position: fixed; top: 0; right: 0; width: 70%; height: 100%; z-index: 40; }
+      .shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative; overflow: hidden; }
+      .bg-orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.3; animation: float 10s ease-in-out infinite; }
+      .orb-1 { width: 280px; height: 280px; background: ${accent}; top: -80px; left: -80px; }
+      .orb-2 { width: 220px; height: 220px; background: #a78bfa; bottom: -60px; right: -60px; animation-delay: -5s; }
+      @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(25px, -40px) scale(1.05); } }
+      .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); border-radius: 28px; padding: 2.5rem; max-width: 480px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.25); position: relative; z-index: 10; }
+      .label { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 0.75rem; }
+      .title { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 1.25rem; }
+      .photo-wrap { width: 100%; aspect-ratio: 1; border-radius: 20px; overflow: hidden; margin: 1.25rem 0; border: 2px solid rgba(255,255,255,0.15); }
+      .photo { width: 100%; height: 100%; object-fit: cover; }
+      .msg { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.9); margin-bottom: 1.25rem; }
+      .sender { font-size: 0.85rem; color: rgba(255,255,255,0.6); font-weight: 300; }
+    ` : `
+      #vip-canvas { position: fixed; inset: 0; z-index: 0; }
+      .stars { position: fixed; inset: 0; z-index: 1; background-image: radial-gradient(1px 1px at 50% 50%, #fff, transparent); background-size: 100px 100px; animation: twinkle 4s ease-in-out infinite; opacity: 0.4; }
+      @keyframes twinkle { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.2; } }
+      .vip-intro { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at center, #1a1a2e 0%, #0f0c29 100%); }
+      .intro-text { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 800; color: #fff; text-align: center; margin-bottom: 2rem; opacity: 0; }
+      .tap-hint { font-size: 1rem; color: ${accent}; animation: pulse 2s ease-in-out infinite; }
+      @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+      #main-content { position: relative; z-index: 10; min-height: 100vh; display: none; align-items: center; justify-content: center; padding: 3rem 2rem; }
+      .vip-card { background: rgba(255,255,255,0.08); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.15); border-radius: 36px; padding: 3.5rem 2.5rem; max-width: 580px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.35); position: relative; overflow: hidden; }
+      .vip-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent, ${accent}, transparent); animation: rotate 12s linear infinite; opacity: 0.25; }
+      @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      .card-inner { position: relative; z-index: 1; }
+      .vip-label { font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 1.25rem; }
+      .vip-title { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 1.75rem; }
+      .vip-gallery-wrap { width: 100%; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; margin: 1.75rem 0; border: 2px solid rgba(255,255,255,0.1); }
+      .vip-photo { width: 100%; height: 100%; object-fit: cover; }
+      .vip-msg { font-size: 1.1rem; line-height: 1.8; color: rgba(255,255,255,0.95); margin-bottom: 1.75rem; }
+      .vip-sender { font-size: 0.95rem; color: ${accent}; font-weight: 600; letter-spacing: 0.08em; }
     `}
-    
-    .s-label { font-size: 0.7rem; letter-spacing: 0.3em; color: ${c}; text-transform: uppercase; margin-bottom: 1rem; font-family: sans-serif; }
-    .s-text { font-size: clamp(1.3rem, 5vw, 2rem); color: ${d.textColor}; line-height: 1.6; max-width: 500px; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
-    .s-photo { max-width: 300px; width: 90%; border-radius: 16px; margin: 2rem 0; box-shadow: 0 20px 60px rgba(0,0,0,0.5); object-fit: cover; }
-    .s-sender { font-style: italic; font-size: 1rem; color: ${d.textColor}; opacity: 0.8; }
-    .s-sender strong { color: ${c}; font-style: normal; font-size: 1.2rem; display: block; margin-top: 10px; }
   `;
 
-  let scenesHTML = '';
-  const totalItems = scenes.length + (d.imageUrl ? 1 : 0);
-  let currentIndex = 0;
-
-  // Scene 1: Concept
-  scenesHTML += `
-    <div class="story-scene active" id="scene-${currentIndex}">
-      ${!isBasic && d.imageUrl ? `<div class="s-bg" style="background-image:url('${d.imageUrl}')"></div>` : ''}
-      <p class="s-label">Para ${d.recipientName || 'ti'}</p>
-      <p class="s-text">${d.title}</p>
-    </div>
-  `;
-  currentIndex++;
-
-  // Scene with photo
-  if (d.imageUrl) {
-    scenesHTML += `
-      <div class="story-scene" id="scene-${currentIndex}">
-        ${!isBasic ? `<div class="s-bg" style="background-image:url('${d.imageUrl}')"></div>` : ''}
-        <img class="s-photo" src="${d.imageUrl}" />
+  const html = isBasic ? `
+    <div class="shell">
+      <div class="bg-orb orb-1"></div>
+      <div class="bg-orb orb-2"></div>
+      <div class="card">
+        <p class="label">${d.title || 'Para Ti'}</p>
+        <h1 class="title">${d.recipientName || 'Especial'}</h1>
+        ${d.imageUrl ? '<div class="photo-wrap">' + gallery.html + '</div>' : ''}
+        <p class="msg" id="type-target"></p>
+        <p class="sender">De: ${d.senderName || 'Alguien Especial'}</p>
       </div>
-    `;
-    if (scenes[0]) {
-      currentIndex++;
-      scenesHTML += `
-        <div class="story-scene" id="scene-${currentIndex}">
-          ${!isBasic ? `<div class="s-bg" style="background-image:url('${d.imageUrl}')"></div>` : ''}
-          <p class="s-text">${scenes[0]}</p>
+    </div>
+  ` : `
+    <canvas id="vip-canvas"></canvas>
+    <div class="stars"></div>
+    <div class="vip-intro" id="intro">
+      <p class="intro-text" id="introText">Una experiencia especial<br/>te espera</p>
+      <p class="tap-hint">Toca para comenzar</p>
+    </div>
+    <div id="main-content">
+      <div class="vip-card">
+        <div class="card-inner">
+          <p class="vip-label">${d.title || 'Exclusivo Para Ti'}</p>
+          <h1 class="vip-title">${d.recipientName || 'Increible'}</h1>
+          ${d.imageUrl ? '<div class="vip-gallery-wrap">' + gallery.html + '</div>' : ''}
+          <p class="vip-msg" id="type-target"></p>
+          <p class="vip-sender">De: ${d.senderName || 'Alguien Especial'}</p>
         </div>
-      `;
-    }
-    currentIndex++;
-  }
-
-  // Remaining scenes
-  const off = d.imageUrl ? 1 : 0;
-  for (let i = off; i < scenes.length; i++) {
-    scenesHTML += `
-      <div class="story-scene" id="scene-${currentIndex}">
-        ${!isBasic && d.imageUrl ? `<div class="s-bg" style="background-image:url('${d.imageUrl}')"></div>` : ''}
-        <p class="s-text">${scenes[i]}</p>
       </div>
-    `;
-    currentIndex++;
-  }
-  
-  // Final scene
-  scenesHTML += `
-    <div class="story-scene" id="scene-${currentIndex}">
-      ${!isBasic && d.imageUrl ? `<div class="s-bg" style="background-image:url('${d.imageUrl}')"></div>` : ''}
-      <p class="s-sender">Con amor,<br/><strong>${d.senderName || 'Alguien especial'}</strong></p>
     </div>
   `;
-  
-  const totalActualScenes = currentIndex + 1;
-
-  let uiHTML = '';
-  if (isBasic) {
-    let dotsHTML = '';
-    for (let i = 0; i < totalActualScenes; i++) {
-      dotsHTML += `<div class="story-dot${i === 0 ? ' active' : ''}" data-idx="${i}"></div>`;
-    }
-    uiHTML = `
-      <div class="story-nav">${dotsHTML}</div>
-      <div class="story-tap-hint" id="tapHint">›</div>
-    `;
-  } else {
-    let barsHTML = '';
-    for (let i = 0; i < totalActualScenes; i++) {
-       barsHTML += `<div class="progress-bar"><div class="progress-fill" id="fill-${i}"></div></div>`;
-    }
-    uiHTML = `
-      <div class="progress-container">${barsHTML}</div>
-      <div class="touch-left" id="t-left"></div>
-      <div class="touch-right" id="t-right"></div>
-    `;
-  }
-
-  const html = `<div class="story-container">${scenesHTML}</div>${uiHTML}`;
 
   const js = isBasic ? `
-    const scenes = document.querySelectorAll('.story-scene');
-    const dots = document.querySelectorAll('.story-dot');
-    let current = 0; const total = scenes.length;
-    
-    function goTo(idx) {
-      if (idx < 0 || idx >= total) return;
-      scenes.forEach(s => s.classList.remove('active'));
-      dots.forEach(d => d.classList.remove('active'));
-      scenes[idx].classList.add('active');
-      if (dots[idx]) dots[idx].classList.add('active');
-      current = idx;
-      if (idx >= total - 1) document.getElementById('tapHint').style.display = 'none';
-      
-      const audio = document.getElementById('bg-music');
-      if(audio && current === 1 && audio.paused) { audio.volume = 0.5; audio.play(); }
-    }
-    
-    document.addEventListener('click', () => { goTo(current + 1); });
-    dots.forEach((dot, i) => { dot.addEventListener('click', (e) => { e.stopPropagation(); goTo(i); }); });
+    (function() {
+      const target = document.getElementById('type-target');
+      if (!target) return;
+      const text = "${d.escapedMessage}";
+      let i = 0;
+      function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 50); } }
+      setTimeout(type, 500);
+    })();
   ` : `
-    // VIP MODE ENGINE - Insta Stories Auto Advance + Touch
-    const scenes = document.querySelectorAll('.story-scene');
-    const total = scenes.length;
-    let current = 0;
-    const duration = 5000; // 5s per scene
-    
-    function resetFills() {
-      gsap.killTweensOf('.progress-fill');
-      for(let i=0; i<total; i++) {
-        const fill = document.getElementById('fill-'+i);
-        if(i < current) fill.style.width = '100%';
-        else if(i > current) fill.style.width = '0%';
+    (function() {
+      const canvas = document.getElementById('vip-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width, height, particles = [], mouseX = 0, mouseY = 0;
+      function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+      class Particle { constructor() { this.reset(); } reset() { this.x = Math.random() * width; this.y = Math.random() * height; this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5; this.radius = Math.random() * 2 + 1; this.alpha = Math.random() * 0.5 + 0.2; } update() { this.x += this.vx + (mouseX - this.x) * 0.0001; this.y += this.vy + (mouseY - this.y) * 0.0001; if (this.x < 0 || this.x > width) this.vx *= -1; if (this.y < 0 || this.y > height) this.vy *= -1; } draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.fillStyle = '${accent}'; ctx.globalAlpha = this.alpha; ctx.fill(); } }
+      function init() { resize(); for (let i = 0; i < 80; i++) particles.push(new Particle()); animate(); }
+      function animate() { ctx.clearRect(0, 0, width, height); for (let i = 0; i < particles.length; i++) { for (let j = i + 1; j < particles.length; j++) { const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y, dist = Math.sqrt(dx * dx + dy * dy); if (dist < 100) { ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.strokeStyle = '${accent}'; ctx.globalAlpha = 0.1 * (1 - dist / 100); ctx.stroke(); } } } particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+      window.addEventListener('resize', resize);
+      window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+      window.addEventListener('touchmove', e => { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; });
+      init();
+      const intro = document.getElementById('intro'), mainContent = document.getElementById('main-content'), introText = document.getElementById('introText');
+      if (intro && introText) {
+        if (typeof gsap !== 'undefined') { gsap.to(introText, { opacity: 1, duration: 2, delay: 0.5 }); } else { introText.style.opacity = 1; }
+        intro.addEventListener('click', () => {
+          const finish = () => { intro.style.display = 'none'; mainContent.style.display = 'flex'; const target = document.getElementById('type-target'); if (target) { const text = "${d.escapedMessage}"; let i = 0; function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 40); } } setTimeout(type, 800); } };
+          if (typeof gsap !== 'undefined') { gsap.to(intro, { opacity: 0, duration: 1, onComplete: finish }); } else { intro.style.opacity = 0; setTimeout(finish, 1000); }
+        });
       }
-    }
-    
-    function animateFill() {
-      resetFills();
-      const fill = document.getElementById('fill-'+current);
-      fill.style.width = '0%';
-      gsap.to(fill, { width: '100%', duration: duration/1000, ease: 'none', onComplete: nextScene });
-    }
-    
-    function showScene(idx) {
-      scenes.forEach(s => s.classList.remove('active'));
-      scenes[idx].classList.add('active');
-      
-      // Ken burns reset
-      const bg = scenes[idx].querySelector('.s-bg');
-      if(bg) { gsap.killTweensOf(bg); gsap.fromTo(bg, {scale: 1}, {scale: 1.15, duration: duration/1000, ease: 'none'}); }
-      
-      // Text reveal GSAP
-      const texts = scenes[idx].querySelectorAll('p, img');
-      gsap.fromTo(texts, {y: 20, opacity: 0}, {y: 0, opacity: 1, duration: 1, stagger: 0.2, ease: 'power2.out'});
-    }
-    
-    function nextScene() {
-      if(current < total - 1) {
-        current++;
-        showScene(current);
-        animateFill();
-      } else {
-        // Stay on last, keep fill complete
-        const fill = document.getElementById('fill-'+current);
-        fill.style.width = '100%';
-      }
-    }
-    
-    function prevScene() {
-      if(current > 0) {
-        current--;
-        showScene(current);
-        animateFill();
-      }
-    }
-    
-    document.getElementById('t-left').addEventListener('click', () => { prevScene(); });
-    document.getElementById('t-right').addEventListener('click', () => { 
-      const audio = document.getElementById('bg-music');
-      if (audio && audio.paused) { audio.volume = 0; audio.play(); gsap.to(audio, {volume: 0.8, duration: 2}); }
-      nextScene(); 
-    });
-    
-    // Init
-    showScene(0);
-    animateFill();
-  
-    ${gallery.js}`;
+    })();
+    ${gallery.js}
+  `;
 
   return { css, html, js };
 }

@@ -1,204 +1,116 @@
+// STYLE: NEON WAVE - Synthwave Aesthetic
 import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderNeonWave(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
   const gallery = renderVipGallery(d, "neonwave");
+  const accent = d.accentColor || '#ff00ff';
 
   const css = `
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;600&display=swap');
-    body { background: #050510; color: #fff; overflow-x: hidden; margin: 0; font-family: 'Exo 2', sans-serif; }
-    
-    .neon-shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative; }
-    
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@300;400;600;800&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: linear-gradient(180deg, #1a0533 0%, #0d0221 100%); min-height: 100vh; overflow-x: hidden; font-family: 'Press+Start+2P', sans-serif; }
     ${isBasic ? `
-    /* BASIC MODE */
-    .neon-card { background: rgba(10,10,30,0.8); border: 2px solid ${d.accentColor}; border-radius: 20px; padding: 3rem 2rem; max-width: 480px; width: 100%; text-align: center; box-shadow: 0 0 30px ${d.accentColor}50; }
-    .neon-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 900; color: #fff; text-shadow: 0 0 10px ${d.accentColor}, 0 0 20px ${d.accentColor}; margin-bottom: 1.5rem; line-height: 1.1; }
-    .neon-msg { font-size: 1.1rem; line-height: 1.8; color: #fff; }
-    .neon-photo { width: 100%; max-width: 300px; border-radius: 12px; margin: 1.5rem auto; display: block; border: 1px solid ${d.accentColor}; box-shadow: 0 0 15px ${d.accentColor}30; }
-    .neon-sender { font-size: 0.9rem; color: #aaa; margin-top: 2rem; }
-    .neon-sender strong { color: ${d.accentColor}; font-family: 'Orbitron'; letter-spacing: 1px; }
-    `: `
-    /* VIP MODE */
-    #draw-canvas { position: fixed; inset: 0; z-index: 0; }
-    
-    #game-overlay {
-      position: fixed; inset: 0; z-index: 100; background: rgba(5,5,15,0.9); backdrop-filter: blur(10px);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      transition: opacity 1s; padding: 2rem;
-    }
-    .neon-btn {
-      background: transparent; border: 2px solid ${d.accentColor}; color: ${d.accentColor};
-      padding: 15px 40px; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 1.2rem;
-      cursor: pointer; position: relative; overflow: hidden; transition: all 0.3s;
-      box-shadow: 0 0 20px ${d.accentColor}40, inset 0 0 10px ${d.accentColor}40;
-    }
-    .neon-btn:hover { background: ${d.accentColor}; color: #000; box-shadow: 0 0 40px ${d.accentColor}; }
-    .neon-inst { color: #fff; font-family: 'Orbitron'; font-size: 0.9rem; letter-spacing: 2px; margin-top: 20px; opacity: 0.6; }
-    
-    #main-content {
-      position: relative; z-index: 10; min-height: 100vh;
-      display: none; align-items: center; justify-content: center; padding: 2rem;
-    }
-    .neon-v-card {
-      background: rgba(10,10,30,0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border: 1px solid ${d.accentColor}30; border-radius: 20px; padding: 4rem 3rem;
-      max-width: 500px; width: 100%; text-align: center; box-shadow: 0 0 60px ${d.accentColor}20;
-    }
-    .n-label { font-family: 'Orbitron'; font-size: 0.7rem; letter-spacing: 0.4em; color: ${d.accentColor}; text-transform: uppercase; margin-bottom: 1rem; }
-    .n-title { font-family: 'Orbitron'; font-size: clamp(2rem,6vw,3.2rem); font-weight: 900; color: #fff; line-height: 1; margin-bottom: 2rem; opacity:0; transform: scale(0.8); }
-    .n-photo-wrap { position: relative; display: inline-block; margin: 1rem 0; opacity: 0; }
-    .n-photo-wrap::after { content: ''; position: absolute; inset: -5px; border: 1px solid ${d.accentColor}; border-radius: 14px; opacity: 0.5; }
-    .n-photo { width: 100%; max-width: 320px; border-radius: 10px; display: block; box-shadow: 0 0 30px ${d.accentColor}30; }
-    .n-msg { font-size: 1.2rem; line-height: 1.8; color: #fff; margin: 2rem 0; min-height: 60px; opacity: 0; }
-    .n-sender { font-family: 'Orbitron'; font-size: 0.8rem; color: ${d.accentColor}; opacity: 0; margin-top: 2rem; }
-    .n-sender strong { color: #fff; font-size: 1.1rem; display: block; margin-top: 5px; }
+      .shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative; overflow: hidden; }
+      .bg-orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.3; animation: float 10s ease-in-out infinite; }
+      .orb-1 { width: 280px; height: 280px; background: ${accent}; top: -80px; left: -80px; }
+      .orb-2 { width: 220px; height: 220px; background: #00ffff; bottom: -60px; right: -60px; animation-delay: -5s; }
+      @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(25px, -40px) scale(1.05); } }
+      .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); border-radius: 28px; padding: 2.5rem; max-width: 480px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.25); position: relative; z-index: 10; }
+      .label { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 0.75rem; }
+      .title { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 1.25rem; }
+      .photo-wrap { width: 100%; aspect-ratio: 1; border-radius: 20px; overflow: hidden; margin: 1.25rem 0; border: 2px solid rgba(255,255,255,0.15); }
+      .photo { width: 100%; height: 100%; object-fit: cover; }
+      .msg { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.9); margin-bottom: 1.25rem; }
+      .sender { font-size: 0.85rem; color: rgba(255,255,255,0.6); font-weight: 300; }
+    ` : `
+      #vip-canvas { position: fixed; inset: 0; z-index: 0; }
+      .stars { position: fixed; inset: 0; z-index: 1; background-image: radial-gradient(1px 1px at 50% 50%, #fff, transparent); background-size: 100px 100px; animation: twinkle 4s ease-in-out infinite; opacity: 0.4; }
+      @keyframes twinkle { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.2; } }
+      .vip-intro { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at center, #1a1a2e 0%, #0f0c29 100%); }
+      .intro-text { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 800; color: #fff; text-align: center; margin-bottom: 2rem; opacity: 0; }
+      .tap-hint { font-size: 1rem; color: ${accent}; animation: pulse 2s ease-in-out infinite; }
+      @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+      #main-content { position: relative; z-index: 10; min-height: 100vh; display: none; align-items: center; justify-content: center; padding: 3rem 2rem; }
+      .vip-card { background: rgba(255,255,255,0.08); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.15); border-radius: 36px; padding: 3.5rem 2.5rem; max-width: 580px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.35); position: relative; overflow: hidden; }
+      .vip-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent, ${accent}, transparent); animation: rotate 12s linear infinite; opacity: 0.25; }
+      @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      .card-inner { position: relative; z-index: 1; }
+      .vip-label { font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 1.25rem; }
+      .vip-title { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 1.75rem; }
+      .vip-gallery-wrap { width: 100%; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; margin: 1.75rem 0; border: 2px solid rgba(255,255,255,0.1); }
+      .vip-photo { width: 100%; height: 100%; object-fit: cover; }
+      .vip-msg { font-size: 1.1rem; line-height: 1.8; color: rgba(255,255,255,0.95); margin-bottom: 1.75rem; }
+      .vip-sender { font-size: 0.95rem; color: ${accent}; font-weight: 600; letter-spacing: 0.08em; }
     `}
   `;
 
   const html = isBasic ? `
-    <div class="neon-shell">
-      <div class="neon-card">
-        <h1 class="neon-title">${d.title}</h1>
-        ${d.imageUrl ? gallery.html : ''}
-        <p class="neon-msg" id="type-target"></p>
-        <p class="neon-sender">ACCESO CONCEDIDO POR: <strong>${d.senderName || 'USER_ADMIN'}</strong></p>
+    <div class="shell">
+      <div class="bg-orb orb-1"></div>
+      <div class="bg-orb orb-2"></div>
+      <div class="card">
+        <p class="label">${d.title || 'Para Ti'}</p>
+        <h1 class="title">${d.recipientName || 'Especial'}</h1>
+        ${d.imageUrl ? '<div class="photo-wrap">' + gallery.html + '</div>' : ''}
+        <p class="msg" id="type-target"></p>
+        <p class="sender">De: ${d.senderName || 'Alguien Especial'}</p>
       </div>
     </div>
   ` : `
-    <canvas id="draw-canvas"></canvas>
-    
-    <div id="game-overlay">
-      <button class="neon-btn" id="start-btn">INICIAR SISTEMA</button>
-      <div class="neon-inst">DIBUJA EN LA OSCURIDAD</div>
+    <canvas id="vip-canvas"></canvas>
+    <div class="stars"></div>
+    <div class="vip-intro" id="intro">
+      <p class="intro-text" id="introText">Una experiencia especial<br/>te espera</p>
+      <p class="tap-hint">Toca para comenzar</p>
     </div>
-
     <div id="main-content">
-      <div class="neon-v-card" id="main-card">
-        <p class="n-label">Sincronización de Datos</p>
-        <h1 class="n-title">${d.title}</h1>
-        ${d.imageUrl ? `
-        <div class="n-photo-wrap">
-          ${gallery.html}
-        </div>` : ''}
-        <div class="n-msg" id="type-target"></div>
-        <p class="n-sender">TRANSMISIÓN_DE: <strong>${d.senderName || 'ALGUIEN'}</strong></p>
+      <div class="vip-card">
+        <div class="card-inner">
+          <p class="vip-label">${d.title || 'Exclusivo Para Ti'}</p>
+          <h1 class="vip-title">${d.recipientName || 'Increible'}</h1>
+          ${d.imageUrl ? '<div class="vip-gallery-wrap">' + gallery.html + '</div>' : ''}
+          <p class="vip-msg" id="type-target"></p>
+          <p class="vip-sender">De: ${d.senderName || 'Alguien Especial'}</p>
+        </div>
       </div>
     </div>
   `;
 
   const js = isBasic ? `
-    const target = document.getElementById('type-target');
-    const txt = "${d.escapedMessage}";
-    let i = 0;
-    function type() {
-      if(i < txt.length){
-        if(txt.substring(i,i+5)==='<br/>'){target.innerHTML+='<br/>';i+=5;}
-        else{target.innerHTML+=txt.charAt(i);i++;}
-        setTimeout(type, 30);
-      }
-    }
-    setTimeout(type, 800);
+    (function() {
+      const target = document.getElementById('type-target');
+      if (!target) return;
+      const text = "${d.escapedMessage}";
+      let i = 0;
+      function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 50); } }
+      setTimeout(type, 500);
+    })();
   ` : `
-    // VIP MODE ENGINE
-    const startBtn = document.getElementById('start-btn');
-    startBtn.addEventListener('click', () => {
-      const audio = document.getElementById('bg-music');
-      if (audio) { audio.volume = 0; audio.play(); gsap.to(audio, {volume: 0.8, duration: 2}); }
-      
-      document.getElementById('game-overlay').style.opacity = '0';
-      setTimeout(() => {
-        document.getElementById('game-overlay').style.display = 'none';
-        initCanvas();
-        startReveal();
-      }, 1000);
-    });
-    
-    function startReveal() {
-      document.getElementById('main-content').style.display = 'flex';
-      gsap.to('.n-title', { opacity: 1, scale: 1, duration: 0.8, ease: 'elastic.out(1, 0.5)', delay: 0.2 });
-      
-      if(document.querySelector('.n-photo-wrap')) {
-         gsap.to('.n-photo-wrap', { opacity: 1, duration: 1, delay: 0.5 });
-      }
-      
-      setTimeout(() => {
-        gsap.to('.n-msg', { opacity: 1, duration: 0.5 });
-        const target = document.getElementById('type-target');
-        const txt = "${d.escapedMessage}";
-        let i = 0;
-        function type() {
-          if(i < txt.length) {
-            if(txt.substring(i,i+5)==='<br/>'){target.innerHTML+='<br/>';i+=5;}
-            else{target.innerHTML+=txt.charAt(i);i++;}
-            setTimeout(type, 20); // Fast cyber typing
-          } else {
-            gsap.to('.n-sender', { opacity: 1, duration: 1 });
-          }
-        }
-        type();
-      }, document.querySelector('.n-photo-wrap') ? 1500 : 800);
-      
-      // 3D Tilt
-      const card = document.getElementById('main-card');
-      window.addEventListener('mousemove', e => {
-         const x = (e.clientX / window.innerWidth - 0.5) * 15;
-         const y = (e.clientY / window.innerHeight - 0.5) * 15;
-         gsap.to(card, { rotationY: x, rotationX: -y, duration: 0.2 });
-      });
-    }
-    
-    // Interactive Neon Trail Canvas
-    function initCanvas() {
-      const canvas = document.getElementById('draw-canvas');
+    (function() {
+      const canvas = document.getElementById('vip-canvas');
+      if (!canvas) return;
       const ctx = canvas.getContext('2d');
-      canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-      
-      window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
-      
-      let mouse = { x: null, y: null };
-      let lastMouse = { x: null, y: null };
-      
-      window.addEventListener('mousemove', (e) => {
-         lastMouse.x = mouse.x; lastMouse.y = mouse.y;
-         mouse.x = e.clientX; mouse.y = e.clientY;
-         if(lastMouse.x !== null && lastMouse.y !== null) drawLine();
-      });
-      
-      window.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; lastMouse.x = null; lastMouse.y = null; });
-      
-      let hue = 300; // start near magenta
-      
-      function drawLine() {
-        ctx.beginPath();
-        ctx.moveTo(lastMouse.x, lastMouse.y);
-        ctx.lineTo(mouse.x, mouse.y);
-        ctx.strokeStyle = \`hsl(\${hue}, 100%, 50%)\`;
-        ctx.lineWidth = 4;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = \`hsl(\${hue}, 100%, 50%)\`;
-        
-        ctx.stroke();
-        
-        hue += 2;
-        if(hue >= 360) hue = 0;
+      let width, height, particles = [], mouseX = 0, mouseY = 0;
+      function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+      class Particle { constructor() { this.reset(); } reset() { this.x = Math.random() * width; this.y = Math.random() * height; this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5; this.radius = Math.random() * 2 + 1; this.alpha = Math.random() * 0.5 + 0.2; } update() { this.x += this.vx + (mouseX - this.x) * 0.0001; this.y += this.vy + (mouseY - this.y) * 0.0001; if (this.x < 0 || this.x > width) this.vx *= -1; if (this.y < 0 || this.y > height) this.vy *= -1; } draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.fillStyle = '${accent}'; ctx.globalAlpha = this.alpha; ctx.fill(); } }
+      function init() { resize(); for (let i = 0; i < 80; i++) particles.push(new Particle()); animate(); }
+      function animate() { ctx.clearRect(0, 0, width, height); for (let i = 0; i < particles.length; i++) { for (let j = i + 1; j < particles.length; j++) { const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y, dist = Math.sqrt(dx * dx + dy * dy); if (dist < 100) { ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.strokeStyle = '${accent}'; ctx.globalAlpha = 0.1 * (1 - dist / 100); ctx.stroke(); } } } particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+      window.addEventListener('resize', resize);
+      window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+      window.addEventListener('touchmove', e => { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; });
+      init();
+      const intro = document.getElementById('intro'), mainContent = document.getElementById('main-content'), introText = document.getElementById('introText');
+      if (intro && introText) {
+        if (typeof gsap !== 'undefined') { gsap.to(introText, { opacity: 1, duration: 2, delay: 0.5 }); } else { introText.style.opacity = 1; }
+        intro.addEventListener('click', () => {
+          const finish = () => { intro.style.display = 'none'; mainContent.style.display = 'flex'; const target = document.getElementById('type-target'); if (target) { const text = "${d.escapedMessage}"; let i = 0; function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 40); } } setTimeout(type, 800); } };
+          if (typeof gsap !== 'undefined') { gsap.to(intro, { opacity: 0, duration: 1, onComplete: finish }); } else { intro.style.opacity = 0; setTimeout(finish, 1000); }
+        });
       }
-      
-      // Auto fade canvas
-      function animate() {
-         ctx.globalCompositeOperation = 'destination-out';
-         ctx.fillStyle = 'rgba(0,0,0,0.05)';
-         ctx.fillRect(0,0,canvas.width,canvas.height);
-         ctx.globalCompositeOperation = 'source-over';
-         requestAnimationFrame(animate);
-      }
-      animate();
-    }
-    
-    ${gallery.js}`;
+    })();
+    ${gallery.js}
+  `;
 
   return { css, html, js };
 }

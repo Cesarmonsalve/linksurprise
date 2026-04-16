@@ -1,189 +1,116 @@
+// STYLE: GOLDEN AGE - Luxurious Vintage
 import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderGoldenAge(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
   const gallery = renderVipGallery(d, "goldenage");
-  const c = d.accentColor || '#d4af37'; // gold
+  const accent = d.accentColor || '#ffd700';
 
   const css = `
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&display=swap');
-    body { background: #1a1408; overflow-x: hidden; margin: 0; }
-    
-    .golden-grain { position: fixed; inset: 0; pointer-events: none; opacity: 0.04; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); z-index: 100; }
-    .golden-glow { position: fixed; inset: 0; background: radial-gradient(ellipse at 50% 30%, ${c}15, transparent 60%); z-index: 0; }
-    
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400;600;800&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: linear-gradient(135deg, #2c1810 0%, #1c1c1c 100%); min-height: 100vh; overflow-x: hidden; font-family: 'Cinzel', sans-serif; }
     ${isBasic ? `
-    .basic-shell { min-height: 100vh; padding: 2rem; display: flex; align-items: center; justify-content: center; position: relative; z-index: 10; }
-    .basic-card { background: rgba(26,20,8,0.8); border: 1px solid ${c}30; padding: 3rem 2rem; max-width: 480px; width: 100%; text-align: center; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; }
-    .basic-card::before, .basic-card::after { content: '✦'; position: absolute; font-size: 1.2rem; color: ${c}50; }
-    .basic-card::before { top: 12px; left: 16px; } .basic-card::after { bottom: 12px; right: 16px; }
-    .g-year { font-size: 0.7rem; letter-spacing: 0.4em; color: ${c}; text-transform: uppercase; margin-bottom: 1rem; }
-    .g-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem,6vw,2.8rem); font-weight: 700; color: #fdfbf7; margin-bottom: 1.5rem; line-height: 1.2; }
-    .g-div { width: 100px; height: 1px; background: ${c}40; margin: 1.5rem auto; }
-    .g-photo { width: 100%; max-width: 300px; border: 4px solid ${c}30; border-radius: 4px; filter: sepia(30%) contrast(1.1); margin: 1.5rem 0; }
-    .g-msg { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; line-height: 2; color: #fdfbf7; opacity: 0.8; margin: 1.5rem 0; }
-    .g-sender { font-family: 'Great Vibes', cursive; font-size: 2rem; color: ${c}; margin-top: 2rem; }
-    `: `
-    /* VIP MODE - 3D Letter */
-    .vip-shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; perspective: 1500px; position: relative; z-index: 10; padding: 2rem; }
-    
-    #wax-seal-overlay {
-      position: absolute; inset: 0; z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      background: rgba(26,20,8,0.9); backdrop-filter: blur(5px); transition: opacity 1s;
-    }
-    .wax-seal {
-      width: 120px; height: 120px; background: radial-gradient(circle, #8a1c1c 40%, #5a0c0c 100%);
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 10px 20px rgba(0,0,0,0.5);
-      cursor: pointer; position: relative; transition: transform 0.3s;
-    }
-    .wax-seal:hover { transform: scale(1.05); }
-    .wax-seal::after { content: '✦'; font-size: 3rem; color: #d4af37; opacity: 0.7; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-    .seal-text { font-family: 'Cormorant Garamond', serif; color: ${c}; margin-top: 2rem; letter-spacing: 0.2em; text-transform: uppercase; }
-
-    .letter-wrap {
-      width: 100%; max-width: 500px; position: relative; transform-style: preserve-3d;
-      transform: rotateX(60deg) translateY(200px) scale(0.5); opacity: 0;
-    }
-    
-    .paper {
-      background: #f4ecd8; border-radius: 4px; box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 0 60px rgba(139,115,85,0.2);
-      padding: 4rem 3rem; text-align: center; color: #3a2e1d; position: relative; overflow: hidden;
-    }
-    /* Paper texture */
-    .paper::before { content: ''; position: absolute; inset: 0; opacity: 0.5; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.1'/%3E%3C/svg%3E"); }
-    
-    .g-label { font-family: 'Cormorant Garamond'; font-size: 1rem; color: #8b7355; font-style: italic; margin-bottom: 1rem; }
-    .g-title { font-family: 'Cormorant Garamond'; font-size: clamp(2.5rem,7vw,3.5rem); font-weight: 700; color: #2a1f10; margin-bottom: 2rem; line-height: 1.1; }
-    .g-div { width: 80px; height: 1px; background: #c2a67e; margin: 2rem auto; }
-    .g-photo { width: 100%; border: 4px solid #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.1); filter: sepia(40%) contrast(1.2); transform: rotate(-2deg); margin: 2rem 0; transition: transform 0.3s; }
-    .g-photo:hover { transform: scale(1.05) rotate(0deg); z-index: 10; position: relative; }
-    .g-msg { font-family: 'Cormorant Garamond'; font-size: 1.2rem; line-height: 2; color: #3a2e1d; text-align: justify; margin: 2rem 0; min-height: 100px; }
-    .g-sender { font-family: 'Great Vibes', cursive; font-size: 3rem; color: #8a1c1c; margin-top: 3rem; }
-    
-    .ink-text { font-weight: 600; color: #1a1408; }
+      .shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative; overflow: hidden; }
+      .bg-orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.3; animation: float 10s ease-in-out infinite; }
+      .orb-1 { width: 280px; height: 280px; background: ${accent}; top: -80px; left: -80px; }
+      .orb-2 { width: 220px; height: 220px; background: #daa520; bottom: -60px; right: -60px; animation-delay: -5s; }
+      @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(25px, -40px) scale(1.05); } }
+      .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); border-radius: 28px; padding: 2.5rem; max-width: 480px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.25); position: relative; z-index: 10; }
+      .label { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 0.75rem; }
+      .title { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 1.25rem; }
+      .photo-wrap { width: 100%; aspect-ratio: 1; border-radius: 20px; overflow: hidden; margin: 1.25rem 0; border: 2px solid rgba(255,255,255,0.15); }
+      .photo { width: 100%; height: 100%; object-fit: cover; }
+      .msg { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.9); margin-bottom: 1.25rem; }
+      .sender { font-size: 0.85rem; color: rgba(255,255,255,0.6); font-weight: 300; }
+    ` : `
+      #vip-canvas { position: fixed; inset: 0; z-index: 0; }
+      .stars { position: fixed; inset: 0; z-index: 1; background-image: radial-gradient(1px 1px at 50% 50%, #fff, transparent); background-size: 100px 100px; animation: twinkle 4s ease-in-out infinite; opacity: 0.4; }
+      @keyframes twinkle { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.2; } }
+      .vip-intro { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at center, #1a1a2e 0%, #0f0c29 100%); }
+      .intro-text { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 800; color: #fff; text-align: center; margin-bottom: 2rem; opacity: 0; }
+      .tap-hint { font-size: 1rem; color: ${accent}; animation: pulse 2s ease-in-out infinite; }
+      @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+      #main-content { position: relative; z-index: 10; min-height: 100vh; display: none; align-items: center; justify-content: center; padding: 3rem 2rem; }
+      .vip-card { background: rgba(255,255,255,0.08); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.15); border-radius: 36px; padding: 3.5rem 2.5rem; max-width: 580px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.35); position: relative; overflow: hidden; }
+      .vip-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent, ${accent}, transparent); animation: rotate 12s linear infinite; opacity: 0.25; }
+      @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      .card-inner { position: relative; z-index: 1; }
+      .vip-label { font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 1.25rem; }
+      .vip-title { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 1.75rem; }
+      .vip-gallery-wrap { width: 100%; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; margin: 1.75rem 0; border: 2px solid rgba(255,255,255,0.1); }
+      .vip-photo { width: 100%; height: 100%; object-fit: cover; }
+      .vip-msg { font-size: 1.1rem; line-height: 1.8; color: rgba(255,255,255,0.95); margin-bottom: 1.75rem; }
+      .vip-sender { font-size: 0.95rem; color: ${accent}; font-weight: 600; letter-spacing: 0.08em; }
     `}
   `;
 
   const html = isBasic ? `
-    <div class="golden-grain"></div>
-    <div class="golden-glow"></div>
-    <div class="basic-shell">
-      <div class="basic-card">
-        <p class="g-year">✦ Momento Especial ✦</p>
-        <h1 class="g-title">${d.title}</h1>
-        <div class="g-div"></div>
-        ${d.imageUrl ? gallery.html : ''}
-        <p class="g-msg" id="type-target"></p>
-        <p class="g-sender">${d.senderName || 'Alguien'}</p>
+    <div class="shell">
+      <div class="bg-orb orb-1"></div>
+      <div class="bg-orb orb-2"></div>
+      <div class="card">
+        <p class="label">${d.title || 'Para Ti'}</p>
+        <h1 class="title">${d.recipientName || 'Especial'}</h1>
+        ${d.imageUrl ? '<div class="photo-wrap">' + gallery.html + '</div>' : ''}
+        <p class="msg" id="type-target"></p>
+        <p class="sender">De: ${d.senderName || 'Alguien Especial'}</p>
       </div>
     </div>
   ` : `
-    <div class="golden-grain"></div>
-    <div class="golden-glow"></div>
-    
-    <div class="vip-shell">
-      <div id="wax-seal-overlay">
-        <div class="wax-seal" id="seal-btn"></div>
-        <p class="seal-text">Romper el sello</p>
-      </div>
-      
-      <div class="letter-wrap" id="letter">
-        <div class="paper">
-          <p class="g-label">Para ${d.recipientName || 'Ti'},</p>
-          <h1 class="g-title">${d.title}</h1>
-          <div class="g-div"></div>
-          ${d.imageUrl ? gallery.html : ''}
-          <div class="g-msg" id="type-target"></div>
-          <p class="g-sender" id="g-sender" style="opacity:0">${d.senderName || 'Alguien'}</p>
+    <canvas id="vip-canvas"></canvas>
+    <div class="stars"></div>
+    <div class="vip-intro" id="intro">
+      <p class="intro-text" id="introText">Una experiencia especial<br/>te espera</p>
+      <p class="tap-hint">Toca para comenzar</p>
+    </div>
+    <div id="main-content">
+      <div class="vip-card">
+        <div class="card-inner">
+          <p class="vip-label">${d.title || 'Exclusivo Para Ti'}</p>
+          <h1 class="vip-title">${d.recipientName || 'Increible'}</h1>
+          ${d.imageUrl ? '<div class="vip-gallery-wrap">' + gallery.html + '</div>' : ''}
+          <p class="vip-msg" id="type-target"></p>
+          <p class="vip-sender">De: ${d.senderName || 'Alguien Especial'}</p>
         </div>
       </div>
     </div>
   `;
 
   const js = isBasic ? `
-    const target = document.getElementById('type-target');
-    const txt = "${d.escapedMessage}";
-    let i = 0;
-    function type() {
-      if(i < txt.length){
-        if(txt.substring(i,i+5)==='<br/>'){target.innerHTML+='<br/>';i+=5;}
-        else{target.innerHTML+=txt.charAt(i);i++;}
-        setTimeout(type, 30);
-      }
-    }
-    setTimeout(type, 800);
+    (function() {
+      const target = document.getElementById('type-target');
+      if (!target) return;
+      const text = "${d.escapedMessage}";
+      let i = 0;
+      function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 50); } }
+      setTimeout(type, 500);
+    })();
   ` : `
-    // VIP MODE ENGINE
-    const seal = document.getElementById('seal-btn');
-    const overlay = document.getElementById('wax-seal-overlay');
-    const letter = document.getElementById('letter');
-    
-    seal.addEventListener('click', () => {
-      const audio = document.getElementById('bg-music');
-      if (audio) { audio.volume = 0; audio.play(); gsap.to(audio, {volume: 0.8, duration: 2}); }
-      
-      // Break seal animation
-      gsap.to(seal, { scale: 1.5, opacity: 0, duration: 0.5, ease: 'back.in' });
-      gsap.to('.seal-text', { opacity: 0, duration: 0.3 });
-      
-      setTimeout(() => {
-        overlay.style.pointerEvents = 'none';
-        gsap.to(overlay, { opacity: 0, duration: 1 });
-        
-        // Unfold letter
-        gsap.to(letter, { 
-          opacity: 1, 
-          rotationX: 0, 
-          y: 0, 
-          scale: 1, 
-          duration: 2, 
-          ease: 'power3.out',
-          onComplete: startWriting
+    (function() {
+      const canvas = document.getElementById('vip-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width, height, particles = [], mouseX = 0, mouseY = 0;
+      function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+      class Particle { constructor() { this.reset(); } reset() { this.x = Math.random() * width; this.y = Math.random() * height; this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5; this.radius = Math.random() * 2 + 1; this.alpha = Math.random() * 0.5 + 0.2; } update() { this.x += this.vx + (mouseX - this.x) * 0.0001; this.y += this.vy + (mouseY - this.y) * 0.0001; if (this.x < 0 || this.x > width) this.vx *= -1; if (this.y < 0 || this.y > height) this.vy *= -1; } draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.fillStyle = '${accent}'; ctx.globalAlpha = this.alpha; ctx.fill(); } }
+      function init() { resize(); for (let i = 0; i < 80; i++) particles.push(new Particle()); animate(); }
+      function animate() { ctx.clearRect(0, 0, width, height); for (let i = 0; i < particles.length; i++) { for (let j = i + 1; j < particles.length; j++) { const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y, dist = Math.sqrt(dx * dx + dy * dy); if (dist < 100) { ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.strokeStyle = '${accent}'; ctx.globalAlpha = 0.1 * (1 - dist / 100); ctx.stroke(); } } } particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+      window.addEventListener('resize', resize);
+      window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+      window.addEventListener('touchmove', e => { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; });
+      init();
+      const intro = document.getElementById('intro'), mainContent = document.getElementById('main-content'), introText = document.getElementById('introText');
+      if (intro && introText) {
+        if (typeof gsap !== 'undefined') { gsap.to(introText, { opacity: 1, duration: 2, delay: 0.5 }); } else { introText.style.opacity = 1; }
+        intro.addEventListener('click', () => {
+          const finish = () => { intro.style.display = 'none'; mainContent.style.display = 'flex'; const target = document.getElementById('type-target'); if (target) { const text = "${d.escapedMessage}"; let i = 0; function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 40); } } setTimeout(type, 800); } };
+          if (typeof gsap !== 'undefined') { gsap.to(intro, { opacity: 0, duration: 1, onComplete: finish }); } else { intro.style.opacity = 0; setTimeout(finish, 1000); }
         });
-      }, 500);
-    });
-    
-    function startWriting() {
-       const target = document.getElementById('type-target');
-       const txt = "${d.escapedMessage}";
-       let i = 0;
-       function type() {
-         if(i < txt.length){
-           let char = txt.charAt(i);
-           if(txt.substring(i,i+5)==='<br/>'){ 
-               target.innerHTML += '<br/>'; i += 4; 
-           } else {
-               // Make it look like ink flowing
-                target.innerHTML += \`<span class="ink-text" style="opacity:0; animation: inkReveal 0.5s forwards">\${char}</span>\`;
-           }
-           i++;
-           setTimeout(type, 40);
-         } else {
-            // Reveal signature
-            gsap.to('#g-sender', { opacity: 1, scale: 1.2, duration: 2, ease: 'back.out' });
-            
-            // Gold particles
-            for(let p=0; p<30; p++) {
-                const pt = document.createElement('div');
-                pt.innerHTML = '✦';
-                pt.style.position = 'absolute'; pt.style.color = '${c}'; pt.style.zIndex = '90';
-                pt.style.left = (Math.random() * 100) + '%'; pt.style.top = (Math.random() * 100) + '%';
-                document.body.appendChild(pt);
-                gsap.fromTo(pt, {y: 0, opacity: 1, scale: Math.random()*2}, {y: -200, opacity: 0, duration: 2+Math.random()*2, onComplete:()=>pt.remove()});
-            }
-         }
-       }
-       
-       // Add CSS for ink
-       const style = document.createElement('style');
-       style.textContent = \`@keyframes inkReveal { from { opacity: 0; filter: blur(2px); } to { opacity: 1; filter: blur(0px); } }\`;
-       document.head.appendChild(style);
-       
-       type();
-    }
-
-    ${gallery.js}`;
+      }
+    })();
+    ${gallery.js}
+  `;
 
   return { css, html, js };
 }

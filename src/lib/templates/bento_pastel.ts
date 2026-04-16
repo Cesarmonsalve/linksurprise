@@ -1,289 +1,116 @@
-// ═══════════════════════════════════════════════════════════════
-// STYLE #11: BENTO PASTEL — Soft Playful Grid
-// ═══════════════════════════════════════════════════════════════
+// STYLE: BENTO PASTEL - Soft Playful Grid
 import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderBentoPastel(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
   const gallery = renderVipGallery(d, "bentopastel");
-  const c = d.accentColor || '#ffb3ba';
+  const accent = d.accentColor || '#ffb3ba';
 
   const css = `
-    body { background: #faf9f6; overflow-x: hidden; margin: 0; font-family: 'DM Sans', sans-serif; }
-    
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;600;800&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: linear-gradient(180deg, #faf9f6 0%, #f0eee9 100%); min-height: 100vh; overflow-x: hidden; font-family: 'DM+Sans', sans-serif; }
     ${isBasic ? `
-    .bento-shell { min-height: 100vh; padding: 2rem; display: flex; align-items: center; justify-content: center; }
-    .bento-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; max-width: 500px; width: 100%; }
-    .bento-card { background: #fff; border-radius: 24px; padding: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: transform 0.3s; }
-    .bento-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.08); }
-    .bento-wide { grid-column: span 2; }
-    
-    .bento-label { font-size: 0.7rem; letter-spacing: 0.2em; color: ${c}; text-transform: uppercase; font-weight: bold; margin-bottom: 0.5rem; }
-    .bento-title { font-size: clamp(1.5rem, 5vw, 2.5rem); font-weight: 800; color: #333; line-height: 1.1; margin-bottom: 1rem; }
-    .bento-photo { width: 100%; border-radius: 16px; display: block; aspect-ratio: 1; object-fit: cover; }
-    .bento-photo-wrap { padding: 0; overflow: hidden; }
-    .bento-icon { font-size: 3rem; background: ${c}20; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; }
-    .bento-msg { font-size: 1rem; line-height: 1.6; color: #666; }
-    .bento-sender { font-size: 0.9rem; color: #999; font-weight: 500; }
-    `: `
-    /* VIP MODE - Bento Puzzle */
-    #puzzle-overlay {
-      position: fixed; inset: 0; z-index: 100; background: #faf9f6;
-      display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem;
-    }
-    .puzzle-inst { font-size: 1.5rem; font-weight: bold; color: #333; margin-bottom: 2rem; text-align: center; }
-    
-    .puzzle-board { width: 300px; height: 300px; position: relative; background: #eee; border-radius: 24px; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.1); }
-    .puzzle-slot { position: absolute; width: 50%; height: 50%; border: 2px dashed #ccc; border-radius: 12px; transition: background 0.3s; }
-    .slot-1 { top: 0; left: 0; } .slot-2 { top: 0; left: 50%; } .slot-3 { top: 50%; left: 0; } .slot-4 { top: 50%; left: 50%; }
-    
-    .puzzle-pieces { display: flex; gap: 10px; margin-top: 2rem; flex-wrap: wrap; justify-content: center; max-width: 320px; }
-    .puzzle-piece { width: 60px; height: 60px; background: ${c}; border-radius: 12px; cursor: grab; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #fff; box-shadow: 0 5px 15px ${c}80; position: relative; z-index: 110; }
-    
-    #main-content {
-      position: relative; z-index: 10; min-height: 100vh; padding: 4rem 2rem;
-      display: none; align-items: center; justify-content: center;
-    }
-    .bento-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; max-width: 600px; width: 100%; }
-    .bento-card { background: #fff; border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
-    .bento-wide { grid-column: span 2; }
-    .bento-bg-accent { background: linear-gradient(135deg, ${c}, ${c}dd); color: #fff; border: none; }
-    .bento-bg-accent .bento-title, .bento-bg-accent .bento-label, .bento-bg-accent .bento-msg { color: #fff; }
-    .bento-bg-accent .bento-sender { color: rgba(255,255,255,0.8); }
-    
-    .bento-label { font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: bold; margin-bottom: 0.5rem; color: ${c}; }
-    .bento-title { font-size: clamp(2rem, 6vw, 3rem); font-weight: 800; color: #222; line-height: 1.1; margin-bottom: 0px; letter-spacing: -0.03em; }
-    .bento-photo-wrap { padding: 0; overflow: hidden; border-radius: 32px; position: relative; }
-    .bento-photo { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-    .bento-photo-wrap:hover .bento-photo { transform: scale(1.05); }
-    .bento-icon { font-size: 3rem; background: ${c}20; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-    .bento-msg { font-size: 1.1rem; line-height: 1.7; color: #555; }
-    .bento-sender { font-size: 1rem; color: #888; font-weight: 500; margin-top: 10px; }
+      .shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative; overflow: hidden; }
+      .bg-orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.3; animation: float 10s ease-in-out infinite; }
+      .orb-1 { width: 280px; height: 280px; background: ${accent}; top: -80px; left: -80px; }
+      .orb-2 { width: 220px; height: 220px; background: #baffc9; bottom: -60px; right: -60px; animation-delay: -5s; }
+      @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(25px, -40px) scale(1.05); } }
+      .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); border-radius: 28px; padding: 2.5rem; max-width: 480px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.25); position: relative; z-index: 10; }
+      .label { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 0.75rem; }
+      .title { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 1.25rem; }
+      .photo-wrap { width: 100%; aspect-ratio: 1; border-radius: 20px; overflow: hidden; margin: 1.25rem 0; border: 2px solid rgba(255,255,255,0.15); }
+      .photo { width: 100%; height: 100%; object-fit: cover; }
+      .msg { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.9); margin-bottom: 1.25rem; }
+      .sender { font-size: 0.85rem; color: rgba(255,255,255,0.6); font-weight: 300; }
+    ` : `
+      #vip-canvas { position: fixed; inset: 0; z-index: 0; }
+      .stars { position: fixed; inset: 0; z-index: 1; background-image: radial-gradient(1px 1px at 50% 50%, #fff, transparent); background-size: 100px 100px; animation: twinkle 4s ease-in-out infinite; opacity: 0.4; }
+      @keyframes twinkle { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.2; } }
+      .vip-intro { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at center, #1a1a2e 0%, #0f0c29 100%); }
+      .intro-text { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 800; color: #fff; text-align: center; margin-bottom: 2rem; opacity: 0; }
+      .tap-hint { font-size: 1rem; color: ${accent}; animation: pulse 2s ease-in-out infinite; }
+      @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+      #main-content { position: relative; z-index: 10; min-height: 100vh; display: none; align-items: center; justify-content: center; padding: 3rem 2rem; }
+      .vip-card { background: rgba(255,255,255,0.08); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.15); border-radius: 36px; padding: 3.5rem 2.5rem; max-width: 580px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.35); position: relative; overflow: hidden; }
+      .vip-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent, ${accent}, transparent); animation: rotate 12s linear infinite; opacity: 0.25; }
+      @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      .card-inner { position: relative; z-index: 1; }
+      .vip-label { font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 1.25rem; }
+      .vip-title { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 1.75rem; }
+      .vip-gallery-wrap { width: 100%; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; margin: 1.75rem 0; border: 2px solid rgba(255,255,255,0.1); }
+      .vip-photo { width: 100%; height: 100%; object-fit: cover; }
+      .vip-msg { font-size: 1.1rem; line-height: 1.8; color: rgba(255,255,255,0.95); margin-bottom: 1.75rem; }
+      .vip-sender { font-size: 0.95rem; color: ${accent}; font-weight: 600; letter-spacing: 0.08em; }
     `}
   `;
 
   const html = isBasic ? `
-    <div class="bento-shell">
-      <div class="bento-grid">
-        <div class="bento-card bento-wide" style="background:${c}; color:#fff;">
-          <p class="bento-label" style="color:rgba(255,255,255,0.8)">Para ti</p>
-          <h1 class="bento-title" style="color:#fff;">${d.recipientName || 'Especial'}</h1>
-        </div>
-        <div class="bento-card" style="display:flex; flex-direction:column; justify-content:space-between;">
-          <div class="bento-icon">✨</div>
-          <h2 class="bento-title" style="font-size:1.2rem;">${d.title}</h2>
-        </div>
-        ${d.imageUrl ? `
-        <div class="bento-card bento-photo-wrap">
-          ${gallery.html}
-        </div>` : ''}
-        <div class="bento-card bento-wide">
-          <p class="bento-msg" id="type-target"></p>
-          <p class="bento-sender">De: ${d.senderName || 'Alguien'}</p>
-        </div>
+    <div class="shell">
+      <div class="bg-orb orb-1"></div>
+      <div class="bg-orb orb-2"></div>
+      <div class="card">
+        <p class="label">${d.title || 'Para Ti'}</p>
+        <h1 class="title">${d.recipientName || 'Especial'}</h1>
+        ${d.imageUrl ? '<div class="photo-wrap">' + gallery.html + '</div>' : ''}
+        <p class="msg" id="type-target"></p>
+        <p class="sender">De: ${d.senderName || 'Alguien Especial'}</p>
       </div>
     </div>
   ` : `
-    <div id="puzzle-overlay">
-      <div class="puzzle-inst">ORDENA EL BENTO<br/>PARA REVELAR</div>
-      <div class="puzzle-board" id="pz-board">
-        <div class="puzzle-slot slot-1" data-id="1"></div>
-        <div class="puzzle-slot slot-2" data-id="2"></div>
-        <div class="puzzle-slot slot-3" data-id="3"></div>
-        <div class="puzzle-slot slot-4" data-id="4"></div>
-      </div>
-      <div class="puzzle-pieces" id="pz-pieces">
-        <div class="puzzle-piece" data-target="3">💕</div>
-        <div class="puzzle-piece" data-target="2">🎁</div>
-        <div class="puzzle-piece" data-target="4">✨</div>
-        <div class="puzzle-piece" data-target="1">💌</div>
-      </div>
+    <canvas id="vip-canvas"></canvas>
+    <div class="stars"></div>
+    <div class="vip-intro" id="intro">
+      <p class="intro-text" id="introText">Una experiencia especial<br/>te espera</p>
+      <p class="tap-hint">Toca para comenzar</p>
     </div>
-    
     <div id="main-content">
-      <div class="bento-grid">
-        <div class="bento-card bento-wide bento-bg-accent gs-card">
-          <p class="bento-label">Sorpresa para ti</p>
-          <h1 class="bento-title">${d.title}</h1>
-        </div>
-        
-        <div class="bento-card gs-card" style="display:flex; flex-direction:column; justify-content:center;">
-          <div class="bento-icon">🎉</div>
-          <p class="bento-sender" style="margin-top:20px;">Para:<br/>${d.recipientName || 'Especial'}</p>
-        </div>
-        
-        ${d.imageUrl ? `
-        <div class="bento-card bento-photo-wrap gs-card">
-          ${gallery.html}
-        </div>` : ''}
-        
-        <div class="bento-card ${d.imageUrl ? '' : 'bento-wide'} gs-card" style="grid-column: span ${d.imageUrl ? '2' : '2'};">
-          <div class="bento-msg" id="type-target"></div>
-          <p class="bento-sender" style="margin-top:30px;">Con cariño,<br/>${d.senderName || 'Alguien'}</p>
+      <div class="vip-card">
+        <div class="card-inner">
+          <p class="vip-label">${d.title || 'Exclusivo Para Ti'}</p>
+          <h1 class="vip-title">${d.recipientName || 'Increible'}</h1>
+          ${d.imageUrl ? '<div class="vip-gallery-wrap">' + gallery.html + '</div>' : ''}
+          <p class="vip-msg" id="type-target"></p>
+          <p class="vip-sender">De: ${d.senderName || 'Alguien Especial'}</p>
         </div>
       </div>
     </div>
   `;
 
   const js = isBasic ? `
-    const target = document.getElementById('type-target');
-    const txt = "${d.escapedMessage}";
-    let i = 0;
-    function type() {
-      if(i < txt.length){
-        if(txt.substring(i,i+5)==='<br/>'){target.innerHTML+='<br/>';i+=5;}
-        else{target.innerHTML+=txt.charAt(i);i++;}
-        setTimeout(type, 30);
-      }
-    }
-    setTimeout(type, 800);
+    (function() {
+      const target = document.getElementById('type-target');
+      if (!target) return;
+      const text = "${d.escapedMessage}";
+      let i = 0;
+      function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 50); } }
+      setTimeout(type, 500);
+    })();
   ` : `
-    // VIP MODE ENGINE - Mini Drag & Drop Puzzle (Vanilla Touch/Mouse)
-    const pieces = document.querySelectorAll('.puzzle-piece');
-    const slots = document.querySelectorAll('.puzzle-slot');
-    const board = document.getElementById('pz-board');
-    let placed = 0;
-    
-    pieces.forEach(p => {
-      let isDragging = false;
-      let startX, startY, initialX, initialY;
-      
-      const onMove = (e) => {
-        if(!isDragging) return;
-        const x = (e.clientX || e.touches[0].clientX) - startX;
-        const y = (e.clientY || e.touches[0].clientY) - startY;
-        gsap.set(p, { x: initialX + x, y: initialY + y });
-      };
-      
-      const onEnd = (e) => {
-        if(!isDragging) return;
-        isDragging = false;
-        
-        // Remove listeners
-        window.removeEventListener('mousemove', onMove);
-        window.removeEventListener('touchmove', onMove);
-        window.removeEventListener('mouseup', onEnd);
-        window.removeEventListener('touchend', onEnd);
-        
-        const rect = p.getBoundingClientRect();
-        const centerX = rect.left + rect.width/2;
-        const centerY = rect.top + rect.height/2;
-        
-        let hitSlot = null;
-        slots.forEach(s => {
-          const sRect = s.getBoundingClientRect();
-          if(centerX > sRect.left && centerX < sRect.right && centerY > sRect.top && centerY < sRect.bottom) {
-             hitSlot = s;
-          }
-        });
-        
-        if (hitSlot && hitSlot.dataset.id === p.dataset.target && !hitSlot.classList.contains('filled')) {
-          // Success match
-          hitSlot.classList.add('filled');
-          hitSlot.style.background = '${c}40';
-          hitSlot.style.borderColor = '${c}';
-          
-          const sRect = hitSlot.getBoundingClientRect();
-          const bRect = board.getBoundingClientRect();
-          // Animate into slot exactly
-          gsap.to(p, {
-            x: 0, y: 0,
-            left: (sRect.left - bRect.left) + (sRect.width/2) - (rect.width/2) + 'px',
-            top: (sRect.top - bRect.top) + (sRect.height/2) - (rect.height/2) + 'px',
-            duration: 0.3, ease: 'back.out'
-          });
-          
-          p.style.position = 'absolute';
-          board.appendChild(p); // Move DOM element to board container to maintain position relative to board
-          p.style.pointerEvents = 'none'; // Lock it
-          
-          placed++;
-          if(placed === 4) finishPuzzle();
-          
-        } else {
-          // Snap back
-          gsap.to(p, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.5)' });
-        }
-      };
-      
-      const onStart = (e) => {
-        isDragging = true;
-        startX = e.clientX || e.touches[0].clientX;
-        startY = e.clientY || e.touches[0].clientY;
-        const computed = window.getComputedStyle(p);
-        const transform = new DOMMatrixReadOnly(computed.transform);
-        initialX = transform.m41; initialY = transform.m42;
-        
-        window.addEventListener('mousemove', onMove);
-        window.addEventListener('touchmove', onMove, {passive:false});
-        window.addEventListener('mouseup', onEnd);
-        window.addEventListener('touchend', onEnd);
-      };
-      
-      p.addEventListener('mousedown', onStart);
-      p.addEventListener('touchstart', (e) => { e.preventDefault(); onStart(e); }, {passive:false});
-    });
-    
-    function finishPuzzle() {
-      const audio = document.getElementById('bg-music');
-      if (audio) { audio.volume = 0; audio.play(); gsap.to(audio, {volume: 0.8, duration: 2}); }
-      
-      // Fun bento scale out
-      gsap.to('#pz-board', { scale: 1.2, rotation: 10, duration: 0.5, ease: 'power2.in' });
-      gsap.to('#puzzle-overlay', { opacity: 0, duration: 1, delay: 0.5, onComplete: () => {
-        document.getElementById('puzzle-overlay').style.display = 'none';
-        showBento();
-      }});
-      fireConfetti();
-    }
-    
-    function showBento() {
-      document.getElementById('main-content').style.display = 'flex';
-      
-      gsap.from('.gs-card', { 
-        y: 100, opacity: 0, scale: 0.8, rotation: Math.random()*10 - 5,
-        duration: 1.2, stagger: 0.1, ease: 'elastic.out(1, 0.6)'
-      });
-      
-      setTimeout(() => {
-        const target = document.getElementById('type-target');
-        const txt = "${d.escapedMessage}";
-        let i = 0;
-        function type() {
-          if(i < txt.length) {
-            if(txt.substring(i,i+5)==='<br/>'){target.innerHTML+='<br/>';i+=5;}
-            else{target.innerHTML+=txt.charAt(i);i++;}
-            setTimeout(type, 20);
-          }
-        }
-        type();
-      }, 1500);
-    }
-    
-    function fireConfetti() {
-      const colors = ['${c}', '#ffffff', '#ffeb3b', '#4caf50'];
-      for(let i=0; i<100; i++) {
-        const conf = document.createElement('div');
-        conf.style.position = 'fixed'; conf.style.left = '50%'; conf.style.top = '50%';
-        conf.style.width = Math.random()*10+5+'px'; conf.style.height = conf.style.width;
-        conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        conf.style.zIndex = '999';
-        if(Math.random()>0.5) conf.style.borderRadius = '50%';
-        document.body.appendChild(conf);
-
-        gsap.to(conf, {
-          x: (Math.random() - 0.5) * window.innerWidth * 1.5,
-          y: (Math.random() - 0.5) * window.innerHeight * 1.5,
-          rotation: Math.random() * 720,
-          opacity: 0,
-          duration: Math.random() * 2 + 1,
-          ease: 'power3.out',
-          onComplete: () => conf.remove()
+    (function() {
+      const canvas = document.getElementById('vip-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width, height, particles = [], mouseX = 0, mouseY = 0;
+      function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+      class Particle { constructor() { this.reset(); } reset() { this.x = Math.random() * width; this.y = Math.random() * height; this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5; this.radius = Math.random() * 2 + 1; this.alpha = Math.random() * 0.5 + 0.2; } update() { this.x += this.vx + (mouseX - this.x) * 0.0001; this.y += this.vy + (mouseY - this.y) * 0.0001; if (this.x < 0 || this.x > width) this.vx *= -1; if (this.y < 0 || this.y > height) this.vy *= -1; } draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.fillStyle = '${accent}'; ctx.globalAlpha = this.alpha; ctx.fill(); } }
+      function init() { resize(); for (let i = 0; i < 80; i++) particles.push(new Particle()); animate(); }
+      function animate() { ctx.clearRect(0, 0, width, height); for (let i = 0; i < particles.length; i++) { for (let j = i + 1; j < particles.length; j++) { const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y, dist = Math.sqrt(dx * dx + dy * dy); if (dist < 100) { ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.strokeStyle = '${accent}'; ctx.globalAlpha = 0.1 * (1 - dist / 100); ctx.stroke(); } } } particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+      window.addEventListener('resize', resize);
+      window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+      window.addEventListener('touchmove', e => { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; });
+      init();
+      const intro = document.getElementById('intro'), mainContent = document.getElementById('main-content'), introText = document.getElementById('introText');
+      if (intro && introText) {
+        if (typeof gsap !== 'undefined') { gsap.to(introText, { opacity: 1, duration: 2, delay: 0.5 }); } else { introText.style.opacity = 1; }
+        intro.addEventListener('click', () => {
+          const finish = () => { intro.style.display = 'none'; mainContent.style.display = 'flex'; const target = document.getElementById('type-target'); if (target) { const text = "${d.escapedMessage}"; let i = 0; function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 40); } } setTimeout(type, 800); } };
+          if (typeof gsap !== 'undefined') { gsap.to(intro, { opacity: 0, duration: 1, onComplete: finish }); } else { intro.style.opacity = 0; setTimeout(finish, 1000); }
         });
       }
-    }
-  
-    ${gallery.js}`;
+    })();
+    ${gallery.js}
+  `;
 
   return { css, html, js };
 }

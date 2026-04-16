@@ -1,225 +1,116 @@
-// ═══════════════════════════════════════════════════════════════
-// STYLE #9: VELVET DARK — Rich Dramatic Luxury
-// ═══════════════════════════════════════════════════════════════
+// STYLE: VELVET DARK - Luxurious Dark Theme
 import { TemplateRenderData, TemplateOutput, renderVipGallery } from './index';
 
 export function renderVelvetDark(d: TemplateRenderData): TemplateOutput {
   const isBasic = d.renderMode === 'basic';
   const gallery = renderVipGallery(d, "velvetdark");
-  const c = d.accentColor || '#ff3366';
+  const accent = d.accentColor || '#9333ea';
 
   const css = `
-    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap');
-    body { background: #0a0608; overflow: hidden; margin: 0; font-family: 'DM Sans', sans-serif; }
-    
-    .velvet-ambient { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(ellipse at 20% 80%, ${c}15 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, ${c}10 0%, transparent 50%); }
-    
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: linear-gradient(180deg, #27272a 0%, #18181b 100%); min-height: 100vh; overflow-x: hidden; font-family: 'Inter', sans-serif; }
     ${isBasic ? `
-    .velvet-shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative; z-index: 10; }
-    .velvet-card { background: rgba(20,10,15,0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 3rem 2rem; max-width: 460px; width: 100%; text-align: center; box-shadow: 0 40px 80px rgba(0,0,0,0.5); }
-    .v-emoji { font-size: 4rem; margin-bottom: 1rem; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5)); }
-    .v-label { font-weight: 300; font-size: 0.75rem; letter-spacing: 0.3em; color: ${c}; text-transform: uppercase; margin-bottom: 0.5rem; }
-    .v-title { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem, 6vw, 2.8rem); color: #fff; line-height: 1.2; margin-bottom: 1.5rem; }
-    .v-photo { width: 100%; max-width: 280px; border-radius: 20px; margin: 1.5rem auto; display: block; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-    .v-div { width: 40px; height: 3px; background: ${c}; margin: 2rem auto; border-radius: 2px; }
-    .v-msg { font-weight: 300; font-size: 1rem; line-height: 1.9; color: #fff; opacity: 0.7; margin: 1.5rem 0; }
-    .v-sender { font-weight: 300; font-size: 0.85rem; color: #fff; opacity: 0.5; margin-top: 2rem; }
-    .v-sender strong { color: ${c}; font-weight: 500; opacity: 1; }
-    `: `
-    /* VIP MODE */
-    #gift-overlay {
-      position: fixed; inset: 0; z-index: 100; background: #0a0608;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      perspective: 1200px;
-    }
-    .gift-box-wrapper { width: 150px; height: 150px; position: relative; transform-style: preserve-3d; cursor: pointer; transition: transform 0.3s; }
-    .gift-box-wrapper:hover { transform: scale(1.1) rotateY(15deg); }
-    
-    .box-face { position: absolute; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255,255,255,0.1); }
-    .box-front { transform: translateZ(75px); background: linear-gradient(135deg, ${c}, ${c}80); }
-    .box-back { transform: rotateY(180deg) translateZ(75px); background: ${c}80; }
-    .box-right { transform: rotateY(90deg) translateZ(75px); background: ${c}a0; }
-    .box-left { transform: rotateY(-90deg) translateZ(75px); background: ${c}60; }
-    .box-top { transform: rotateX(90deg) translateZ(75px); background: ${c}c0; }
-    .box-bottom { transform: rotateX(-90deg) translateZ(75px); background: #000; }
-    
-    .ribbon-v { position: absolute; width: 20px; height: 100%; background: #ffea00; left: 50%; transform: translateX(-50%); box-shadow: 0 0 10px rgba(0,0,0,0.5); }
-    .ribbon-h { position: absolute; width: 100%; height: 20px; background: #ffea00; top: 50%; transform: translateY(-50%); box-shadow: 0 0 10px rgba(0,0,0,0.5); }
-    .gift-hint { color: #fff; font-family: 'DM Sans'; font-weight: 300; letter-spacing: 3px; text-transform: uppercase; margin-top: 60px; font-size: 0.8rem; opacity: 0.6; animation: pulse 2s infinite; }
-    @keyframes pulse { 50% { opacity: 1; } }
-
-    #main-content {
-      position: relative; z-index: 10; height: 100vh; overflow-y: auto; overflow-x: hidden;
-      display: none; padding: 4rem 2rem; perspective: 1000px;
-    }
-    .velvet-card {
-      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 40px;
-      padding: 4rem 3rem; max-width: 550px; width: 100%; text-align: center; margin: 0 auto;
-      box-shadow: 0 60px 120px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
-      backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-      transform-style: preserve-3d;
-    }
-    .v-emoji { font-size: 5rem; margin-bottom: 1.5rem; filter: drop-shadow(0 20px 20px rgba(0,0,0,0.5)); transform: translateZ(50px); }
-    .v-label { font-weight: 300; font-size: 0.8rem; letter-spacing: 0.4em; color: ${c}; text-transform: uppercase; margin-bottom: 1rem; transform: translateZ(30px); }
-    .v-title { font-family: 'DM Serif Display', serif; font-size: clamp(2.5rem, 8vw, 3.5rem); color: #fff; line-height: 1.1; margin-bottom: 2rem; transform: translateZ(40px); }
-    .v-div { width: 60px; height: 3px; background: ${c}; margin: 2rem auto; border-radius: 3px; box-shadow: 0 0 20px ${c}; transform: translateZ(20px); }
-    .v-photo-wrap { transform: translateZ(60px); transform-style: preserve-3d; }
-    .v-photo { width: 100%; max-width: 320px; border-radius: 20px; box-shadow: 0 30px 60px rgba(0,0,0,0.8); margin: 2rem auto; display: block; border: 1px solid rgba(255,255,255,0.1); }
-    .v-msg { font-weight: 300; font-size: 1.1rem; line-height: 2; color: #fff; opacity: 0.8; margin: 2rem 0; min-height: 100px; transform: translateZ(30px); }
-    .v-sender { font-weight: 400; font-size: 1rem; color: rgba(255,255,255,0.5); margin-top: 3rem; transform: translateZ(20px); }
-    .v-sender strong { color: ${c}; font-weight: 500; font-size: 1.2rem; display: block; margin-top: 5px; }
-
-    .particle { position: fixed; pointer-events: none; border-radius: 50%; opacity: 0; z-index: 100; }
+      .shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative; overflow: hidden; }
+      .bg-orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.3; animation: float 10s ease-in-out infinite; }
+      .orb-1 { width: 280px; height: 280px; background: ${accent}; top: -80px; left: -80px; }
+      .orb-2 { width: 220px; height: 220px; background: #db2777; bottom: -60px; right: -60px; animation-delay: -5s; }
+      @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(25px, -40px) scale(1.05); } }
+      .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); border-radius: 28px; padding: 2.5rem; max-width: 480px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.25); position: relative; z-index: 10; }
+      .label { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 0.75rem; }
+      .title { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 1.25rem; }
+      .photo-wrap { width: 100%; aspect-ratio: 1; border-radius: 20px; overflow: hidden; margin: 1.25rem 0; border: 2px solid rgba(255,255,255,0.15); }
+      .photo { width: 100%; height: 100%; object-fit: cover; }
+      .msg { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.9); margin-bottom: 1.25rem; }
+      .sender { font-size: 0.85rem; color: rgba(255,255,255,0.6); font-weight: 300; }
+    ` : `
+      #vip-canvas { position: fixed; inset: 0; z-index: 0; }
+      .stars { position: fixed; inset: 0; z-index: 1; background-image: radial-gradient(1px 1px at 50% 50%, #fff, transparent); background-size: 100px 100px; animation: twinkle 4s ease-in-out infinite; opacity: 0.4; }
+      @keyframes twinkle { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.2; } }
+      .vip-intro { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at center, #1a1a2e 0%, #0f0c29 100%); }
+      .intro-text { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 800; color: #fff; text-align: center; margin-bottom: 2rem; opacity: 0; }
+      .tap-hint { font-size: 1rem; color: ${accent}; animation: pulse 2s ease-in-out infinite; }
+      @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+      #main-content { position: relative; z-index: 10; min-height: 100vh; display: none; align-items: center; justify-content: center; padding: 3rem 2rem; }
+      .vip-card { background: rgba(255,255,255,0.08); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.15); border-radius: 36px; padding: 3.5rem 2.5rem; max-width: 580px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.35); position: relative; overflow: hidden; }
+      .vip-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent, ${accent}, transparent); animation: rotate 12s linear infinite; opacity: 0.25; }
+      @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      .card-inner { position: relative; z-index: 1; }
+      .vip-label { font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase; color: ${accent}; font-weight: 600; margin-bottom: 1.25rem; }
+      .vip-title { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 1.75rem; }
+      .vip-gallery-wrap { width: 100%; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; margin: 1.75rem 0; border: 2px solid rgba(255,255,255,0.1); }
+      .vip-photo { width: 100%; height: 100%; object-fit: cover; }
+      .vip-msg { font-size: 1.1rem; line-height: 1.8; color: rgba(255,255,255,0.95); margin-bottom: 1.75rem; }
+      .vip-sender { font-size: 0.95rem; color: ${accent}; font-weight: 600; letter-spacing: 0.08em; }
     `}
   `;
 
   const html = isBasic ? `
-    <div class="velvet-ambient"></div>
-    <div class="velvet-shell">
-      <div class="velvet-card">
-        <div class="v-emoji">🌹</div>
-        <p class="v-label">Para ${d.recipientName || 'ti'}</p>
-        <h1 class="v-title">${d.title}</h1>
-        <div class="v-div"></div>
-        ${d.imageUrl ? gallery.html : ''}
-        <p class="v-msg" id="type-target"></p>
-        <p class="v-sender">Siempre, <strong>${d.senderName || 'Alguien'}</strong></p>
+    <div class="shell">
+      <div class="bg-orb orb-1"></div>
+      <div class="bg-orb orb-2"></div>
+      <div class="card">
+        <p class="label">${d.title || 'Para Ti'}</p>
+        <h1 class="title">${d.recipientName || 'Especial'}</h1>
+        ${d.imageUrl ? '<div class="photo-wrap">' + gallery.html + '</div>' : ''}
+        <p class="msg" id="type-target"></p>
+        <p class="sender">De: ${d.senderName || 'Alguien Especial'}</p>
       </div>
     </div>
   ` : `
-    <div class="velvet-ambient"></div>
-    
-    <div id="gift-overlay">
-      <div class="gift-box-wrapper" id="gift-box">
-        <div class="box-face box-front"><div class="ribbon-v"></div><div class="ribbon-h"></div></div>
-        <div class="box-face box-back"><div class="ribbon-v"></div><div class="ribbon-h"></div></div>
-        <div class="box-face box-right"><div class="ribbon-v"></div><div class="ribbon-h"></div></div>
-        <div class="box-face box-left"><div class="ribbon-v"></div><div class="ribbon-h"></div></div>
-        <div class="box-face box-top"><div class="ribbon-v"></div><div class="ribbon-h"></div></div>
-        <div class="box-face box-bottom"></div>
-      </div>
-      <div class="gift-hint">TOCA PARA ABRIR</div>
+    <canvas id="vip-canvas"></canvas>
+    <div class="stars"></div>
+    <div class="vip-intro" id="intro">
+      <p class="intro-text" id="introText">Una experiencia especial<br/>te espera</p>
+      <p class="tap-hint">Toca para comenzar</p>
     </div>
-    
     <div id="main-content">
-      <div class="velvet-card" id="main-card">
-        <div class="v-emoji gs-el">🎁</div>
-        <p class="v-label gs-el">Una Sorpresa Para ${d.recipientName || 'ti'}</p>
-        <h1 class="v-title gs-el">${d.title}</h1>
-        <div class="v-div gs-el"></div>
-        ${d.imageUrl ? `
-        <div class="v-photo-wrap gs-el">
-          ${gallery.html}
-        </div>` : ''}
-        <div class="v-msg gs-el" id="type-target"></div>
-        <p class="v-sender gs-el">Entregado por <strong>${d.senderName || 'Alguien especial'}</strong></p>
+      <div class="vip-card">
+        <div class="card-inner">
+          <p class="vip-label">${d.title || 'Exclusivo Para Ti'}</p>
+          <h1 class="vip-title">${d.recipientName || 'Increible'}</h1>
+          ${d.imageUrl ? '<div class="vip-gallery-wrap">' + gallery.html + '</div>' : ''}
+          <p class="vip-msg" id="type-target"></p>
+          <p class="vip-sender">De: ${d.senderName || 'Alguien Especial'}</p>
+        </div>
       </div>
     </div>
   `;
 
   const js = isBasic ? `
-    const target = document.getElementById('type-target');
-    const txt = "${d.escapedMessage}";
-    let i = 0;
-    function type() {
-      if(i < txt.length){
-        if(txt.substring(i,i+5)==='<br/>'){target.innerHTML+='<br/>';i+=5;}
-        else{target.innerHTML+=txt.charAt(i);i++;}
-        setTimeout(type, 30);
-      }
-    }
-    setTimeout(type, 800);
+    (function() {
+      const target = document.getElementById('type-target');
+      if (!target) return;
+      const text = "${d.escapedMessage}";
+      let i = 0;
+      function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 50); } }
+      setTimeout(type, 500);
+    })();
   ` : `
-    // VIP MODE ENGINE
-    const gift = document.getElementById('gift-box');
-    const overlay = document.getElementById('gift-overlay');
-    
-    // Rotate box idle
-    gsap.to(gift, { rotationY: 360, rotationX: 20, duration: 8, repeat: -1, ease: 'linear' });
-    
-    gift.addEventListener('click', () => {
-      // Audio
-      const audio = document.getElementById('bg-music');
-      if (audio) { audio.volume = 0; audio.play(); gsap.to(audio, {volume: 0.8, duration: 2}); }
-      
-      // Stop idle
-      gsap.killTweensOf(gift);
-      
-      // Explode box
-      gsap.to('.box-top', { y: -200, rotationX: 180, opacity: 0, duration: 1 });
-      gsap.to('.box-front', { z: 200, rotationX: -90, opacity: 0, duration: 1 });
-      gsap.to('.box-right', { x: 200, rotationY: 90, opacity: 0, duration: 1 });
-      gsap.to('.box-left', { x: -200, rotationY: -90, opacity: 0, duration: 1 });
-      gsap.to('.box-back', { z: -200, rotationX: 90, opacity: 0, duration: 1 });
-      
-      // Explosion particles
-      createParticles();
-      
-      setTimeout(() => {
-        overlay.style.display = 'none';
-        document.body.style.overflow = 'auto'; // allow scroll if needed
-        showCard();
-      }, 800);
-    });
-    
-    function createParticles() {
-      const colors = ['${c}', '#ffffff', '#ffea00', '#ff3366'];
-      for(let i=0; i<50; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        p.style.background = colors[Math.floor(Math.random() * colors.length)];
-        p.style.width = Math.random() * 10 + 5 + 'px';
-        p.style.height = p.style.width;
-        p.style.left = '50%'; p.style.top = '50%';
-        document.body.appendChild(p);
-        
-        const angle = Math.random() * Math.PI * 2;
-        const radius = Math.random() * innerWidth;
-        gsap.to(p, {
-          x: Math.cos(angle) * radius,
-          y: Math.sin(angle) * radius,
-          opacity: Math.random() > 0.5 ? 1 : 0.5,
-          rotation: Math.random() * 360,
-          duration: 1.5 + Math.random(),
-          ease: 'power3.out',
-          onComplete: () => p.remove()
+    (function() {
+      const canvas = document.getElementById('vip-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width, height, particles = [], mouseX = 0, mouseY = 0;
+      function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+      class Particle { constructor() { this.reset(); } reset() { this.x = Math.random() * width; this.y = Math.random() * height; this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5; this.radius = Math.random() * 2 + 1; this.alpha = Math.random() * 0.5 + 0.2; } update() { this.x += this.vx + (mouseX - this.x) * 0.0001; this.y += this.vy + (mouseY - this.y) * 0.0001; if (this.x < 0 || this.x > width) this.vx *= -1; if (this.y < 0 || this.y > height) this.vy *= -1; } draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.fillStyle = '${accent}'; ctx.globalAlpha = this.alpha; ctx.fill(); } }
+      function init() { resize(); for (let i = 0; i < 80; i++) particles.push(new Particle()); animate(); }
+      function animate() { ctx.clearRect(0, 0, width, height); for (let i = 0; i < particles.length; i++) { for (let j = i + 1; j < particles.length; j++) { const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y, dist = Math.sqrt(dx * dx + dy * dy); if (dist < 100) { ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.strokeStyle = '${accent}'; ctx.globalAlpha = 0.1 * (1 - dist / 100); ctx.stroke(); } } } particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+      window.addEventListener('resize', resize);
+      window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+      window.addEventListener('touchmove', e => { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; });
+      init();
+      const intro = document.getElementById('intro'), mainContent = document.getElementById('main-content'), introText = document.getElementById('introText');
+      if (intro && introText) {
+        if (typeof gsap !== 'undefined') { gsap.to(introText, { opacity: 1, duration: 2, delay: 0.5 }); } else { introText.style.opacity = 1; }
+        intro.addEventListener('click', () => {
+          const finish = () => { intro.style.display = 'none'; mainContent.style.display = 'flex'; const target = document.getElementById('type-target'); if (target) { const text = "${d.escapedMessage}"; let i = 0; function type() { if (i < text.length) { target.textContent += text.charAt(i); i++; setTimeout(type, 40); } } setTimeout(type, 800); } };
+          if (typeof gsap !== 'undefined') { gsap.to(intro, { opacity: 0, duration: 1, onComplete: finish }); } else { intro.style.opacity = 0; setTimeout(finish, 1000); }
         });
       }
-    }
-    
-    function showCard() {
-      document.getElementById('main-content').style.display = 'block';
-      gsap.set('.gs-el', { autoAlpha: 0, y: 50, rotationX: -20 });
-      
-      const tl = gsap.timeline();
-      tl.from('#main-card', { autoAlpha: 0, scale: 0.8, rotationY: -30, duration: 1.5, ease: 'power4.out', clearProps: 'transform' })
-        .to('.gs-el', { autoAlpha: 1, y: 0, rotationX: 0, duration: 0.8, stagger: 0.15, ease: 'back.out' }, "-=1")
-        .call(() => {
-          const target = document.getElementById('type-target');
-          const txt = "${d.escapedMessage}";
-          let i = 0;
-          function type() {
-            if(i < txt.length) {
-              if(txt.substring(i,i+5)==='<br/>'){target.innerHTML+='<br/>';i+=5;}
-              else{target.innerHTML+=txt.charAt(i);i++;}
-              setTimeout(type, 20);
-            }
-          }
-          type();
-        });
-        
-      // 3D Parallax on card hover
-      const card = document.getElementById('main-card');
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width/2;
-        const y = e.clientY - rect.top - rect.height/2;
-        gsap.to(card, { rotationY: x*0.02, rotationX: -y*0.02, duration: 0.5, ease: 'power2.out' });
-      });
-      card.addEventListener('mouseleave', () => { gsap.to(card, { rotationY: 0, rotationX: 0, duration: 1, ease: 'elastic.out' }); });
-    }
-  
-    ${gallery.js}`;
+    })();
+    ${gallery.js}
+  `;
 
   return { css, html, js };
 }

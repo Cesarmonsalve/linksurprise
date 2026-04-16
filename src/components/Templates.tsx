@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { TEMPLATES, PILLARS } from '@/lib/templates';
+import { TEMPLATES, PILLARS, getTierInfo } from '@/lib/templates';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -76,6 +76,39 @@ export default function Templates() {
         <p className="section-desc" style={{ marginTop: '20px' }}>
           Desde diseños minimalistas hasta experiencias cinematográficas con efectos avanzados
         </p>
+        
+        {/* Tier Legend */}
+        <div style={{ 
+          display: 'flex', 
+          gap: '16px', 
+          justifyContent: 'center', 
+          flexWrap: 'wrap',
+          marginTop: '30px',
+          padding: '20px',
+          background: 'rgba(255,255,255,0.03)',
+          borderRadius: '16px',
+          backdropFilter: 'blur(10px)',
+        }}>
+          {['free', 'basic', 'premium', 'vip'].map((tier) => {
+            const info = getTierInfo(tier);
+            return (
+              <div key={tier} style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '8px 16px',
+                background: `linear-gradient(135deg, ${info.color}22, ${info.color}11)`,
+                border: `1px solid ${info.color}44`,
+                borderRadius: '12px',
+                fontSize: '0.85rem',
+              }}>
+                <span style={{ fontSize: '1.2rem' }}>{info.icon}</span>
+                <span style={{ color: info.color, fontWeight: 600 }}>{info.name}</span>
+                {info.price > 0 && <span style={{ color: '#888' }}>${info.price}</span>}
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {templatesByPillar.map((pillar) => (
@@ -122,19 +155,42 @@ export default function Templates() {
 
           <div className="templates-grid">
             {pillar.templates.map((t, index) => {
-              const isVip = ['nebula_glass', 'quantum_rift', 'film_noir', 'ethereal_dream', 'watercolor_bliss', 'neon_nights', 'pixel_pop', 'galaxy_sweep'].includes(t.id);
+              const tierInfo = getTierInfo(t.tier);
+              const isVip = t.tier === 'vip';
+              const isPremium = t.tier === 'premium';
               
               return (
                 <div
-                  className={`template-card ${isVip ? 'vip' : ''}`}
+                  className={`template-card ${isVip ? 'vip' : ''} ${isPremium ? 'premium' : ''} ${t.tier}`}
                   key={t.id}
                   data-aos="fade-up"
                   data-aos-delay={index * 50}
                 >
+                  {/* Tier Badge */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '12px',
+                    right: '12px',
+                    padding: '6px 12px',
+                    background: `linear-gradient(135deg, ${tierInfo.color}, ${tierInfo.color}dd)`,
+                    borderRadius: '20px',
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    color: '#fff',
+                    zIndex: 10,
+                    boxShadow: `0 4px 15px ${tierInfo.color}66`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                  }}>
+                    <span>{tierInfo.icon}</span>
+                    <span>{tierInfo.name}</span>
+                  </div>
+
                   <div
                     className="template-card-image"
                     style={{
-                      background: isVip 
+                      background: isVip || isPremium
                         ? `${t.gradient}, url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
                         : t.gradient,
                       display: 'flex',
@@ -154,9 +210,26 @@ export default function Templates() {
                     <span className="template-card-tag">{t.pillarLabel}</span>
                     <h3 className="template-card-title">{t.name}</h3>
                     <p className="template-card-desc">{t.defaultMessage.substring(0, 90)}...</p>
+                    
+                    {/* Features List */}
+                    <ul style={{
+                      margin: '12px 0',
+                      padding: '0 0 0 16px',
+                      fontSize: '0.75rem',
+                      color: 'var(--text-muted)',
+                      lineHeight: 1.6,
+                    }}>
+                      {t.features.slice(0, 3).map((feature, i) => (
+                        <li key={i} style={{ marginBottom: '4px' }}>{feature}</li>
+                      ))}
+                      {t.features.length > 3 && (
+                        <li style={{ fontStyle: 'italic', color: '#666' }}>+{t.features.length - 3} más...</li>
+                      )}
+                    </ul>
+                    
                     <div className="template-card-price">
-                      <span className="from">{isVip ? 'Premium' : 'Desde'}</span>
-                      <span className="price">{isVip ? '$9' : '$3'}</span>
+                      <span className="from">{t.tier === 'free' ? '¡Gratis!' : t.tier === 'vip' ? 'Ultra Premium' : 'Desde'}</span>
+                      <span className="price">{t.tier === 'free' ? '$0' : t.tier === 'vip' ? '$9' : `$${tierInfo.price}`}</span>
                     </div>
                   </div>
                   {isVip && (
